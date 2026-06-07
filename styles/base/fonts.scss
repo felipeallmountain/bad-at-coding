@@ -1,0 +1,53 @@
+/* big-shoulders-stencil-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Big Shoulders Stencil';
+  font-style: normal;
+  font-weight: 400;
+  src: url('@bad-at-coding/fonts/big-shoulders-stencil-v4-latin-regular.woff2') format('woff2');
+}
+
+/* big-shoulders-stencil-500 - latin */
+@font-face {
+  font-display: swap;/* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Big Shoulders Stencil';
+  font-style: normal;
+  font-weight: 500;
+  src: url('@bad-at-coding/fonts/big-shoulders-stencil-v4-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* big-shoulders-stencil-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Big Shoulders Stencil';
+  font-style: normal;
+  font-weight: 700;
+  src: url('@bad-at-coding/fonts/big-shoulders-stencil-v4-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* jetbrains-mono-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('@bad-at-coding/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* jetbrains-mono-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  src: url('@bad-at-coding/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* jetbrains-mono-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('@bad-at-coding/fonts/jetbrains-mono-v24-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}

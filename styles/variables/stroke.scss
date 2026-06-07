@@ -1,0 +1,5 @@
+@use 'primitives';
+
+$line-thin: primitives.$line-0-5;
+$line-default: primitives.$line-1;
+$line-focus: primitives.$line-2;

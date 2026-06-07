@@ -1,0 +1,33 @@
+block variables
+
+doctype html
+
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+
+    base(href='/')
+
+    title= 'bad at coding'
+
+    meta(name='description', content='content')
+
+  body
+    .wrapper
+      header.header
+        nav.nav
+          ul.nav__content
+            li.link-container
+              a.link(href='/') BAD-AT-CODING
+            li.link-container
+              a.link(href='/') /fail-cases
+
+      main.content(data-template=template)
+        .cutting-mat
+          block body
+
+      footer.footer
+        .span bad-at-coding.com - ©️2026. All rights reserved. Or not. Whatever
+
+    script(async, src='../app/main.js', type='module')

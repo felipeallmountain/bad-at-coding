@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@bad-at-coding/*": ["./*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

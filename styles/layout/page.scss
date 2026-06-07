@@ -1,0 +1,27 @@
+@use '@bad-at-coding/styles/variables/colors';
+@use '@bad-at-coding/styles/variables/spacing';
+
+html,
+body {
+  background-color: colors.$color-bg-abyss;
+}
+
+html {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  padding: spacing.$component-padding-panel;
+}

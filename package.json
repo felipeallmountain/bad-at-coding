@@ -1,0 +1,35 @@
+{
+  "name": "bad-at-coding",
+  "private": true,
+  "version": "1.0.0",
+  "author": "Felipe Vega",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "dev": "nodemon",
+    "start": "NODE_ENV=production node server",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@eslint/css": "^1.3.0",
+    "@eslint/js": "^10.0.1",
+    "@prettier/plugin-pug": "^3.4.2",
+    "eslint": "^10.4.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.6.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.3",
+    "pug": "^3.0.4",
+    "pug-plugin": "^6.1.0",
+    "sass": "^1.100.0",
+    "vite": "^8.0.16",
+    "vite-plugin-pug": "^0.4.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
