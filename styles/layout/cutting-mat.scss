@@ -2,29 +2,51 @@
 @use '@bad-at-coding/styles/variables/colors';
 @use '@bad-at-coding/styles/variables/stroke';
 
-$grid-height: calc(100vh - (spacing.$component-padding-panel * 2));
-$row-height: calc($grid-height / 7);
-$num-squares: calc($grid-height / spacing.$gap-nav-links);
+$grid-padding: calc(spacing.$component-padding-panel * 2);
+$grid-width : calc(100vw - $grid-padding);
+$grid-height: calc(100vh - $grid-padding);
 
+$total-x-squares: 100;
+$total-y-squares: 60;
+$column-grid-num : 10;
+$row-grid-num : 10;
+
+$square-width: calc($grid-width / $total-x-squares);
+$square-height: calc($grid-height / $total-y-squares);
+$row-height: calc($grid-height / $row-grid-num);
+$row-gap-height: calc($row-height / spacing.$gap-nav-links);
+
+@mixin background-img($color, $stroke) {
+  background-image:
+    linear-gradient($color $stroke, transparent $stroke),
+    linear-gradient(90deg, $color $stroke, transparent $stroke);
+}
 
 .cutting-mat {
+  position: relative;
   width: 100%;
   height: 100%;
-  background-image:
-    linear-gradient(colors.$color-border-mat stroke.$line-default, transparent stroke.$line-default),
-    linear-gradient(90deg, colors.$color-border-mat stroke.$line-default, transparent stroke.$line-default);
-  background-size: spacing.$gap-nav-links spacing.$gap-nav-links;
-  border: stroke.$line-focus solid colors.$color-border-mat;
-  display: grid;
 
-  grid-template-columns: repeat(auto-fill, calc(spacing.$gap-nav-links * 6));
-  grid-auto-columns: 1fr;
-  grid-template-rows: repeat(auto-fill, calc(spacing.$gap-nav-links * 10));
-  // grid-template-rows: repeat(auto-fill, $row-height);
-  grid-auto-rows: 1fr;
+  @include background-img(colors.$color-border-mat, stroke.$line-default);
+  background-size: $square-width $square-height;
+
+  border-inline-end: stroke.$line-focus solid colors.$color-border-grid;
+  border-block-end: stroke.$line-focus solid colors.$color-border-grid;
+
+  overflow: hidden;
 }
 
 .bg-grid {
   position: absolute;
   inset: 0;
+  width: 101%;
+  height: 101%;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, calc($square-width * $column-grid-num));
+  grid-template-rows: repeat(auto-fill, calc($square-height * $row-grid-num));
+
+  @include background-img(colors.$color-border-grid, stroke.$line-focus);
+  background-size:
+    calc($square-width * $column-grid-num) calc($square-height * $row-grid-num);
 }
