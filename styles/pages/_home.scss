@@ -1,0 +1,12 @@
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/variables/stroke' as stroke;
+
+.home {
+  grid-column-start: 6;
+  grid-column-end: 16;
+  grid-row-start: 3;
+  grid-row-end: 11;
+
+  background-color: colors.$color-bg-surface;
+  border: stroke.$line-focus solid colors.$color-border-grid;
+}

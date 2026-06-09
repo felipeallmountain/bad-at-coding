@@ -1,12 +1,12 @@
-@use './variables/primitives.scss';
-@use './variables/colors.scss';
-@use './variables/spacing.scss';
-@use './variables/stroke.scss';
+@use './variables/primitives';
+@use './variables/colors';
+@use './variables/spacing';
+@use './variables/stroke';
 
-@use './base/fonts.scss';
-@use './base/reset.scss';
+@use './base/fonts';
+@use './base/reset';
 
-@use './layout/page.scss';
-@use './layout/cutting-mat.scss';
+@use './layout/page';
+@use './layout/cutting-mat';
 
-@use './pages/home.scss';
+@use './pages/home';

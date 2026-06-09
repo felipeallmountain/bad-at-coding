@@ -1,4 +1,4 @@
-@use 'primitives';
+@use 'primitives' as primitives;
 
 // gap
 $gap-text-line: primitives.$space-1;
@@ -14,6 +14,3 @@ $component-padding-panel: primitives.$space-6;
 $layout-padding-compact: primitives.$space-6;
 $layout-padding-default: primitives.$space-10;
 $layout-section-gap: primitives.$space-20;
-
-
-

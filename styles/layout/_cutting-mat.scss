@@ -1,6 +1,6 @@
-@use '@bad-at-coding/styles/variables/spacing';
-@use '@bad-at-coding/styles/variables/colors';
-@use '@bad-at-coding/styles/variables/stroke';
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/variables/stroke' as stroke;
 
 $grid-padding: calc(spacing.$component-padding-panel * 2);
 $grid-width : calc(100vw - $grid-padding);
@@ -8,8 +8,8 @@ $grid-height: calc(100vh - $grid-padding);
 
 $total-x-squares: 100;
 $total-y-squares: 60;
-$column-grid-num : 10;
-$row-grid-num : 10;
+$column-grid-num : 5;
+$row-grid-num : 6;
 
 $square-width: calc($grid-width / $total-x-squares);
 $square-height: calc($grid-height / $total-y-squares);

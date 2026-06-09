@@ -1,0 +1,22 @@
+@use 'primitives' as primitives;
+
+$font-family-display: 'Big Shoulders Stencil Display', sans-serif;
+$font-family-code: 'JetBrains Mono', monospace;
+// Font Weights
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// Line Heights
+$line-height-tight: 120%;
+$line-height-mono: 130%;
+$line-height-base: 150%;
+
+$code-lg: primitives.$text-5;
+$body-reading: primitives.$text-4;
+$body-commentary: primitives.$text-3-5;
+$body-micro: primitives.$text-3;
+$code-default: primitives.$text-4;
+$heading-display: primitives.$text-12;
+$heading-title: primitives.$text-10;
+$heading-subtitle: primitives.$text-6;
