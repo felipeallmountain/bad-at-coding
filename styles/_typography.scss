@@ -1,0 +1,12 @@
+@use './variables/typography' as typography;
+@use './variables/primitives' as primitives;
+
+:root {
+  font-family: typography.$font-family-display;
+}
+
+.heading-display {
+  font-family: typography.$font-family-display;
+  font-size: typography.$heading-display;
+  font-weight: typography.$font-weight-medium;
+}
