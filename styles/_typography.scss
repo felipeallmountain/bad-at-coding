@@ -5,8 +5,58 @@
   font-family: typography.$font-family-display;
 }
 
-.heading-display {
+
+.heading {
   font-family: typography.$font-family-display;
-  font-size: typography.$heading-display;
   font-weight: typography.$font-weight-medium;
+  line-height: typography.$line-height-tight;
+
+  &-display {
+    font-size: typography.$heading-display;
+  }
+
+  &-title {
+    font-size: typography.$heading-title;
+  }
+}
+
+.code-command {
+  font-family: typography.$font-family-code;
+  font-weight: typography.$font-weight-regular;
+  line-height: typography.$line-height-mono;
+
+  &-default {
+    font-size: typography.$code-default;
+  }
+
+  &-link {
+    font-size: typography.$code-default;
+    text-decoration: underline;
+  }
+
+  &-lg {
+    font-size: typography.$code-lg;
+    font-weight: typography.$font-weight-medium;
+  }
+}
+
+
+.body {
+  font-family: typography.$font-family-code;
+  font-weight: typography.$font-weight-regular;
+  line-height: typography.$line-height-mono;
+
+  &-reading {
+    font-size: typography.$body-reading;
+    line-height: typography.$line-height-base;
+  }
+
+  &-commentary {
+    font-size: typography.$body-commentary;
+  }
+
+  &-micro {
+    font-weight: typography.$font-weight-bold;
+    font-size: typography.$body-micro;
+  }
 }
