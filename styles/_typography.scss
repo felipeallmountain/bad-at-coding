@@ -5,58 +5,74 @@
   font-family: typography.$font-family-display;
 }
 
-
-.heading {
+@mixin heading {
   font-family: typography.$font-family-display;
   font-weight: typography.$font-weight-medium;
   line-height: typography.$line-height-tight;
+}
 
+.heading {
   &-display {
     font-size: typography.$heading-display;
+    @include heading;
   }
 
   &-title {
     font-size: typography.$heading-title;
+    @include heading;
   }
 }
 
-.code-command {
+@mixin code {
   font-family: typography.$font-family-code;
   font-weight: typography.$font-weight-regular;
   line-height: typography.$line-height-mono;
+}
 
+.code-command {
   &-default {
     font-size: typography.$code-default;
+    @include code;
   }
 
   &-link {
     font-size: typography.$code-default;
     text-decoration: underline;
+    @include code;
   }
 
   &-lg {
     font-size: typography.$code-lg;
     font-weight: typography.$font-weight-medium;
+    @include code;
   }
 }
 
-
-.body {
+@mixin body {
   font-family: typography.$font-family-code;
   font-weight: typography.$font-weight-regular;
   line-height: typography.$line-height-mono;
+}
 
+.body {
   &-reading {
     font-size: typography.$body-reading;
     line-height: typography.$line-height-base;
+    @include body;
+
+    p+p {
+      margin-block-start: typography.$body-reading;
+    }
   }
 
   &-commentary {
     font-size: typography.$body-commentary;
+    @include body;
   }
 
   &-micro {
     font-weight: typography.$font-weight-bold;
     font-size: typography.$body-micro;
+    @include body;
   }
 }

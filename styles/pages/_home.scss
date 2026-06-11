@@ -1,7 +1,16 @@
 @use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/layout/containers';
+
+@mixin home-padding {
+  padding-block: spacing.$component-padding-y;
+  padding-inline: spacing.$component-padding-x;
+}
 
 .home {
+  @include home-padding;
+
   grid-column-start: 6;
   grid-column-end: 16;
   grid-row-start: 3;
@@ -9,4 +18,28 @@
 
   background-color: colors.$color-bg-surface;
   border: stroke.$line-focus solid colors.$color-border-grid;
+
+  @extend %flex-column;
+
+  &__welcome {
+    @include home-padding;
+    @extend %flex-column;
+
+    gap: spacing.$gap-cards-items;
+    text-wrap: balance;
+
+    .welcome {
+      &__title {
+        color: colors.$color-text-pure;
+      }
+
+      &__description {
+        color: colors.$color-text-default;
+      }
+    }
+  }
+
+  &__links {
+    @extend %flex-column;
+  }
 }
