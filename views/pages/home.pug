@@ -1,5 +1,13 @@
 extends ../base.pug
 
+mixin link(symbol, label, url, description)
+  .link.code-command-default
+    .link__symbol [#{ symbol }]
+    .link__link
+      .code-command-default $
+      a.code-command-link(href=url, target='self')= label
+    .link__description= description
+
 block variables
   - var template = 'home'
 
@@ -7,11 +15,11 @@ block body
   .home
     .home__welcome
       h1.welcome__title.heading-display WELCOME TO MY MISERY_
-      .welcome__description.body-reading
+      .welcome__description.code-command-lg
         p This site exists to remind me why I prefer the company of my bicycle, my computer and black coffee to yours.
         p If you are looking for a Full-stack ninja, you are in the wrong place.
         p Here there is only code that works out of pure spite and designs that ignore your feelings
     .home__links
-      a(href='#', target='self') /fail-cases
-      a(href='#', target='self') /who-i-am-not
-      a(href='#', target='self') /annoy-me
+      +link('!', '/fail-cases', '#', '// The gallery of mediocrity.')
+      +link('?', '/who-i-am-not', '#', '// Not your friend.')
+      +link('#', '/annoy-me', '#', '// Only if strictly necessary.')

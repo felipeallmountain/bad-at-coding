@@ -28,9 +28,14 @@ ul {
 :root,
 body {
   font-family: 'Arial', sans-serif;
-  font-size: calc(100vw / 1280 * 4);
   line-height: 1.5;
   color: #333;
+
+}
+
+
+html {
+  font-size: clamp(2px, calc(100vw / 1280 * 4), 6px);
 }
 
 a {

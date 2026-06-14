@@ -11,8 +11,8 @@
 .home {
   @include home-padding;
 
-  grid-column-start: 6;
-  grid-column-end: 16;
+  grid-column-start: 5;
+  grid-column-end: 17;
   grid-row-start: 3;
   grid-row-end: 11;
 
@@ -26,7 +26,7 @@
     @extend %flex-column;
 
     gap: spacing.$gap-cards-items;
-    text-wrap: balance;
+    text-wrap: pretty;
 
     .welcome {
       &__title {
@@ -40,6 +40,20 @@
   }
 
   &__links {
-    @extend %flex-column;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    grid-auto-rows: 1fr;
+    justify-content: start;
+    // color: colors.$color-text-pure;
+
+    .link {
+      grid-column: span 3;
+      display: grid;
+      grid-template-columns: subgrid;
+
+      &__link {
+        display: flex;
+      }
+    }
   }
 }

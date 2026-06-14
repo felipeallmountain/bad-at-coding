@@ -45,6 +45,10 @@
     font-size: typography.$code-lg;
     font-weight: typography.$font-weight-medium;
     @include code;
+
+    p+p {
+      margin-block-start: typography.$code-lg;
+    }
   }
 }
 
