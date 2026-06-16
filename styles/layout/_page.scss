@@ -41,10 +41,10 @@ html {
 }
 
 .footer {
-  color: colors.$color-text-default;
+  color: colors.$color-text-muted;
   position: fixed;
-  text-align: center;
-  width: 100%;
-  margin: auto;
   bottom: 0;
+  right: 0;
+  padding-inline-end: spacing.$gap-nav-links;
+  padding-block-end: spacing.$gap-text-line;
 }
