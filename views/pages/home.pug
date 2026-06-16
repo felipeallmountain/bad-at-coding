@@ -2,7 +2,10 @@ extends ../base.pug
 
 mixin link(symbol, label, url, description)
   .link.code-command-default
-    .link__symbol [#{ symbol }]
+    .link__symbol
+      .symbol__start
+        .line
+      .symbol__symbol [#{ symbol }]
     .link__link
       .code-command-default $
       a.code-command-link(href=url, target='self')= label
@@ -20,6 +23,18 @@ block body
         p If you are looking for a Full-stack ninja, you are in the wrong place.
         p Here there is only code that works out of pure spite and designs that ignore your feelings
     .home__links
+      .link.top
+        .top__start
+        .top__middle
+          .line
+        .top__end
+          .line
       +link('!', '/fail-cases', '#', '// The gallery of mediocrity.')
       +link('?', '/who-i-am-not', '#', '// Not your friend.')
       +link('#', '/annoy-me', '#', '// Only if strictly necessary.')
+      .link.bottom
+        .bottom__start
+        .bottom__middle
+          .line
+        .bottom__end
+    .home__spacing

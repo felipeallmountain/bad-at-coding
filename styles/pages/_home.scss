@@ -8,18 +8,81 @@
   padding-inline: spacing.$component-padding-x;
 }
 
+@mixin links-line {
+  height: spacing.$component-padding-y;
+  border-inline: stroke.$line-thin solid colors.$color-border-blueprint;
+
+  .line {
+    position: relative;
+    border-block-start: stroke.$line-thin solid colors.$color-border-blueprint;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      transform: translateY(-50%);
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+    }
+
+    &::before {
+      left: 0;
+      border-right: 6px solid colors.$color-border-blueprint;
+    }
+
+    &::after {
+      right: 0;
+      border-left: 6px solid colors.$color-border-blueprint;
+    }
+  }
+}
+
+@mixin symbol-line {
+  height: 100%;
+  width: spacing.$component-padding-y;
+  border-block: stroke.$line-thin solid colors.$color-border-blueprint;
+  padding-inline-start: spacing.$gap-text-line;
+
+  .line {
+    position: relative;
+    height: 100%;
+    border-inline-start: stroke.$line-thin solid colors.$color-border-blueprint;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      transform: translateX(-50%);
+      border-left: 3px solid transparent;
+      border-right: 3px solid transparent;
+    }
+
+    &::before {
+      top: 0;
+      border-bottom: 4px solid colors.$color-border-blueprint;
+    }
+
+    &::after {
+      bottom: 0;
+      border-top: 4px solid colors.$color-border-blueprint;
+    }
+  }
+}
+
 .home {
   @include home-padding;
 
-  grid-column-start: 5;
-  grid-column-end: 17;
+  grid-column-start: 6;
+  grid-column-end: 16;
   grid-row-start: 3;
   grid-row-end: 11;
 
   background-color: colors.$color-bg-surface;
-  border: stroke.$line-focus solid colors.$color-border-grid;
+  margin: stroke.$line-focus;
+  // border: stroke.$line-focus solid colors.$color-border-grid;
 
   @extend %flex-column;
+  justify-content: space-between;
 
   &__welcome {
     @include home-padding;
@@ -42,17 +105,62 @@
   &__links {
     display: grid;
     grid-template-columns: repeat(3, max-content);
-    grid-auto-rows: 1fr;
+    column-gap: spacing.$gap-cards-items;
     justify-content: start;
-    // color: colors.$color-text-pure;
 
     .link {
       grid-column: span 3;
       display: grid;
       grid-template-columns: subgrid;
 
-      &__link {
+      &:not(:first-child, :last-child, :nth-child(2)) {
+        margin-block-start: spacing.$gap-cards-items;
+      }
+
+      &.top {
+        .top {
+
+          &__middle,
+          &__end {
+            padding-block-start: spacing.$gap-text-line;
+            @include links-line;
+          }
+        }
+      }
+
+      &.bottom {
+        .bottom {
+          &__middle {
+            display: flex;
+            flex-direction: column-reverse;
+            padding-block-end: spacing.$gap-text-line;
+            @include links-line;
+          }
+        }
+      }
+
+      &__symbol {
         display: flex;
+
+        .symbol {
+          &__start {
+            @include symbol-line;
+          }
+
+          &__symbol {
+            color: colors.$color-text-default;
+          }
+        }
+      }
+
+      &__link {
+        color: colors.$color-text-pure;
+        display: flex;
+        gap: spacing.$gap-text-line;
+      }
+
+      &__description {
+        color: colors.$color-text-muted;
       }
     }
   }
