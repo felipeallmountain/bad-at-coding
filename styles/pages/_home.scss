@@ -79,7 +79,6 @@
 
   background-color: colors.$color-bg-surface;
   margin: stroke.$line-focus;
-  // border: stroke.$line-focus solid colors.$color-border-grid;
 
   @extend %flex-column;
   justify-content: space-between;

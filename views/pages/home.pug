@@ -8,7 +8,7 @@ mixin link(symbol, label, url, description)
       .symbol__symbol [#{ symbol }]
     .link__link
       .code-command-default $
-      a.code-command-link(href=url, target='self')= label
+      a.code-command-link(href=url, target='_self')= label
     .link__description= description
 
 block variables
