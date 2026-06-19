@@ -3,11 +3,6 @@
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
 @use '@bad-at-coding/styles/layout/containers';
 
-@mixin home-padding {
-  padding-block: spacing.$component-padding-y;
-  padding-inline: spacing.$component-padding-x;
-}
-
 @mixin links-line {
   height: spacing.$component-padding-y;
   border-inline: stroke.$line-thin solid colors.$color-border-blueprint;
@@ -21,18 +16,17 @@
       content: '';
       position: absolute;
       transform: translateY(-50%);
-      border-top: 4px solid transparent;
-      border-bottom: 4px solid transparent;
+      border-block: 4px solid transparent;
     }
 
     &::before {
       left: 0;
-      border-right: 6px solid colors.$color-border-blueprint;
+      border-inline-end: 6px solid colors.$color-border-blueprint;
     }
 
     &::after {
       right: 0;
-      border-left: 6px solid colors.$color-border-blueprint;
+      border-inline-start: 6px solid colors.$color-border-blueprint;
     }
   }
 }
@@ -53,24 +47,23 @@
       content: '';
       position: absolute;
       transform: translateX(-50%);
-      border-left: 3px solid transparent;
-      border-right: 3px solid transparent;
+      border-inline: 3px solid transparent;
     }
 
     &::before {
-      top: 0;
-      border-bottom: 4px solid colors.$color-border-blueprint;
+      inset-block-start: 0;
+      border-block-end: 4px solid colors.$color-border-blueprint;
     }
 
     &::after {
-      bottom: 0;
-      border-top: 4px solid colors.$color-border-blueprint;
+      inset-block-end: 0;
+      border-block-start: 4px solid colors.$color-border-blueprint;
     }
   }
 }
 
 .home {
-  @include home-padding;
+  @extend %container-padding;
 
   grid-column-start: 3;
   grid-column-end: 12;
@@ -84,7 +77,7 @@
   justify-content: space-between;
 
   &__welcome {
-    @include home-padding;
+    @extend %container-padding;
     @extend %flex-column;
 
     gap: spacing.$gap-cards-items;

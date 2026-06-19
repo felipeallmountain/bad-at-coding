@@ -1,4 +1,11 @@
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
+
 %flex-column {
   display: flex;
   flex-direction: column;
+}
+
+%container-padding {
+  padding-block: spacing.$component-padding-y;
+  padding-inline: spacing.$component-padding-x;
 }

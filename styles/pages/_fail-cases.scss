@@ -1,0 +1,15 @@
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/variables/stroke' as stroke;
+@use '@bad-at-coding/styles/layout/containers';
+
+.fail-cases {
+  @extend %container-padding;
+  grid-column-start: 2;
+  grid-column-end: 15;
+  grid-row-start: 3;
+  grid-row-end: 11;
+
+
+  background-color: colors.$color-bg-surface;
+  margin: stroke.$line-focus;
+}
