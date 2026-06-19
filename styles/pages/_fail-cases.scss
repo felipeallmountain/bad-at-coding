@@ -12,4 +12,14 @@
 
   background-color: colors.$color-bg-surface;
   margin: stroke.$line-focus;
+
+  &__welcome {
+    @extend %container-padding;
+
+    .welcome {
+      &__title {
+        color: colors.$color-text-pure;
+      }
+    }
+  }
 }

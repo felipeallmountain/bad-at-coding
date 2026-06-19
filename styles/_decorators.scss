@@ -1,0 +1,78 @@
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/variables/stroke' as stroke;
+
+@mixin links-line {
+  height: spacing.$component-padding-y;
+  border-inline: stroke.$line-thin solid colors.$color-border-blueprint;
+
+  .line {
+    position: relative;
+    border-block-start: stroke.$line-thin solid colors.$color-border-blueprint;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      transform: translateY(-50%);
+      border-block: 4px solid transparent;
+    }
+
+    &::before {
+      left: 0;
+      border-inline-end: 6px solid colors.$color-border-blueprint;
+    }
+
+    &::after {
+      right: 0;
+      border-inline-start: 6px solid colors.$color-border-blueprint;
+    }
+  }
+}
+
+@mixin symbol-line {
+  height: 100%;
+  width: spacing.$component-padding-y;
+  border-block: stroke.$line-thin solid colors.$color-border-blueprint;
+  padding-inline-start: spacing.$gap-text-line;
+
+  .line {
+    position: relative;
+    height: 100%;
+    border-inline-start: stroke.$line-thin solid colors.$color-border-blueprint;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      transform: translateX(-50%);
+      border-inline: 3px solid transparent;
+    }
+
+    &::before {
+      inset-block-start: 0;
+      border-block-end: 4px solid colors.$color-border-blueprint;
+    }
+
+    &::after {
+      inset-block-end: 0;
+      border-block-start: 4px solid colors.$color-border-blueprint;
+    }
+  }
+}
+
+.top-line {
+  padding-block-start: spacing.$gap-text-line;
+  @include links-line;
+}
+
+.bottom-line {
+  display: flex;
+  flex-direction: column-reverse;
+  padding-block-end: spacing.$gap-text-line;
+  @include links-line;
+}
+
+.left-line {
+  @include symbol-line;
+}
