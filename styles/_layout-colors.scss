@@ -1,0 +1,47 @@
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/variables/primitives' as primitives;
+
+// text
+.text-color-pure {
+  color: colors.$color-text-pure;
+}
+
+.text-color-default {
+  color: colors.$color-text-default;
+}
+
+.text-color-muted {
+  color: colors.$color-text-muted;
+}
+
+.text-color-dead {
+  color: colors.$color-text-dead;
+}
+
+// surface
+.bg-color-surface {
+  background-color: colors.$color-bg-surface;
+}
+
+// shadow
+
+$shadow-block: 4rem;
+$shadow-inline: 4rem;
+$shadow-spread: 10rem;
+$shadow-color: colors.$color-border-mat;
+
+.shadow-right-down {
+  box-shadow: $shadow-inline $shadow-block $shadow-spread $shadow-color;
+}
+
+.shadow-right-up {
+  box-shadow: $shadow-inline calc($shadow-block * -1) $shadow-spread $shadow-color;
+}
+
+.shadow-left-down {
+  box-shadow: calc($shadow-inline * -1) $shadow-block $shadow-spread $shadow-color;
+}
+
+.shadow-left-up {
+  box-shadow: calc($shadow-inline * -1) calc($shadow-block * -1) $shadow-spread $shadow-color;
+}

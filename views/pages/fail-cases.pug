@@ -1,4 +1,18 @@
 extends ../base.pug
+include ../mixins/line.pug
+
+mixin link(number, label, url, description)
+  .link
+    .link__number.code-command-default [#{number}]
+    .link__content
+      .content__top
+        +line-block('top-line')
+        .top__url
+          .url__symbol.code-command-default $
+          a.code-command-link(href=url, target='_self')= label
+      .content__description.body-commentary
+        p= description
+        +line-block('bottom-line')
 
 block variables
   - var template = 'fail-cases'
@@ -8,3 +22,8 @@ block body
     .fail-cases__welcome
       h1.welcome__title.heading-display THE GALLERY OF MEDIOCRITY_
     .fail-cases__links
+      +link('01', '/the-spite-ful-portfolio', '/the-spite-ful-portfolio', 'A portfolio that is, frankly, visually abusive')
+      +link('02', '/the-user-friendly-nav', '/the-user-friendly-nav', 'The navigation menu I designed while deliberately ignoring every standard UX principle.')
+      +link('03', '/rejection-letter-generator', '/rejection-letter-generator', "Simulate being rejected from that desired work you're applying, or reject that person you don't wish to work with")
+      +link('04', '/boring-clock', '/boring-clock', 'Procrastinate your time by watching time, waste your precious time and postpone your deadlines, feel free to blame me when you get fired.')
+      +link('05', '/compiler-annoying-tool', '/compiler-annoying-tool', 'A script that generates more errors than code')

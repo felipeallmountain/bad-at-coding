@@ -31,17 +31,14 @@ html {
       width: max-content;
       position: relative;
       z-index: 10;
-      color: colors.$color-text-pure;
       display: flex;
       padding: spacing.$gap-nav-links;
       gap: spacing.$gap-nav-links;
-      background-color: colors.$color-bg-surface;
     }
   }
 }
 
 .footer {
-  color: colors.$color-text-muted;
   position: fixed;
   bottom: 0;
   right: 0;
