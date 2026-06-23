@@ -1,30 +1,53 @@
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/stroke' as stroke;
 @use '@bad-at-coding/styles/layout/containers';
 
 .who-i-am-not {
   grid-column-start: 5;
   grid-column-end: 20;
-  grid-row-start: 2;
+  grid-row-start: 4;
   grid-row-end: 11;
+
+  margin: stroke.$line-focus;
   @extend %flex-column;
   gap: spacing.$gap-cards-items;
 
-  &__items {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: spacing.$layout-section-gap;
+  &__welcome {
+    @extend %flex-column;
 
-    .item {
-      display: flex;
-      gap: spacing.$gap-nav-links;
+    gap: spacing.$gap-cards-items;
+    text-wrap: pretty;
+  }
 
-      &__content {
+  &__content {
+    @extend %flex-column;
+    justify-content: space-between;
+    height: 100%;
+
+    .content {
+      &__items {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: spacing.$layout-section-gap;
+
+        .item {
+          display: flex;
+          gap: spacing.$gap-nav-links;
+
+          &__content {
+            @extend %flex-column;
+            gap: spacing.$gap-nav-links;
+
+            p {
+              text-wrap: pretty;
+            }
+          }
+        }
+      }
+
+      &__footer {
         @extend %flex-column;
         gap: spacing.$gap-nav-links;
-
-        p {
-          text-wrap: pretty;
-        }
       }
     }
   }

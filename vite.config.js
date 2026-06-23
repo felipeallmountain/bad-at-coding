@@ -15,6 +15,7 @@ export default defineConfig({
     },
   },
   build: {
+    manifest: true,
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'app/main.ts'),

@@ -1,56 +1,99 @@
 import dotenv from 'dotenv'
 import path from 'path'
-import express, { Request, Response } from 'express'
-import { fileURLToPath } from 'url'
-import { createServer as createViteServer } from 'vite'
+import express, { Request, Response, NextFunction } from 'express'
+import { createServer as createViteServer, ViteDevServer } from 'vite'
 import pug from 'pug'
+import fs from 'fs'
 
 dotenv.config()
 const app = express()
 const isDev = process.env.NODE_ENV !== 'production'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+interface ManifestEntry {
+  file: string
+  css?: string[]
+  src?: string
+}
 
-const viteServer = await createViteServer({
-  server: { middlewareMode: true },
-  appType: 'custom',
-})
+let viteServer: ViteDevServer
+let manifest: Record<string, ManifestEntry> = {}
 
-app.get('/', async (request: Request, resolve: Response) => {
-  const url = request.originalUrl
-
-  const templatePath = path.resolve(__dirname, 'views/pages/home.pug')
-  const compiledTemplate = pug.compileFile(templatePath)
-  const htmlTemplate = compiledTemplate({
-    title: 'bad at coding!!',
-    message: 'hi from da backandd!!!',
+if (isDev) {
+  viteServer = await createViteServer({
+    server: { middlewareMode: true },
+    appType: 'custom',
   })
-  const finalTemplate = await viteServer.transformIndexHtml(url, htmlTemplate)
+} else {
+  try {
+    const manifestPath = path.resolve(
+      process.cwd(),
+      'dist',
+      '.vite',
+      'manifest.json'
+    )
+    manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'))
+  } catch (error) {
+    console.error('Failed to load production manifest:', error)
+  }
+}
 
-  resolve.status(200).set({ 'Content-type': 'text/html' }).end(finalTemplate)
-})
+const renderView = (viewName: string, locals: Record<string, unknown> = {}) => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const url = req.originalUrl
+      const templatePath = path.resolve(
+        process.cwd(),
+        'views',
+        'pages',
+        `${viewName}.pug`
+      )
+      const compiledTemplate = pug.compileFile(templatePath)
+      const htmlTemplate = compiledTemplate(locals)
 
-app.get('/fail-cases', async (request: Request, resolve: Response) => {
-  const url = request.originalUrl
+      let finalHtml = htmlTemplate
+      if (isDev) {
+        finalHtml = await viteServer.transformIndexHtml(url, htmlTemplate)
+      } else {
+        // Rewrite paths using the production manifest
+        const mainTs = manifest['app/main.ts']
+        const jsFile = mainTs ? `/${mainTs.file}` : ''
+        const cssFile = mainTs?.css?.[0] ? `/${mainTs.css[0]}` : ''
+        const bs500 = manifest['fonts/big-shoulders-stencil-v4-latin-500.woff2']
+          ?.file
+          ? `/${manifest['fonts/big-shoulders-stencil-v4-latin-500.woff2'].file}`
+          : ''
+        const jm400 = manifest['fonts/jetbrains-mono-v24-latin-regular.woff2']
+          ?.file
+          ? `/${manifest['fonts/jetbrains-mono-v24-latin-regular.woff2'].file}`
+          : ''
+        const jm500 = manifest['fonts/jetbrains-mono-v24-latin-500.woff2']?.file
+          ? `/${manifest['fonts/jetbrains-mono-v24-latin-500.woff2'].file}`
+          : ''
 
-  const templatePath = path.resolve(__dirname, 'views/pages/fail-cases.pug')
-  const compiledTemplate = pug.compileFile(templatePath)
-  const htmlTemplate = compiledTemplate({})
-  const finalTemplate = await viteServer.transformIndexHtml(url, htmlTemplate)
+        finalHtml = htmlTemplate
+          .replace('../app/main.ts', jsFile)
+          .replace('../styles/main.scss', cssFile)
+          .replace('../fonts/big-shoulders-stencil-v4-latin-500.woff2', bs500)
+          .replace('../fonts/jetbrains-mono-v24-latin-regular.woff2', jm400)
+          .replace('../fonts/jetbrains-mono-v24-latin-500.woff2', jm500)
+      }
 
-  resolve.status(200).set({ 'Content-type': 'text/html' }).end(finalTemplate)
-})
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(finalHtml)
+    } catch (error) {
+      next(error)
+    }
+  }
+}
 
-app.get('/who-i-am-not', async (request: Request, resolve: Response) => {
-  const url = request.originalUrl
+app.get('/', renderView('home'))
 
-  const templatePath = path.resolve(__dirname, 'views/pages/who-i-am-not.pug')
-  const compiledTemplate = pug.compileFile(templatePath)
-  const htmlTemplate = compiledTemplate({})
-  const finalTemplate = await viteServer.transformIndexHtml(url, htmlTemplate)
+app.get('/fail-cases', renderView('fail-cases'))
 
-  resolve.status(200).set({ 'Content-type': 'text/html' }).end(finalTemplate)
-})
+app.get('/who-i-am-not', renderView('who-i-am-not'))
 
 async function startServer() {
   if (isDev) {
