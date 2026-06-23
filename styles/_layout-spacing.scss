@@ -1,0 +1,23 @@
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
+
+// padding
+.padding-x {
+  padding-inline: spacing.$component-padding-x;
+}
+
+.padding-y {
+  padding-block: spacing.$component-padding-y;
+}
+
+.padding-x-y {
+  padding-inline: spacing.$component-padding-x;
+  padding-block: spacing.$component-padding-y;
+}
+
+.padding-content {
+  padding: spacing.$component-padding-panel;
+}
+
+.padding-nav-links {
+  padding: spacing.$gap-nav-links;
+}

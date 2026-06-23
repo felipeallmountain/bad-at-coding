@@ -41,6 +41,17 @@ app.get('/fail-cases', async (request, resolve) => {
   resolve.status(200).set({ 'Content-type': 'text/html' }).end(finalTemplate)
 })
 
+app.get('/who-i-am-not', async (request, resolve) => {
+  const url = request.originalUrl
+
+  const templatePath = path.resolve(__dirname, 'views/pages/who-i-am-not.pug')
+  const compiledTemplate = pug.compileFile(templatePath)
+  const htmlTemplate = compiledTemplate({})
+  const finalTemplate = await viteServer.transformIndexHtml(url, htmlTemplate)
+
+  resolve.status(200).set({ 'Content-type': 'text/html' }).end(finalTemplate)
+})
+
 async function startServer() {
   if (isDev) {
     app.use(viteServer.middlewares)

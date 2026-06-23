@@ -22,7 +22,6 @@ html {
 .content {
   position: absolute;
   inset: 0;
-  padding: spacing.$component-padding-panel;
 }
 
 .header {
@@ -32,7 +31,6 @@ html {
       position: relative;
       z-index: 10;
       display: flex;
-      padding: spacing.$gap-nav-links;
       gap: spacing.$gap-nav-links;
     }
   }

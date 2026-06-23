@@ -4,8 +4,6 @@
 @use '@bad-at-coding/styles/layout/containers';
 
 .home {
-  @extend %container-padding;
-
   grid-column-start: 3;
   grid-column-end: 12;
   grid-row-start: 3;
@@ -18,21 +16,10 @@
   justify-content: space-between;
 
   &__welcome {
-    @extend %container-padding;
     @extend %flex-column;
 
     gap: spacing.$gap-cards-items;
     text-wrap: pretty;
-
-    .welcome {
-      &__title {
-        color: colors.$color-text-pure;
-      }
-
-      &__description {
-        color: colors.$color-text-default;
-      }
-    }
   }
 
   &__links {
@@ -52,22 +39,11 @@
 
       &__symbol {
         display: flex;
-
-        .symbol {
-          &__symbol {
-            color: colors.$color-text-default;
-          }
-        }
       }
 
       &__link {
-        color: colors.$color-text-pure;
         display: flex;
         gap: spacing.$gap-text-line;
-      }
-
-      &__description {
-        color: colors.$color-text-muted;
       }
     }
   }

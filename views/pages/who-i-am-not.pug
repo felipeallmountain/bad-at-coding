@@ -1,0 +1,23 @@
+extends ../base.pug
+include ../mixins/line.pug
+
+mixin item(title, paragraph)
+  article.item.shadow-right-down
+    .item__space
+      +line-inline('left-line')
+    .item__content.padding-y
+      h2.content__title.code-command-default.text-color-pure= title
+      p.content__paragraph.body-commentary.text-color-default= paragraph
+
+block variables
+  - var template = 'who-i-am-not'
+  - var links = [{ label: '/who-i-am-not', url: '/who-i-am-not'}]
+
+block body
+  .who-i-am-not.bg-color-surface.shadow-right-up.padding-x-y
+    .who-i-am-not__welcome.padding-x-y
+      h1.welcome__title.heading-display.text-color-pure NOT YOUR FRIEND_
+    .who-i-am-not__items
+      +item('[01] NOT A NINJA',"I don't throw shurikens; I push code that coccasionally passes CI/CD pipelines. Let's stop using feudal mercenary metaphors for a sedentary desk job")
+      +item('[02] NOT "PROACTIVE"',"I am strictly reactive. Reactive to a competitive salary, transparent specifications, and well-scoped tasks. If the Jira ticket is empty, my congnitive rendering pipeline is too.")
+      +item('[03] NOT "PASSIONATE"',"Passion didn't write this codel an over-extracted batch of dark roast and a desire to fund a mountain biking trip did. I don't code in my sleep; I sleep in my sleep.")

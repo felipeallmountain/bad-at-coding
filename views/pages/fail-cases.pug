@@ -2,25 +2,26 @@ extends ../base.pug
 include ../mixins/line.pug
 
 mixin link(number, label, url, description)
-  .link
-    .link__number.code-command-default [#{number}]
+  .link.shadow-right-up.padding-x-y
+    .link__number.code-command-default.padding-y.text-color-muted [#{number}]
     .link__content
       .content__top
         +line-block('top-line')
         .top__url
-          .url__symbol.code-command-default $
-          a.code-command-link(href=url, target='_self')= label
+          .url__symbol.code-command-default.text-color-default $
+          a.code-command-link.text-color-pure(href=url, target='_self')= label
       .content__description.body-commentary
-        p= description
+        p.padding-y.text-color-default= description
         +line-block('bottom-line')
 
 block variables
   - var template = 'fail-cases'
+  - var links = [{ label: '/fail-cases', url: '/fail-cases' }]
 
 block body
-  .fail-cases
-    .fail-cases__welcome
-      h1.welcome__title.heading-display THE GALLERY OF MEDIOCRITY_
+  .fail-cases.bg-color-surface.shadow-right-up.padding-x-y
+    .fail-cases__welcome.padding-x-y
+      h1.welcome__title.heading-display.text-color-pure THE GALLERY OF MEDIOCRITY_
     .fail-cases__links
       +link('01', '/the-spite-ful-portfolio', '/the-spite-ful-portfolio', 'A portfolio that is, frankly, visually abusive')
       +link('02', '/the-user-friendly-nav', '/the-user-friendly-nav', 'The navigation menu I designed while deliberately ignoring every standard UX principle.')

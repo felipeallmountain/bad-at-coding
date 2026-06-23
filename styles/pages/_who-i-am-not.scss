@@ -1,0 +1,31 @@
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/layout/containers';
+
+.who-i-am-not {
+  grid-column-start: 5;
+  grid-column-end: 20;
+  grid-row-start: 2;
+  grid-row-end: 11;
+  @extend %flex-column;
+  gap: spacing.$gap-cards-items;
+
+  &__items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: spacing.$layout-section-gap;
+
+    .item {
+      display: flex;
+      gap: spacing.$gap-nav-links;
+
+      &__content {
+        @extend %flex-column;
+        gap: spacing.$gap-nav-links;
+
+        p {
+          text-wrap: pretty;
+        }
+      }
+    }
+  }
+}

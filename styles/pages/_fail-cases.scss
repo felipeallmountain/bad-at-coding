@@ -1,29 +1,17 @@
-@use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
 @use '@bad-at-coding/styles/layout/containers';
 
 .fail-cases {
-  @extend %container-padding;
   grid-column-start: 2;
   grid-column-end: 15;
   grid-row-start: 3;
   grid-row-end: 11;
 
-  background-color: colors.$color-bg-surface;
   margin: stroke.$line-focus;
   @extend %flex-column;
   gap: spacing.$gap-cards-items;
-
-  &__welcome {
-    @extend %container-padding;
-
-    .welcome {
-      &__title {
-        color: colors.$color-text-pure;
-      }
-    }
-  }
+  overflow: hidden;
 
   &__links {
     display: grid;
@@ -35,38 +23,25 @@
       display: flex;
       gap: spacing.$gap-nav-links;
 
-      &__number {
-        color: colors.$color-text-muted;
-        padding-block: spacing.$component-padding-y;
-      }
-
       &__content {
         @extend %flex-column;
         gap: spacing.$gap-text-line;
+
         .content {
           &__top {
             width: fit-content;
-            padding-block-end: spacing.$component-padding-y;
 
             .top {
               &__url {
                 display: flex;
                 gap: spacing.$gap-nav-links;
-
-                .url__symbol {
-                  color: colors.$color-text-default;
-                }
-
-                a {
-                  color: colors.$color-text-pure;
-                }
               }
             }
           }
+
           &__description {
             @extend %flex-column;
             gap: spacing.$gap-text-line;
-            color: colors.$color-text-default;
             text-wrap: balance;
           }
         }

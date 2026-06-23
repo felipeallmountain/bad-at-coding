@@ -2,6 +2,10 @@ block variables
 
 doctype html
 
+mixin nav-link(url, label)
+  li.link-container
+    a.link(href=url, target='_self') #{ label }
+
 html(lang='en')
   head
     meta(charset='UTF-8')
@@ -17,13 +21,13 @@ html(lang='en')
     .wrapper
       header.header.code-command-default
         nav.nav
-          ul.nav__content.text-color-pure.bg-color-surface
-            li.link-container
-              a.link(href='/') BAD-AT-CODING
-            li.link-container
-              a.link(href='/') /fail-cases
+          ul.nav__content.text-color-pure.bg-color-surface.padding-nav-links
+            +nav-link('/', 'BAD-AT-CODING') 
+            if links && links.length > 0
+              each navLink in links
+                +nav-link(navLink.url, navLink.label)
 
-      main.content(data-template=template)
+      main.content.padding-content(data-template=template)
         .cutting-mat
           .bg-grid
             block body
