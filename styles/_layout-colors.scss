@@ -35,13 +35,16 @@ $shadow-color: colors.$color-border-mat;
 }
 
 .shadow-right-up {
-  box-shadow: $shadow-inline calc($shadow-block * -1) $shadow-spread $shadow-color;
+  box-shadow: $shadow-inline calc($shadow-block * -1) $shadow-spread
+    $shadow-color;
 }
 
 .shadow-left-down {
-  box-shadow: calc($shadow-inline * -1) $shadow-block $shadow-spread $shadow-color;
+  box-shadow: calc($shadow-inline * -1) $shadow-block $shadow-spread
+    $shadow-color;
 }
 
 .shadow-left-up {
-  box-shadow: calc($shadow-inline * -1) calc($shadow-block * -1) $shadow-spread $shadow-color;
+  box-shadow: calc($shadow-inline * -1) calc($shadow-block * -1) $shadow-spread
+    $shadow-color;
 }

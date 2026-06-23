@@ -46,7 +46,7 @@
     font-weight: typography.$font-weight-medium;
     @include code;
 
-    p+p {
+    p + p {
       margin-block-start: typography.$code-lg;
     }
   }
@@ -64,7 +64,7 @@
     line-height: typography.$line-height-base;
     @include body;
 
-    p+p {
+    p + p {
       margin-block-start: typography.$body-reading;
     }
   }

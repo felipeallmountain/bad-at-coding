@@ -14,5 +14,12 @@ export default defineConfig({
       '@bad-at-coding': path.resolve(__dirname, './'),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'app/main.ts'),
+      },
+    },
+  },
   appType: 'custom',
 })

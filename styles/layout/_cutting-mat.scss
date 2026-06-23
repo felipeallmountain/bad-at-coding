@@ -3,13 +3,13 @@
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
 
 $grid-padding: calc(spacing.$component-padding-panel * 2);
-$grid-width : calc(100vw - $grid-padding);
+$grid-width: calc(100vw - $grid-padding);
 $grid-height: calc(100vh - $grid-padding);
 
 $total-x-squares: 100;
 $total-y-squares: 60;
-$column-grid-num : 5;
-$row-grid-num : 6;
+$column-grid-num: 5;
+$row-grid-num: 6;
 
 $square-width: calc($grid-width / $total-x-squares);
 $square-height: calc($grid-height / $total-y-squares);
@@ -43,10 +43,13 @@ $row-gap-height: calc($row-height / spacing.$gap-nav-links);
   height: 101%;
 
   display: grid;
-  grid-template-columns: repeat(auto-fill, calc($square-width * $column-grid-num));
+  grid-template-columns: repeat(
+    auto-fill,
+    calc($square-width * $column-grid-num)
+  );
   grid-template-rows: repeat(auto-fill, calc($square-height * $row-grid-num));
 
   @include background-img(colors.$color-border-grid, stroke.$line-focus);
-  background-size:
-    calc($square-width * $column-grid-num) calc($square-height * $row-grid-num);
+  background-size: calc($square-width * $column-grid-num)
+    calc($square-height * $row-grid-num);
 }

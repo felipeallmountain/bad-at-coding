@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@bad-at-coding/*": ["./*"]
+    },
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "noEmit": true
+  },
+  "exclude": ["node_modules", "dist", "server"]
+}

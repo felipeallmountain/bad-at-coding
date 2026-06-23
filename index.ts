@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import path from 'path'
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { fileURLToPath } from 'url'
 import { createServer as createViteServer } from 'vite'
 import pug from 'pug'
@@ -16,7 +16,7 @@ const viteServer = await createViteServer({
   appType: 'custom',
 })
 
-app.get('/', async (request, resolve) => {
+app.get('/', async (request: Request, resolve: Response) => {
   const url = request.originalUrl
 
   const templatePath = path.resolve(__dirname, 'views/pages/home.pug')
@@ -30,7 +30,7 @@ app.get('/', async (request, resolve) => {
   resolve.status(200).set({ 'Content-type': 'text/html' }).end(finalTemplate)
 })
 
-app.get('/fail-cases', async (request, resolve) => {
+app.get('/fail-cases', async (request: Request, resolve: Response) => {
   const url = request.originalUrl
 
   const templatePath = path.resolve(__dirname, 'views/pages/fail-cases.pug')
@@ -41,7 +41,7 @@ app.get('/fail-cases', async (request, resolve) => {
   resolve.status(200).set({ 'Content-type': 'text/html' }).end(finalTemplate)
 })
 
-app.get('/who-i-am-not', async (request, resolve) => {
+app.get('/who-i-am-not', async (request: Request, resolve: Response) => {
   const url = request.originalUrl
 
   const templatePath = path.resolve(__dirname, 'views/pages/who-i-am-not.pug')
