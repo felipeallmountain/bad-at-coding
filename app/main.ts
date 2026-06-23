@@ -1,12 +1,15 @@
 import '@bad-at-coding/styles/main.scss'
 
+const CONTENT_CONTAINER = '.bg-grid'
+const HEADER_CONTAINER = '.header'
+
 class App {
   private contentContainer: HTMLElement | null = null
   private headerContainer: HTMLElement | null = null
 
   constructor() {
-    this.contentContainer = document.querySelector('.content')
-    this.headerContainer = document.querySelector('.header')
+    this.contentContainer = document.querySelector(CONTENT_CONTAINER)
+    this.headerContainer = document.querySelector(HEADER_CONTAINER)
     this.initRouter()
   }
 
@@ -105,8 +108,8 @@ class App {
       const parser = new DOMParser()
       const newDoc = parser.parseFromString(htmlText, 'text/html')
 
-      const newContent = newDoc.querySelector('.content')
-      const newHeader = newDoc.querySelector('.header')
+      const newContent = newDoc.querySelector(CONTENT_CONTAINER)
+      const newHeader = newDoc.querySelector(HEADER_CONTAINER)
 
       if (newContent && this.contentContainer) {
         // Swap content

@@ -22,10 +22,6 @@ html {
 .content {
   position: absolute;
   inset: 0;
-  transition: opacity 0.25s ease;
-  &.is-transitioning {
-    opacity: 0;
-  }
 }
 
 .header {
