@@ -2,7 +2,7 @@
 import '@bad-at-coding/styles/main.scss'
 import { isLinkClickInterceptable } from './utlis/links.js'
 
-const CONTENT_CONTAINER = '.bg-grid'
+const CONTENT_CONTAINER = '.container'
 const HEADER_CONTAINER = '.header'
 
 class App {
@@ -49,7 +49,11 @@ class App {
     await new Promise((resolve) => setTimeout(resolve, 250))
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'X-requested-with': 'XMLHttpRequest'
+        }
+      })
       if (!response.ok) {
         throw new Error(`Failed to load page: ${response.status}`)
       }
@@ -66,8 +70,13 @@ class App {
         this.contentContainer.innerHTML = newContent.innerHTML
 
         // Update template dataset
+        const oldTemplate = this.contentContainer.dataset.template || ''
         const newTemplate = newContent.getAttribute('data-template') || ''
         this.contentContainer.setAttribute('data-template', newTemplate)
+        // this.contentContainer.classList.replace(oldTemplate, newTemplate)
+        document.startViewTransition(() => {
+          this.contentContainer && this.contentContainer.classList.replace(oldTemplate, newTemplate)
+        });
 
         // Swap header to keep dynamic link paths in sync
         if (newHeader && this.headerContainer) {

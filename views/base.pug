@@ -33,10 +33,11 @@ html(lang='en')
               each navLink in links
                 +nav-link(navLink.url, navLink.label)
 
-      main.content.padding-content(data-template=template)
+      main.content.padding-content
         .cutting-mat
           .bg-grid
-            block body
+            .container.bg-color-surface.shadow-right-up.padding-x-y(class=template, data-template=template)
+              block body
 
       footer.footer.body-micro.text-color-muted
         .span bad-at-coding.com - ©️2026. All rights reserved. Or not. Whatever

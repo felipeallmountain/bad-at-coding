@@ -16,26 +16,25 @@ block variables
   - var template = 'home'
 
 block body
-  .home.bg-color-surface.shadow-right-up.padding-x-y
-    .home__welcome.padding-x-y
-      h1.welcome__title.heading-display.text-color-pure WELCOME TO MY MISERY_
-      .welcome__description.code-command-lg.text-color-default
-        p This site exists to remind me why I prefer the company of my bicycle, my computer and black coffee to yours.
-        p If you are looking for a Full-stack ninja, you are in the wrong place.
-        p Here there is only code that works out of pure spite and designs that ignore your feelings
-    .home__links.shadow-left-down
-      .link.top
-        .top__start
-        .top__middle
-          +line-block('top-line')
-        .top__end
-          +line-block('top-line')
-      +link('!', '/fail-cases', '/fail-cases', '// The gallery of mediocrity.')
-      +link('?', '/who-i-am-not', '/who-i-am-not', '// Not your friend.')
-      +link('#', '/annoy-me', '#', '// Only if strictly necessary.')
-      .link.bottom
-        .bottom__start
-        .bottom__middle
-          +line-block('bottom-line')
-        .bottom__end
-    .home__spacing
+  .home__welcome.padding-x-y
+    h1.welcome__title.heading-display.text-color-pure WELCOME TO MY MISERY_
+    .welcome__description.code-command-lg.text-color-default
+      p This site exists to remind me why I prefer the company of my bicycle, my computer and black coffee to yours.
+      p If you are looking for a Full-stack ninja, you are in the wrong place.
+      p Here there is only code that works out of pure spite and designs that ignore your feelings
+  .home__links.shadow-left-down
+    .link.top
+      .top__start
+      .top__middle
+        +line-block('top-line')
+      .top__end
+        +line-block('top-line')
+    +link('!', '/fail-cases', '/fail-cases', '// The gallery of mediocrity.')
+    +link('?', '/who-i-am-not', '/who-i-am-not', '// Not your friend.')
+    +link('#', '/annoy-me', '#', '// Only if strictly necessary.')
+    .link.bottom
+      .bottom__start
+      .bottom__middle
+        +line-block('bottom-line')
+      .bottom__end
+  .home__spacing
