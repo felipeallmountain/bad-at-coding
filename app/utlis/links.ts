@@ -51,6 +51,4 @@ const isLinkClickInterceptable = (
   }
 }
 
-export {
-  isLinkClickInterceptable
-}
+export { isLinkClickInterceptable }

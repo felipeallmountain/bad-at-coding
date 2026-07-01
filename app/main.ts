@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error: path alias import for SCSS file stylesheet
 import '@bad-at-coding/styles/main.scss'
 import { isLinkClickInterceptable } from './utlis/links.js'
 import gsap from 'gsap'
@@ -50,8 +50,8 @@ class App {
       this.contentContainer.replaceChildren()
       const response = await fetch(url, {
         headers: {
-          'X-requested-with': 'XMLHttpRequest'
-        }
+          'X-requested-with': 'XMLHttpRequest',
+        },
       })
       if (!response.ok) {
         throw new Error(`Failed to load page: ${response.status}`)
@@ -69,13 +69,14 @@ class App {
         const state = Flip.getState(this.contentContainer)
 
         // Update template dataset
-        const oldTemplate = this.contentContainer.getAttribute('data-template') || ''
+        const oldTemplate =
+          this.contentContainer.getAttribute('data-template') || ''
         const newTemplate = newContent.getAttribute('data-template') || ''
         this.contentContainer.setAttribute('data-template', newTemplate)
         this.contentContainer.classList.replace(oldTemplate, newTemplate)
 
         Flip.from(state, {
-          duration: .5,
+          duration: 0.5,
           ease: 'power2.inOut',
           absolute: true,
           onComplete: () => {
@@ -85,8 +86,7 @@ class App {
             if (newHeader && this.headerContainer) {
               this.headerContainer.innerHTML = newHeader.innerHTML
             }
-
-          }
+          },
         })
 
         // Swap header to keep dynamic link paths in sync
