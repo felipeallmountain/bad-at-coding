@@ -16,7 +16,37 @@ class App {
   constructor() {
     this.contentContainer = document.querySelector(CONTENT_CONTAINER)
     this.headerContainer = document.querySelector(HEADER_CONTAINER)
+    this.initPreloader()
     this.initRouter()
+  }
+
+  private initPreloader() {
+    const preloader = document.querySelector('.preloader')
+    const lines = document.querySelectorAll('.preloader__line')
+
+    if (!preloader || lines.length === 0) return
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        preloader.remove()
+      },
+    })
+
+    tl.to(lines, {
+      opacity: 1,
+      y: 0,
+      stagger: 0.3,
+      duration: 0.4,
+      ease: 'power2.out',
+    })
+
+    tl.to(preloader, {
+      opacity: 0,
+      yPercent: -100,
+      duration: 0.6,
+      ease: 'power4.inOut',
+      delay: 0.5,
+    })
   }
 
   private initRouter() {
