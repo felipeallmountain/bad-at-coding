@@ -1,9 +1,13 @@
 // @ts-ignore
 import '@bad-at-coding/styles/main.scss'
 import { isLinkClickInterceptable } from './utlis/links.js'
+import gsap from 'gsap'
+import { Flip } from 'gsap/Flip'
 
 const CONTENT_CONTAINER = '.container'
 const HEADER_CONTAINER = '.header'
+
+gsap.registerPlugin(Flip)
 
 class App {
   private contentContainer: HTMLElement | null = null
@@ -42,13 +46,8 @@ class App {
       return
     }
 
-    // Add transitioning class for exit animation
-    this.contentContainer.classList.add('is-transitioning')
-
-    // Wait for the transition to complete (250ms)
-    await new Promise((resolve) => setTimeout(resolve, 250))
-
     try {
+      this.contentContainer.replaceChildren()
       const response = await fetch(url, {
         headers: {
           'X-requested-with': 'XMLHttpRequest'
@@ -67,21 +66,30 @@ class App {
 
       if (newContent && this.contentContainer) {
         // Swap content
-        this.contentContainer.innerHTML = newContent.innerHTML
+        const state = Flip.getState(this.contentContainer)
 
         // Update template dataset
-        const oldTemplate = this.contentContainer.dataset.template || ''
+        const oldTemplate = this.contentContainer.getAttribute('data-template') || ''
         const newTemplate = newContent.getAttribute('data-template') || ''
         this.contentContainer.setAttribute('data-template', newTemplate)
-        // this.contentContainer.classList.replace(oldTemplate, newTemplate)
-        document.startViewTransition(() => {
-          this.contentContainer && this.contentContainer.classList.replace(oldTemplate, newTemplate)
-        });
+        this.contentContainer.classList.replace(oldTemplate, newTemplate)
+
+        Flip.from(state, {
+          duration: .5,
+          ease: 'power2.inOut',
+          absolute: true,
+          onComplete: () => {
+            if (newContent && this.contentContainer) {
+              this.contentContainer.innerHTML = newContent.innerHTML
+            }
+            if (newHeader && this.headerContainer) {
+              this.headerContainer.innerHTML = newHeader.innerHTML
+            }
+
+          }
+        })
 
         // Swap header to keep dynamic link paths in sync
-        if (newHeader && this.headerContainer) {
-          this.headerContainer.innerHTML = newHeader.innerHTML
-        }
 
         // Update title
         document.title = newDoc.title
@@ -107,7 +115,7 @@ class App {
       }
     } finally {
       // Remove transitioning class for entrance animation
-      this.contentContainer.classList.remove('is-transitioning')
+      // this.contentContainer.classList.remove('is-transitioning')
     }
   }
 }

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import path from 'path'
 import express, { Request, Response, NextFunction } from 'express'
-import { createServer as createViteServer, ViteDevServer } from 'vite'
+import type { ViteDevServer } from 'vite'
 import pug from 'pug'
 import fs from 'fs'
 
@@ -19,6 +19,7 @@ let viteServer: ViteDevServer
 let manifest: Record<string, ManifestEntry> = {}
 
 if (isDev) {
+  const { createServer: createViteServer } = await import('vite')
   viteServer = await createViteServer({
     server: { middlewareMode: true },
     appType: 'custom',
