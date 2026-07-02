@@ -1,4 +1,8 @@
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/variables/primitives' as primitives;
+@use '@bad-at-coding/styles/variables/stroke' as stroke;
+@use '@bad-at-coding/styles/variables/typography' as typography;
 
 %flex-column {
   display: flex;
@@ -8,4 +12,97 @@
 %container-padding {
   padding-block: spacing.$component-padding-y;
   padding-inline: spacing.$component-padding-x;
+}
+
+.container {
+  position: relative;
+  transition:
+    opacity 0.3s ease,
+    outline-color 0.3s ease;
+
+  &.is-loading {
+    outline: stroke.$line-default solid colors.$color-feedback-sketchy;
+    outline-offset: -1px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        transparent 50%,
+        rgba(colors.$color-feedback-sketchy, 0.05) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      animation: container-scan 2s linear infinite;
+    }
+  }
+
+  &__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    min-height: 200px;
+    font-family: typography.$font-family-code;
+    color: colors.$color-feedback-sketchy;
+
+    &-terminal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: primitives.$space-3;
+    }
+
+    &-text {
+      font-size: typography.$code-default;
+      letter-spacing: 1px;
+      animation: container-pulse 1.5s ease-in-out infinite;
+    }
+
+    &-bar {
+      width: 120px;
+      height: 4px;
+      background-color: colors.$color-border-mat;
+      position: relative;
+      overflow: hidden;
+    }
+
+    &-progress {
+      position: absolute;
+      height: 100%;
+      width: 50%;
+      background-color: colors.$color-feedback-sketchy;
+      animation: container-progress-slide 1.5s infinite ease-in-out;
+    }
+  }
+}
+
+@keyframes container-scan {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+
+@keyframes container-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes container-progress-slide {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 100%;
+  }
 }

@@ -77,7 +77,21 @@ class App {
     }
 
     try {
+      this.contentContainer.classList.add('is-loading')
       this.contentContainer.replaceChildren()
+
+      const loader = document.createElement('div')
+      loader.className = 'container__loader'
+      loader.innerHTML = `
+        <div class="container__loader-terminal">
+          <div class="container__loader-text">> RETRIEVING DATA...</div>
+          <div class="container__loader-bar">
+            <div class="container__loader-progress"></div>
+          </div>
+        </div>
+      `
+      this.contentContainer.appendChild(loader)
+
       const response = await fetch(url, {
         headers: {
           'X-requested-with': 'XMLHttpRequest',
@@ -110,6 +124,9 @@ class App {
           ease: 'power2.inOut',
           absolute: true,
           onComplete: () => {
+            if (this.contentContainer) {
+              this.contentContainer.classList.remove('is-loading')
+            }
             if (newContent && this.contentContainer) {
               this.contentContainer.innerHTML = newContent.innerHTML
             }
@@ -135,6 +152,9 @@ class App {
         throw new Error('Content layout missing in new page')
       }
     } catch (error) {
+      if (this.contentContainer) {
+        this.contentContainer.classList.remove('is-loading')
+      }
       console.error(
         'Navigation error, falling back to browser navigation:',
         error
