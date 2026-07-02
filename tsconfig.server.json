@@ -4,5 +4,5 @@
     "outDir": "./server",
     "noEmit": false
   },
-  "include": ["index.ts"]
+  "include": ["index.ts", "src-server/**/*.ts"]
 }

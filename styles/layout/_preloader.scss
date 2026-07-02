@@ -1,6 +1,6 @@
-@use '@bad-at-coding/styles/variables/primitives' as primitives;
 @use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/typography' as typography;
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
 
 .preloader {
   position: fixed;
@@ -10,32 +10,21 @@
   align-items: center;
   justify-content: center;
   background-color: colors.$color-bg-abyss;
-  font-family: typography.$font-family-code;
-  padding: primitives.$space-8;
 
   &__terminal {
     display: flex;
     flex-direction: column;
-    gap: primitives.$space-2;
+    gap: spacing.$gap-nav-links;
   }
 
   &__line {
-    color: colors.$color-text-muted;
-    font-size: typography.$code-default;
-    line-height: typography.$line-height-mono;
     opacity: 0;
     transform: translateY(10px);
-
-    &--accent {
-      color: colors.$color-feedback-stable;
-      font-weight: typography.$font-weight-medium;
-    }
   }
 
   &__cursor {
     display: inline-block;
     animation: preloader-blink 1s infinite steps(1);
-    color: colors.$color-feedback-stable;
   }
 }
 

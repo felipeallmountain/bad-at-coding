@@ -3,11 +3,13 @@ import '@bad-at-coding/styles/main.scss'
 import { isLinkClickInterceptable } from './utlis/links.js'
 import gsap from 'gsap'
 import { Flip } from 'gsap/Flip'
+import ScrambleTextPlugin from 'gsap/ScrambleTextPlugin'
 
 const CONTENT_CONTAINER = '.container'
 const HEADER_CONTAINER = '.header'
 
 gsap.registerPlugin(Flip)
+gsap.registerPlugin(ScrambleTextPlugin)
 
 class App {
   private contentContainer: HTMLElement | null = null
@@ -32,12 +34,13 @@ class App {
       },
     })
 
-    tl.to(lines, {
-      opacity: 1,
-      y: 0,
-      stagger: 0.3,
-      duration: 0.4,
-      ease: 'power2.out',
+    lines.forEach(line => {
+      tl.to(line, {
+        opacity: .9,
+        duration: .8,
+        scrambleText: line.innerHTML,
+        delay: .8
+      })
     })
 
     tl.to(preloader, {
@@ -45,7 +48,7 @@ class App {
       yPercent: -100,
       duration: 0.6,
       ease: 'power4.inOut',
-      delay: 0.5,
+      delay: 2,
     })
   }
 
