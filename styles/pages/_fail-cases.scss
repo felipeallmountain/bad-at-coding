@@ -4,14 +4,9 @@
 
 .fail-cases {
   grid-column-start: 2;
-  grid-column-end: 15;
+  grid-column-end: 18;
   grid-row-start: 3;
   grid-row-end: 11;
-
-  margin: stroke.$line-focus;
-  @extend %flex-column;
-  gap: spacing.$gap-cards-items;
-  overflow: hidden;
 
   &__links {
     display: grid;

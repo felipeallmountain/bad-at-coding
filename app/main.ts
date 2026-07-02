@@ -48,7 +48,7 @@ class App {
       yPercent: -100,
       duration: 0.6,
       ease: 'power4.inOut',
-      delay: 2,
+      delay: 1,
     })
   }
 
@@ -80,20 +80,20 @@ class App {
     }
 
     try {
-      this.contentContainer.classList.add('is-loading')
-      this.contentContainer.replaceChildren()
+      // this.contentContainer.classList.add('is-loading')
+      // this.contentContainer.replaceChildren()
 
-      const loader = document.createElement('div')
-      loader.className = 'container__loader'
-      loader.innerHTML = `
-        <div class="container__loader-terminal">
-          <div class="container__loader-text">> RETRIEVING DATA...</div>
-          <div class="container__loader-bar">
-            <div class="container__loader-progress"></div>
-          </div>
-        </div>
-      `
-      this.contentContainer.appendChild(loader)
+      // const loader = document.createElement('div')
+      // loader.className = 'container__loader'
+      // loader.innerHTML = `
+      //   <div class="container__loader-terminal">
+      //     <div class="container__loader-text">> RETRIEVING DATA...</div>
+      //     <div class="container__loader-bar">
+      //       <div class="container__loader-progress"></div>
+      //     </div>
+      //   </div>
+      // `
+      // this.contentContainer.appendChild(loader)
 
       const response = await fetch(url, {
         headers: {
@@ -110,9 +110,9 @@ class App {
 
       const newContent = newDoc.querySelector(CONTENT_CONTAINER)
       const newHeader = newDoc.querySelector(HEADER_CONTAINER)
+      this.contentContainer.replaceChildren()
 
-      if (newContent && this.contentContainer) {
-        // Swap content
+      if (newContent) {
         const state = Flip.getState(this.contentContainer)
 
         // Update template dataset
@@ -139,8 +139,6 @@ class App {
           },
         })
 
-        // Swap header to keep dynamic link paths in sync
-
         // Update title
         document.title = newDoc.title
 
@@ -156,7 +154,7 @@ class App {
       }
     } catch (error) {
       if (this.contentContainer) {
-        this.contentContainer.classList.remove('is-loading')
+        // this.contentContainer.classList.remove('is-loading')
       }
       console.error(
         'Navigation error, falling back to browser navigation:',

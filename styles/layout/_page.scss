@@ -1,5 +1,7 @@
 @use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/stroke' as stroke;
+@use '@bad-at-coding/styles/layout/containers';
 
 html,
 body {
@@ -22,6 +24,22 @@ html {
 .content {
   position: absolute;
   inset: 0;
+}
+
+.container {
+  @extend %flex-column;
+  gap: spacing.$gap-cards-items;
+  margin: stroke.$line-focus;
+  overflow: hidden;
+
+  &__title {
+    @extend %flex-column;
+    gap: spacing.$gap-cards-items;
+  }
+
+  &__paragraph {
+    text-wrap: pretty;
+  }
 }
 
 .header {

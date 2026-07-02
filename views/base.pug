@@ -44,6 +44,9 @@ html(lang='en')
         .cutting-mat
           .bg-grid
             .container.bg-color-surface.shadow-right-up.padding-x-y(class=template, data-template=template)
+              .container__title.padding-x-y
+                h1.container__title.heading-display.text-color-pure=pageTitle
+                block paragraph
               block body
 
       footer.footer.body-micro.text-color-muted

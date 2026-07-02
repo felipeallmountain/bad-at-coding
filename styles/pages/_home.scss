@@ -8,19 +8,7 @@
   grid-column-end: 12;
   grid-row-start: 3;
   grid-row-end: 11;
-
-  margin: stroke.$line-focus;
-  overflow: hidden;
-
-  @extend %flex-column;
   justify-content: space-between;
-
-  &__welcome {
-    @extend %flex-column;
-
-    gap: spacing.$gap-cards-items;
-    text-wrap: pretty;
-  }
 
   &__links {
     display: grid;

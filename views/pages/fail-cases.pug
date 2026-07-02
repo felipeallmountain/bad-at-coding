@@ -17,10 +17,9 @@ mixin link(number, label, url, description)
 block variables
   - var template = 'fail-cases'
   - var links = [{ label: '/fail-cases', url: '/fail-cases' }]
+  - var pageTitle = 'THE GALLERY OF MEDIOCRITY_'
 
 block body
-  .fail-cases__welcome.padding-x-y
-    h1.welcome__title.heading-display.text-color-pure THE GALLERY OF MEDIOCRITY_
   .fail-cases__links
     +link('01', '/the-spite-ful-portfolio', '/the-spite-ful-portfolio', 'A portfolio that is, frankly, visually abusive')
     +link('02', '/the-user-friendly-nav', '/the-user-friendly-nav', 'The navigation menu I designed while deliberately ignoring every standard UX principle.')

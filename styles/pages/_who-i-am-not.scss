@@ -5,19 +5,8 @@
 .who-i-am-not {
   grid-column-start: 5;
   grid-column-end: 20;
-  grid-row-start: 4;
+  grid-row-start: 2;
   grid-row-end: 11;
-
-  margin: stroke.$line-focus;
-  @extend %flex-column;
-  gap: spacing.$gap-cards-items;
-
-  &__welcome {
-    @extend %flex-column;
-
-    gap: spacing.$gap-cards-items;
-    text-wrap: pretty;
-  }
 
   &__content {
     @extend %flex-column;
