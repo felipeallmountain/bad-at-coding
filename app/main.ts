@@ -7,6 +7,8 @@ import ScrambleTextPlugin from 'gsap/ScrambleTextPlugin'
 
 const CONTENT_CONTAINER = '.container'
 const HEADER_CONTAINER = '.header'
+const CONTAINER_TITLE = '.container__title h1'
+const CONTAINER_PARAGRAPH = '.container__paragraph'
 
 gsap.registerPlugin(Flip)
 gsap.registerPlugin(ScrambleTextPlugin)
@@ -94,6 +96,43 @@ class App {
       //   </div>
       // `
       // this.contentContainer.appendChild(loader)
+      const oldTitle = this.contentContainer.querySelector(CONTAINER_TITLE)
+      const tl = gsap.timeline()
+
+
+      if (oldTitle) {
+        tl.fromTo(oldTitle, {
+          scrambleText: oldTitle.innerHTML
+        }, {
+          duration: 5,
+          repeat: -1,
+          scrambleText: {
+            text: '',
+            // speed: 2,
+            chars: 'upperAndLowerCase',
+            rightToLeft: true,
+            revealDelay: 1,
+          }
+        })
+      }
+
+
+
+
+
+      // tl.to(oldTitle, {
+      //   // scrambleText: oldTitle?.innerHTML
+      //   duration: 5,
+      //   scrambleText: {
+      //     // text: oldTitle?.innerHTML || '',
+      //     text: '_',
+      //     speed: 2,
+      //     chars: 'upperAndLowerCase',
+      //     rightToLeft: true,
+      //     revealDelay: 1,
+      //   },
+      //   repeat: -1,
+      // })
 
       const response = await fetch(url, {
         headers: {
@@ -104,13 +143,26 @@ class App {
         throw new Error(`Failed to load page: ${response.status}`)
       }
 
+
       const htmlText = await response.text()
       const parser = new DOMParser()
       const newDoc = parser.parseFromString(htmlText, 'text/html')
 
       const newContent = newDoc.querySelector(CONTENT_CONTAINER)
       const newHeader = newDoc.querySelector(HEADER_CONTAINER)
-      this.contentContainer.replaceChildren()
+
+      const newTitle = newDoc.querySelector(CONTAINER_TITLE)
+      if (newTitle) {
+        tl.kill()
+        gsap.to(oldTitle, {
+          duration: .5,
+          scrambleText: {
+            text: newTitle.innerHTML,
+            speed: 2
+          }
+        })
+      }
+      // this.contentContainer.replaceChildren()
 
       if (newContent) {
         const state = Flip.getState(this.contentContainer)
@@ -131,7 +183,7 @@ class App {
               this.contentContainer.classList.remove('is-loading')
             }
             if (newContent && this.contentContainer) {
-              this.contentContainer.innerHTML = newContent.innerHTML
+              // this.contentContainer.innerHTML = newContent.innerHTML
             }
             if (newHeader && this.headerContainer) {
               this.headerContainer.innerHTML = newHeader.innerHTML

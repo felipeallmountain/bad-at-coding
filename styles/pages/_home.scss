@@ -8,7 +8,10 @@
   grid-column-end: 12;
   grid-row-start: 3;
   grid-row-end: 11;
-  justify-content: space-between;
+
+  &__content {
+    justify-content: center;
+  }
 
   &__links {
     display: grid;

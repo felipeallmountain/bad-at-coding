@@ -40,6 +40,11 @@ html {
   &__paragraph {
     text-wrap: pretty;
   }
+
+  &__content {
+    @extend %flex-column;
+    height: 100%;
+  }
 }
 
 .header {

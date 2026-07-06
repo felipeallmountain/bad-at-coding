@@ -44,10 +44,11 @@ html(lang='en')
         .cutting-mat
           .bg-grid
             .container.bg-color-surface.shadow-right-up.padding-x-y(class=template, data-template=template)
-              .container__title.padding-x-y
-                h1.container__title.heading-display.text-color-pure=pageTitle
+              .container__title.padding-x-y(class=template+'__title')
+                h1.heading-display.text-color-pure=pageTitle
                 block paragraph
-              block body
+              .container__content(class=template+'__content')
+                block body
 
       footer.footer.body-micro.text-color-muted
         .span bad-at-coding.com - ©️2026. All rights reserved. Or not. Whatever
