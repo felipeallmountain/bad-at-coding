@@ -46,7 +46,9 @@ html(lang='en')
             .container.bg-color-surface.shadow-right-up.padding-x-y(class=template, data-template=template)
               .container__title.padding-x-y(class=template+'__title')
                 h1.heading-display.text-color-pure=pageTitle
-                block paragraph
+                if showParagraph
+                  .container__paragraph.code-command-lg.text-color-default
+                    block paragraph
               .container__content(class=template+'__content')
                 block body
 

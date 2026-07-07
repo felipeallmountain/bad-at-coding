@@ -38,7 +38,11 @@ html {
   }
 
   &__paragraph {
-    text-wrap: pretty;
+    overflow: hidden;
+
+    p {
+      text-wrap: balance;
+    }
   }
 
   &__content {
