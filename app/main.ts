@@ -1,80 +1,54 @@
 // @ts-expect-error: path alias import for SCSS file stylesheet
 import '@bad-at-coding/styles/main.scss'
-import { isLinkClickInterceptable } from './utlis/links.js'
 import gsap from 'gsap'
 import { Flip } from 'gsap/Flip'
 import ScrambleTextPlugin from 'gsap/ScrambleTextPlugin'
+import { Component } from './classes/component.js'
+import { Preloader } from './classes/preloader.js'
+import { Router } from './classes/router.js'
 
 const CONTENT_CONTAINER = '.container'
 const HEADER_CONTAINER = '.header'
 const CONTAINER_HEAD = '.container__title'
 const CONTAINER_TITLE = `${CONTAINER_HEAD} h1`
 const CONTAINER_PARAGRAPH = '.container__paragraph'
+const CONTAINER_CONTENT = '.container__content'
 
 gsap.registerPlugin(Flip)
 gsap.registerPlugin(ScrambleTextPlugin)
 
-class App {
-  private contentContainer: HTMLElement | null = null
-  private headerContainer: HTMLElement | null = null
+class App extends Component {
+  router: Router
+  preloader: Preloader
 
   constructor() {
-    this.contentContainer = document.querySelector(CONTENT_CONTAINER)
-    this.headerContainer = document.querySelector(HEADER_CONTAINER)
-    this.initPreloader()
-    this.initRouter()
-  }
-
-  private initPreloader() {
-    const preloader = document.querySelector('.preloader')
-    const lines = document.querySelectorAll('.preloader__line')
-
-    if (!preloader || lines.length === 0) return
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        preloader.remove()
+    super({
+      element: 'body',
+      classes: {
+        contentContainer: CONTENT_CONTAINER,
+        headerContainer: HEADER_CONTAINER,
       },
     })
 
-    lines.forEach(line => {
-      tl.to(line, {
-        opacity: .9,
-        duration: .8,
-        scrambleText: line.innerHTML,
-        delay: .8
-      })
-    })
-
-    tl.to(preloader, {
-      opacity: 0,
-      yPercent: -100,
-      duration: 0.6,
-      ease: 'power4.inOut',
-      delay: 1,
-    })
-  }
-
-  private initRouter() {
-    // Intercept clicks on links
-    document.addEventListener('click', (e) => {
-      const anchor = (e.target as HTMLElement).closest('a')
-
-      if (anchor && isLinkClickInterceptable(e, anchor)) {
-        e.preventDefault()
-        const url = anchor.getAttribute('href') || '/'
-        this.navigate(url)
+    this.preloader = new Preloader()
+    this.router = new Router()
+    this.router.on(
+      'navigate',
+      ({ url, pushState }: { url: string; pushState: boolean }) => {
+        this.navigate(url, pushState)
       }
-    })
-
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', () => {
-      this.navigate(window.location.pathname, false)
-    })
+    )
   }
 
-  private async navigate(url: string, pushState = true) {
-    if (!this.contentContainer) return
+  async navigate(url: string, pushState = true) {
+    const contentContainer = this.elements.contentContainer as
+      | HTMLElement
+      | undefined
+    const headerContainer = this.elements.headerContainer as
+      | HTMLElement
+      | undefined
+
+    if (!contentContainer) return
 
     // If it's the exact same pathname/search, avoid redundant fetch
     const currentPath = window.location.pathname + window.location.search
@@ -83,7 +57,9 @@ class App {
     }
 
     try {
-      const oldTitle = this.contentContainer.querySelector(CONTAINER_TITLE)
+      const oldTitle = contentContainer.querySelector(
+        CONTAINER_TITLE
+      ) as HTMLElement | null
       const tl = gsap.timeline()
 
       if (oldTitle) {
@@ -94,29 +70,31 @@ class App {
           scrambleText: {
             text: oldTitle.innerHTML,
             chars: oldTitle.innerHTML,
-            speed: .5,
+            speed: 0.5,
             rightToLeft: true,
           },
         })
       }
 
-      const oldParagraph = this.contentContainer.querySelector(CONTAINER_PARAGRAPH)
+      const oldParagraph = contentContainer.querySelector(
+        CONTAINER_PARAGRAPH
+      ) as HTMLElement | null
       const oldParagraphTl = gsap.timeline()
       if (oldParagraph) {
         const oldFragments = oldParagraph.querySelectorAll('p')
         const oldFragmentsList = Array.from(oldFragments)
 
-        oldFragmentsList.reverse().forEach(frag => {
+        oldFragmentsList.reverse().forEach((frag) => {
           gsap.to(frag, {
             duration: 5,
             ease: 'power2.out',
             repeat: -1,
             scrambleText: {
               chars: 'upperAndLowerCase',
-              text: frag.textContent,
+              text: frag.textContent || '',
               speed: 1,
               rightToLeft: true,
-            }
+            },
           })
         })
       }
@@ -134,54 +112,64 @@ class App {
       const parser = new DOMParser()
       const newDoc = parser.parseFromString(htmlText, 'text/html')
 
-      const newContent = newDoc.querySelector(CONTENT_CONTAINER)
-      const newHeader = newDoc.querySelector(HEADER_CONTAINER)
+      const newContent = newDoc.querySelector(
+        CONTENT_CONTAINER
+      ) as HTMLElement | null
+      const newHeader = newDoc.querySelector(
+        HEADER_CONTAINER
+      ) as HTMLElement | null
 
-      const newTitle = newDoc.querySelector(CONTAINER_TITLE)
-      if (newTitle) {
+      const newTitle = newDoc.querySelector(
+        CONTAINER_TITLE
+      ) as HTMLElement | null
+      if (newTitle && oldTitle) {
         tl.kill()
         gsap.to(oldTitle, {
-          duration: .6,
+          duration: 0.6,
           ease: 'power2.in',
           scrambleText: {
             text: newTitle.innerHTML,
             speed: 4,
-          }
+          },
         })
       }
 
       if (newContent) {
-        const state = Flip.getState(this.contentContainer)
-        const newParagraph = newContent.querySelector(CONTAINER_PARAGRAPH)
+        const state = Flip.getState(contentContainer)
+        const newParagraph = newContent.querySelector(
+          CONTAINER_PARAGRAPH
+        ) as HTMLElement | null
         if (newParagraph) {
           const paragraphFragments = newParagraph.querySelectorAll('p')
           const fragmentList = Array.from(paragraphFragments)
-          const containerHead = this.contentContainer.querySelector(CONTAINER_HEAD)
+          const containerHead = contentContainer.querySelector(
+            CONTAINER_HEAD
+          ) as HTMLElement | null
           if (fragmentList.length > 0 && containerHead) {
-
-            let newParagraph
+            let paragraphContainer: HTMLElement
             if (oldParagraph) {
               oldParagraph.replaceChildren()
-              newParagraph = oldParagraph
+              paragraphContainer = oldParagraph
             } else {
               const emptyParagraph = document.createElement('div')
-              emptyParagraph.className = 'container__paragraph code-command-lg text-color-default'
+              emptyParagraph.className =
+                'container__paragraph code-command-lg text-color-default'
               containerHead.append(emptyParagraph)
-              newParagraph = emptyParagraph
+              paragraphContainer = emptyParagraph
             }
             oldParagraphTl.kill()
-            oldParagraphTl.delay(.6)
+            oldParagraphTl.delay(0.6)
 
-            fragmentList.forEach(fragment => {
+            fragmentList.forEach((fragment) => {
               const paragraph = document.createElement('p')
-              newParagraph.append(paragraph)
+              paragraphContainer.append(paragraph)
               oldParagraphTl.to(paragraph, {
-                duration: .4,
+                duration: 0.4,
                 ease: 'power2.in',
                 scrambleText: {
-                  text: fragment.textContent,
-                  speed: 4
-                }
+                  text: fragment.textContent || '',
+                  speed: 4,
+                },
               })
             })
           }
@@ -191,26 +179,30 @@ class App {
           }
         }
 
+        // Update body content of the container
+        const oldBody = contentContainer.querySelector(
+          CONTAINER_CONTENT
+        ) as HTMLElement | null
+        const newBody = newContent.querySelector(
+          CONTAINER_CONTENT
+        ) as HTMLElement | null
+        if (oldBody && newBody) {
+          oldBody.innerHTML = newBody.innerHTML
+        }
+
         // Update template dataset
-        const oldTemplate =
-          this.contentContainer.getAttribute('data-template') || ''
+        const oldTemplate = contentContainer.getAttribute('data-template') || ''
         const newTemplate = newContent.getAttribute('data-template') || ''
-        this.contentContainer.setAttribute('data-template', newTemplate)
-        this.contentContainer.classList.replace(oldTemplate, newTemplate)
+        contentContainer.setAttribute('data-template', newTemplate)
+        contentContainer.classList.replace(oldTemplate, newTemplate)
 
         Flip.from(state, {
           duration: 0.5,
           ease: 'power2.inOut',
           absolute: true,
           onComplete: () => {
-            if (this.contentContainer) {
-              this.contentContainer.classList.remove('is-loading')
-            }
-            if (newContent && this.contentContainer) {
-              // this.contentContainer.innerHTML = newContent.innerHTML
-            }
-            if (newHeader && this.headerContainer) {
-              this.headerContainer.innerHTML = newHeader.innerHTML
+            if (newHeader && headerContainer) {
+              headerContainer.innerHTML = newHeader.innerHTML
             }
           },
         })
@@ -229,9 +221,6 @@ class App {
         throw new Error('Content layout missing in new page')
       }
     } catch (error) {
-      if (this.contentContainer) {
-        // this.contentContainer.classList.remove('is-loading')
-      }
       console.error(
         'Navigation error, falling back to browser navigation:',
         error
@@ -240,16 +229,7 @@ class App {
       if (pushState) {
         window.location.href = url
       }
-    } finally {
-      // Remove transitioning class for entrance animation
-      // this.contentContainer.classList.remove('is-transitioning')
     }
-  }
-
-  private createEmptyParagraph() {
-    const emptyParagraph = document.createElement('div')
-    emptyParagraph.className = 'container__paragraph code-command-lg text-color-default'
-
   }
 }
 
