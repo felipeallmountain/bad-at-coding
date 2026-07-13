@@ -37,6 +37,7 @@ export class Component extends EventEmitter {
     this.classes = classes
     this.initElement(element)
     this.initElements(classes)
+    this.addEventListeners()
   }
 
   initElement(selector: TComponentSelector) {
