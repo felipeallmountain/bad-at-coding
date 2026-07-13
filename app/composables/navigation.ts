@@ -12,8 +12,12 @@ const CONTAINER_CONTENT = '.container__content'
 gsap.registerPlugin(Flip)
 gsap.registerPlugin(ScrambleTextPlugin)
 
-export class Navigation {
-  animateOldTitle(tl: gsap.core.Timeline, oldTitle: HTMLElement) {
+export interface INavigation {
+  navigate: (url: string, pushState?: boolean) => Promise<void>
+}
+
+export function createNavigation(): INavigation {
+  const animateOldTitle = (tl: gsap.core.Timeline, oldTitle: HTMLElement) => {
     tl.to(oldTitle, {
       duration: 5,
       ease: 'power2.out',
@@ -27,7 +31,7 @@ export class Navigation {
     })
   }
 
-  animateOldParagraph(oldParagraph: HTMLElement) {
+  const animateOldParagraph = (oldParagraph: HTMLElement) => {
     const oldFragments = oldParagraph.querySelectorAll('p')
     const oldFragmentsList = Array.from(oldFragments)
     if (oldFragmentsList.length === 0) return
@@ -47,9 +51,11 @@ export class Navigation {
     })
   }
 
-  animateNewTitle(
-    oldTitle: HTMLElement, newTitle: HTMLElement, tl: gsap.core.Timeline
-  ) {
+  const animateNewTitle = (
+    oldTitle: HTMLElement,
+    newTitle: HTMLElement,
+    tl: gsap.core.Timeline
+  ) => {
     tl.kill()
     gsap.to(oldTitle, {
       duration: 0.6,
@@ -59,12 +65,13 @@ export class Navigation {
         speed: 4,
       },
     })
-
   }
 
-  animateNewParagraph(
-    newParagraph: HTMLElement, contentContainer: HTMLElement, oldParagraph: HTMLElement | null
-  ) {
+  const animateNewParagraph = (
+    newParagraph: HTMLElement,
+    contentContainer: HTMLElement,
+    oldParagraph: HTMLElement | null
+  ) => {
     const paragraphFragments = newParagraph.querySelectorAll('p')
     const fragmentList = Array.from(paragraphFragments)
     const containerHead = contentContainer.querySelector(
@@ -101,13 +108,13 @@ export class Navigation {
     }
   }
 
-  updateBodyContent(
+  const updateBodyContent = (
     contentContainer: HTMLElement,
     newContent: HTMLElement,
     newDoc: Document,
     pushState: boolean,
     url: string
-  ) {
+  ) => {
     const oldBody = contentContainer.querySelector(
       CONTAINER_CONTENT
     ) as HTMLElement | null
@@ -129,7 +136,7 @@ export class Navigation {
     }
   }
 
-  animateContainer(state: Flip.FlipState, newHeader: HTMLElement) {
+  const animateContainer = (state: Flip.FlipState, newHeader: HTMLElement) => {
     Flip.from(state, {
       duration: 0.5,
       ease: 'power2.inOut',
@@ -143,18 +150,15 @@ export class Navigation {
         }
       },
     })
-
   }
 
-
-  async navigate(url: string, pushState = true) {
+  const navigate = async (url: string, pushState = true) => {
     const contentContainer = document.querySelector(CONTENT_CONTAINER) as
       | HTMLElement
       | undefined
 
     if (!contentContainer) return
 
-    // If it's the exact same pathname/search, avoid redundant fetch
     const currentPath = window.location.pathname + window.location.search
     if (url === currentPath && pushState) {
       return
@@ -169,9 +173,12 @@ export class Navigation {
         CONTAINER_PARAGRAPH
       ) as HTMLElement | null
 
-      oldTitle && this.animateOldTitle(tl, oldTitle)
-      oldParagraph && this.animateOldParagraph(oldParagraph)
-
+      if (oldTitle) {
+        animateOldTitle(tl, oldTitle)
+      }
+      if (oldParagraph) {
+        animateOldParagraph(oldParagraph)
+      }
 
       const response = await fetch(url, {
         headers: {
@@ -197,7 +204,9 @@ export class Navigation {
         CONTAINER_TITLE
       ) as HTMLElement | null
 
-      newTitle && oldTitle && this.animateNewTitle(oldTitle, newTitle, tl)
+      if (newTitle && oldTitle) {
+        animateNewTitle(oldTitle, newTitle, tl)
+      }
 
       if (newContent) {
         const state = Flip.getState(contentContainer)
@@ -205,15 +214,17 @@ export class Navigation {
           CONTAINER_PARAGRAPH
         ) as HTMLElement | null
         if (newParagraph) {
-          this.animateNewParagraph(newParagraph, contentContainer, oldParagraph)
+          animateNewParagraph(newParagraph, contentContainer, oldParagraph)
         } else {
           if (oldParagraph) {
             oldParagraph.remove()
           }
         }
 
-        this.updateBodyContent(contentContainer, newContent, newDoc, pushState, url)
-        newHeader && this.animateContainer(state, newHeader)
+        updateBodyContent(contentContainer, newContent, newDoc, pushState, url)
+        if (newHeader) {
+          animateContainer(state, newHeader)
+        }
       } else {
         throw new Error('Content layout missing in new page')
       }
@@ -222,10 +233,13 @@ export class Navigation {
         'Navigation error, falling back to browser navigation:',
         error
       )
-      // Fallback to standard page load
       if (pushState) {
         window.location.href = url
       }
     }
+  }
+
+  return {
+    navigate,
   }
 }

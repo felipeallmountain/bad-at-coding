@@ -1,26 +1,30 @@
 // @ts-expect-error: path alias import for SCSS file stylesheet
 import '@bad-at-coding/styles/main.scss'
-import { Preloader } from './classes/preloader.js'
-import { Router } from './classes/router.js'
-import { Navigation } from './classes/navigation.js'
+import { createPreloader } from './composables/preloader.js'
+import { createRouter } from './composables/router.js'
+import { createNavigation } from './composables/navigation.js'
 
+function initApp() {
+  const preloader = createPreloader()
+  const router = createRouter()
+  const navigation = createNavigation()
 
-class App {
-  router: Router
-  preloader: Preloader
-  navigation: Navigation
+  router.on(
+    'navigate',
+    ({ url, pushState }: { url: string; pushState: boolean }) => {
+      navigation.navigate(url, pushState)
+    }
+  )
 
-  constructor() {
-    this.preloader = new Preloader()
-    this.router = new Router()
-    this.navigation = new Navigation()
-    this.router.on(
-      'navigate',
-      ({ url, pushState }: { url: string; pushState: boolean }) => {
-        this.navigation.navigate(url, pushState)
-      }
-    )
+  return {
+    preloader,
+    router,
+    navigation,
   }
 }
 
-new App()
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp)
+} else {
+  initApp()
+}
