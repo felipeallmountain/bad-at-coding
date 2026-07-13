@@ -29,10 +29,7 @@ export class EventEmitter {
   off(_: string, callback: Listener) {
     const unsubscribe = this.entries.get(callback)
 
-    if (unsubscribe) {
-      unsubscribe()
-    }
-
+    unsubscribe && unsubscribe()
     this.entries.delete(callback)
   }
 
