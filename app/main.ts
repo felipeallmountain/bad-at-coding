@@ -4,10 +4,11 @@ import { createPreloader } from './composables/preloader.js'
 import { createRouter } from './composables/router.js'
 import { createNavigation } from './composables/navigation.js'
 
-function initApp() {
+const initApp = () => {
   const preloader = createPreloader()
   const router = createRouter()
   const navigation = createNavigation()
+  // const currentPage = L
 
   router.on(
     'navigate',
@@ -15,12 +16,6 @@ function initApp() {
       navigation.navigate(url, pushState)
     }
   )
-
-  return {
-    preloader,
-    router,
-    navigation,
-  }
 }
 
 if (document.readyState === 'loading') {

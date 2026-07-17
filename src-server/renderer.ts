@@ -5,7 +5,7 @@ import pug from 'pug'
 import fs from 'fs'
 import { config } from './config.js'
 
-interface ManifestEntry {
+type ManifestEntry = {
   file: string
   css?: string[]
   src?: string

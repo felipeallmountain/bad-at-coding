@@ -3,14 +3,14 @@ import { createNanoEvents, Unsubscribe } from 'nanoevents'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type TListener = (...args: any[]) => void
 
-export interface IEventEmitter {
+export type TEventEmitter = {
   on: (event: string, callback: TListener) => Unsubscribe | void
   off: (event: string, callback: TListener) => void
   fire: (event: string, ...args: unknown[]) => void
   destroy: () => void
 }
 
-export function createEventEmitter(): IEventEmitter {
+export const createEventEmitter = (): TEventEmitter => {
   const emitter = createNanoEvents()
   const entries = new Map<TListener, Unsubscribe>()
 

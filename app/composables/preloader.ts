@@ -1,11 +1,11 @@
-import { createComponent, IComponent } from './component.js'
+import { createComponent, TComponent } from './component.js'
 import gsap from 'gsap'
 
-export interface IPreloader extends IComponent {
+export type TPreloader = TComponent & {
   animate: () => void
 }
 
-export function createPreloader(): IPreloader {
+export const createPreloader = (): TPreloader => {
   const component = createComponent({
     element: '.preloader',
     classes: {

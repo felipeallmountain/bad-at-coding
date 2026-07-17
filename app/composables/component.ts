@@ -1,37 +1,37 @@
-import { createEventEmitter, IEventEmitter } from './event-emitter.js'
+import { createEventEmitter, TEventEmitter } from './event-emitter.js'
 
-export interface IComponentClasses {
+export type TComponentClasses = {
   [key: string]: string
 }
 
-export interface IComponentElements {
+export type TComponentElements = {
   [key: string]:
-    | unknown[]
-    | Element
-    | Array<Element>
-    | HTMLElement
-    | Array<HTMLElement>
-    | NodeList
-    | Window
-    | null
+  | unknown[]
+  | Element
+  | Array<Element>
+  | HTMLElement
+  | Array<HTMLElement>
+  | NodeList
+  | Window
+  | null
 }
 
 export type TComponentSelector = string | HTMLElement
 
-export interface IComponent extends IEventEmitter {
+export type TComponent = TEventEmitter & {
   element?: HTMLElement
-  elements: IComponentElements
-  classes: IComponentClasses
+  elements: TComponentElements
+  classes: TComponentClasses
   destroy: () => void
 }
 
-export function createComponent({
+export const createComponent = ({
   classes,
   element: selector,
 }: {
-  classes: IComponentClasses
+  classes: TComponentClasses
   element: TComponentSelector
-}): IComponent {
+}): TComponent => {
   const eventEmitter = createEventEmitter()
 
   let element: HTMLElement | undefined
@@ -41,7 +41,7 @@ export function createComponent({
     element = (document.querySelector(selector) as HTMLElement) || undefined
   }
 
-  const elements: IComponentElements = {}
+  const elements: TComponentElements = {}
   if (element) {
     for (const key in classes) {
       const classSelector = classes[key]

@@ -12,11 +12,11 @@ const CONTAINER_CONTENT = '.container__content'
 gsap.registerPlugin(Flip)
 gsap.registerPlugin(ScrambleTextPlugin)
 
-export interface INavigation {
+export type TNavigation = {
   navigate: (url: string, pushState?: boolean) => Promise<void>
 }
 
-export function createNavigation(): INavigation {
+export const createNavigation = (): TNavigation => {
   const animateOldTitle = (tl: gsap.core.Timeline, oldTitle: HTMLElement) => {
     tl.to(oldTitle, {
       duration: 5,
@@ -25,7 +25,7 @@ export function createNavigation(): INavigation {
       scrambleText: {
         text: oldTitle.innerHTML,
         chars: oldTitle.innerHTML,
-        speed: 0.5,
+        speed: 3,
         rightToLeft: true,
       },
     })
@@ -142,9 +142,7 @@ export function createNavigation(): INavigation {
       ease: 'power2.inOut',
       absolute: true,
       onComplete: () => {
-        const headerContainer = document.querySelector(HEADER_CONTAINER) as
-          | HTMLElement
-          | undefined
+        const headerContainer = document.querySelector(HEADER_CONTAINER)
         if (newHeader && headerContainer) {
           headerContainer.innerHTML = newHeader.innerHTML
         }

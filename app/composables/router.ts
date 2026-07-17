@@ -1,7 +1,7 @@
-import { createEventEmitter, IEventEmitter } from './event-emitter.js'
+import { createEventEmitter, TEventEmitter } from './event-emitter.js'
 import { isLinkClickInterceptable } from '../utlis/links.js'
 
-export function createRouter(): IEventEmitter {
+export const createRouter = (): TEventEmitter => {
   const eventEmitter = createEventEmitter()
 
   const handleLinkClick = (e: MouseEvent) => {
