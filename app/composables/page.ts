@@ -16,10 +16,10 @@ export const createPage = ({
 }): TPage => {
   const component = createComponent({ classes, element })
 
-  const create = () => { }
-  const show = () => { }
-  const hide = () => { }
-  const update = () => { }
+  const create = () => {}
+  const show = () => {}
+  const hide = () => {}
+  const update = () => {}
 
   return {
     ...component,

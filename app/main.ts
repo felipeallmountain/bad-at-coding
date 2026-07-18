@@ -3,8 +3,10 @@ import '@bad-at-coding/styles/main.scss'
 import { createPreloader } from './composables/preloader.js'
 import { createRouter } from './composables/router.js'
 import { createNavigation } from './composables/navigation.js'
+import { createGrid } from './composables/grid.js'
 
 const initApp = () => {
+  createGrid()
   const preloader = createPreloader()
   const router = createRouter()
   const navigation = createNavigation()

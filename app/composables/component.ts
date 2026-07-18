@@ -6,14 +6,14 @@ export type TComponentClasses = {
 
 export type TComponentElements = {
   [key: string]:
-  | unknown[]
-  | Element
-  | Array<Element>
-  | HTMLElement
-  | Array<HTMLElement>
-  | NodeList
-  | Window
-  | null
+    | unknown[]
+    | Element
+    | Array<Element>
+    | HTMLElement
+    | Array<HTMLElement>
+    | NodeList
+    | Window
+    | null
 }
 
 export type TComponentSelector = string | HTMLElement
