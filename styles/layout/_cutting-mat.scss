@@ -23,6 +23,9 @@ $row-gap-height: calc($row-height / spacing.$gap-nav-links);
 }
 
 .cutting-mat {
+  --color-border-grid: #{colors.$color-border-grid};
+  --color-border-mat: #{colors.$color-border-mat};
+
   position: relative;
   width: 100%;
   height: 100%;
@@ -36,6 +39,14 @@ $row-gap-height: calc($row-height / spacing.$gap-nav-links);
   overflow: hidden;
 }
 
+.cutting-mat-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .bg-grid {
   position: absolute;
   inset: 0;
@@ -43,12 +54,15 @@ $row-gap-height: calc($row-height / spacing.$gap-nav-links);
   height: 101%;
 
   display: grid;
-  grid-template-columns: repeat(auto-fill,
-      calc($square-width * $column-grid-num));
+  grid-template-columns: repeat(
+    auto-fill,
+    calc($square-width * $column-grid-num)
+  );
   grid-template-rows: repeat(auto-fill, calc($square-height * $row-grid-num));
 
   @include background-img(colors.$color-border-grid, stroke.$line-focus);
-  background-size: calc($square-width * $column-grid-num) calc($square-height * $row-grid-num);
+  background-size: calc($square-width * $column-grid-num)
+    calc($square-height * $row-grid-num);
 
   transition: opacity 0.25s ease;
 
@@ -64,19 +78,5 @@ $row-gap-height: calc($row-height / spacing.$gap-nav-links);
     background-image: none;
     grid-template-columns: var(--grid-cols);
     grid-template-rows: var(--grid-rows);
-  }
-
-  .grid-cell {
-    position: relative;
-    box-sizing: border-box;
-    border-inline-start: stroke.$line-default solid colors.$color-border-grid;
-    border-block-start: stroke.$line-default solid colors.$color-border-grid;
-    background-image:
-      linear-gradient(colors.$color-border-mat stroke.$line-default,
-        transparent stroke.$line-default ),
-      linear-gradient(90deg,
-        colors.$color-border-mat stroke.$line-default,
-        transparent stroke.$line-default );
-    background-size: 20% 16.666667%;
   }
 }

@@ -7,8 +7,16 @@ export const createGrid = (): TGrid => {
     '.cutting-mat'
   ) as HTMLElement | null
   const bgGrid = document.querySelector('.bg-grid') as HTMLElement | null
+  const canvas = document.querySelector(
+    '.cutting-mat-canvas'
+  ) as HTMLCanvasElement | null
 
-  if (!cuttingMat || !bgGrid) {
+  if (!cuttingMat || !bgGrid || !canvas) {
+    return { destroy: () => {} }
+  }
+
+  const ctx = canvas.getContext('2d')
+  if (!ctx) {
     return { destroy: () => {} }
   }
 
@@ -32,31 +40,104 @@ export const createGrid = (): TGrid => {
   // Add class for dynamic grid
   cuttingMat.classList.add('has-dynamic-grid')
 
-  // Generate cells and position them explicitly to avoid grid auto-placement conflicts
-  const container = bgGrid.querySelector('.container')
-  const fragment = document.createDocumentFragment()
+  const draw = () => {
+    const rect = canvas.getBoundingClientRect()
+    const dpr = window.devicePixelRatio || 1
 
-  for (let r = 1; r <= rowsCount; r++) {
-    for (let c = 1; c <= colsCount; c++) {
-      const cell = document.createElement('div')
-      cell.className = 'grid-cell'
-      cell.style.gridColumn = `${c}`
-      cell.style.gridRow = `${r}`
-      fragment.appendChild(cell)
+    // Scale canvas buffer to match DPR
+    canvas.width = rect.width * dpr
+    canvas.height = rect.height * dpr
+    ctx.scale(dpr, dpr)
+
+    ctx.clearRect(0, 0, rect.width, rect.height)
+
+    // Retrieve theme colors dynamically
+    const computed = getComputedStyle(canvas)
+    const colorMajor =
+      computed.getPropertyValue('--color-border-grid') ||
+      'rgba(255, 255, 255, 0.1)'
+    const colorMinor =
+      computed.getPropertyValue('--color-border-mat') ||
+      'rgba(255, 255, 255, 0.1)'
+
+    // Compute pixel positions for columns and rows
+    const colPositions: number[] = [0]
+    let currentX = 0
+    cols.forEach((w) => {
+      currentX += (w / 100) * rect.width
+      colPositions.push(currentX)
+    })
+
+    const rowPositions: number[] = [0]
+    let currentY = 0
+    rows.forEach((h) => {
+      currentY += (h / 100) * rect.height
+      rowPositions.push(currentY)
+    })
+
+    // Draw minor grid lines (5x6 subdivisions in each cell)
+    ctx.strokeStyle = colorMinor
+    ctx.lineWidth = 1
+    ctx.beginPath()
+
+    for (let r = 0; r < rowsCount; r++) {
+      const yStart = rowPositions[r]
+      const yEnd = rowPositions[r + 1]
+      const cellH = yEnd - yStart
+
+      for (let c = 0; c < colsCount; c++) {
+        const xStart = colPositions[c]
+        const xEnd = colPositions[c + 1]
+        const cellW = xEnd - xStart
+
+        // Draw 5 horizontal sub-divisions (6 cells)
+        for (let i = 1; i < 6; i++) {
+          const y = yStart + (i / 6) * cellH
+          ctx.moveTo(xStart, y)
+          ctx.lineTo(xEnd, y)
+        }
+
+        // Draw 4 vertical sub-divisions (5 cells)
+        for (let j = 1; j < 5; j++) {
+          const x = xStart + (j / 5) * cellW
+          ctx.moveTo(x, yStart)
+          ctx.lineTo(x, yEnd)
+        }
+      }
     }
+    ctx.stroke()
+
+    // Draw major grid lines (boundaries between cells)
+    ctx.strokeStyle = colorMajor
+    ctx.lineWidth = 2
+    ctx.beginPath()
+
+    // Vertical major lines
+    colPositions.forEach((x) => {
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, rect.height)
+    })
+
+    // Horizontal major lines
+    rowPositions.forEach((y) => {
+      ctx.moveTo(0, y)
+      ctx.lineTo(rect.width, y)
+    })
+    ctx.stroke()
   }
 
-  if (container) {
-    bgGrid.insertBefore(fragment, container)
-  } else {
-    bgGrid.appendChild(fragment)
-  }
+  // Draw initially
+  draw()
+
+  // Handle resizing
+  window.addEventListener('resize', draw)
 
   const destroy = () => {
-    bgGrid.querySelectorAll('.grid-cell').forEach((cell) => cell.remove())
+    window.removeEventListener('resize', draw)
     cuttingMat.classList.remove('has-dynamic-grid')
     bgGrid.style.removeProperty('--grid-cols')
     bgGrid.style.removeProperty('--grid-rows')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
   }
 
   return {
