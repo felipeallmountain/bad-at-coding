@@ -13,6 +13,7 @@ type TLine = {
   isMajor: boolean
   baseCoord: number
   nodes: TNode[]
+  history?: number[][] // history of displacements: number[frameCount][nodeIndex]
 }
 
 export const createGrid = (): TGrid => {
@@ -36,6 +37,11 @@ export const createGrid = (): TGrid => {
   const colsCount = 20
   const rowsCount = 10
   const segmentCount = 15 // Number of simulation points per string line
+
+  const RED_DELAY = 2
+  const GREEN_DELAY = 5
+  const BLUE_DELAY = 8
+  const MAX_HISTORY = 9
 
   // Generate normalized random column and row tracks
   const cols = generateNormalizedTracks(colsCount, 2.5, 7.5, 100)
@@ -265,77 +271,309 @@ export const createGrid = (): TGrid => {
       }
     })
 
-    // Helper to determine if a line has active vibrations (displacement > 0.05px)
-    const isLineVibrating = (line: TLine) => {
+    // Record displacement history for all lines
+    verticalLines.forEach((line) => {
+      if (!line.history) {
+        line.history = []
+      }
+      line.history.unshift(line.nodes.map((node) => node.u))
+      if (line.history.length > MAX_HISTORY) {
+        line.history.pop()
+      }
+    })
+
+    horizontalLines.forEach((line) => {
+      if (!line.history) {
+        line.history = []
+      }
+      line.history.unshift(line.nodes.map((node) => node.u))
+      if (line.history.length > MAX_HISTORY) {
+        line.history.pop()
+      }
+    })
+
+    const getLineVibration = (line: TLine) => {
+      let maxU = 0
       for (let i = 0; i <= segmentCount; i++) {
-        if (Math.abs(line.nodes[i].u) > 0.05) return true
+        const u = Math.abs(line.nodes[i].u)
+        if (u > maxU) maxU = u
+      }
+      return maxU
+    }
+
+    const hasActiveTrails = (line: TLine) => {
+      const vibration = getLineVibration(line)
+      if (vibration > 0.05) return true
+      if (line.history) {
+        for (let f = 0; f < line.history.length; f++) {
+          const frame = line.history[f]
+          for (let i = 0; i <= segmentCount; i++) {
+            if (Math.abs(frame[i]) > 0.05) return true
+          }
+        }
       }
       return false
+    }
+
+    const getHistoricalDisplacement = (
+      line: TLine,
+      delay: number
+    ): number[] | null => {
+      if (!line.history || line.history.length === 0) return null
+      const index = Math.min(delay, line.history.length - 1)
+      return line.history[index]
+    }
+
+    const drawTrailsForLine = (
+      line: TLine,
+      isVertical: boolean,
+      opacityBase: number
+    ) => {
+      const vibration = getLineVibration(line)
+      const intensity = Math.min(1.0, vibration / 6)
+
+      // opacityFactor guarantees visibility for small movements (starting at 0.3)
+      const opacityFactor = 0.3 + 0.7 * intensity
+      // spatialOffset expands up to 5 pixels depending on movement speed
+      const spatialOffset = 5.0 * intensity
+
+      // Red Trail
+      const dispRed = getHistoricalDisplacement(line, RED_DELAY)
+      if (dispRed) {
+        ctx.beginPath()
+        ctx.strokeStyle = `rgba(255, 0, 80, ${opacityBase * 0.85 * opacityFactor})`
+        if (isVertical) {
+          ctx.moveTo(
+            line.baseCoord + dispRed[0] - spatialOffset,
+            line.nodes[0].pos
+          )
+          for (let i = 1; i <= segmentCount; i++) {
+            ctx.lineTo(
+              line.baseCoord + dispRed[i] - spatialOffset,
+              line.nodes[i].pos
+            )
+          }
+        } else {
+          ctx.moveTo(
+            line.nodes[0].pos,
+            line.baseCoord + dispRed[0] - spatialOffset
+          )
+          for (let i = 1; i <= segmentCount; i++) {
+            ctx.lineTo(
+              line.nodes[i].pos,
+              line.baseCoord + dispRed[i] - spatialOffset
+            )
+          }
+        }
+        ctx.stroke()
+      }
+
+      // Green Trail
+      const dispGreen = getHistoricalDisplacement(line, GREEN_DELAY)
+      if (dispGreen) {
+        ctx.beginPath()
+        ctx.strokeStyle = `rgba(0, 255, 80, ${opacityBase * 0.65 * opacityFactor})`
+        if (isVertical) {
+          ctx.moveTo(line.baseCoord + dispGreen[0], line.nodes[0].pos)
+          for (let i = 1; i <= segmentCount; i++) {
+            ctx.lineTo(line.baseCoord + dispGreen[i], line.nodes[i].pos)
+          }
+        } else {
+          ctx.moveTo(line.nodes[0].pos, line.baseCoord + dispGreen[0])
+          for (let i = 1; i <= segmentCount; i++) {
+            ctx.lineTo(line.nodes[i].pos, line.baseCoord + dispGreen[i])
+          }
+        }
+        ctx.stroke()
+      }
+
+      // Blue Trail
+      const dispBlue = getHistoricalDisplacement(line, BLUE_DELAY)
+      if (dispBlue) {
+        ctx.beginPath()
+        ctx.strokeStyle = `rgba(0, 80, 255, ${opacityBase * 0.5 * opacityFactor})`
+        if (isVertical) {
+          ctx.moveTo(
+            line.baseCoord + dispBlue[0] + spatialOffset,
+            line.nodes[0].pos
+          )
+          for (let i = 1; i <= segmentCount; i++) {
+            ctx.lineTo(
+              line.baseCoord + dispBlue[i] + spatialOffset,
+              line.nodes[i].pos
+            )
+          }
+        } else {
+          ctx.moveTo(
+            line.nodes[0].pos,
+            line.baseCoord + dispBlue[0] + spatialOffset
+          )
+          for (let i = 1; i <= segmentCount; i++) {
+            ctx.lineTo(
+              line.nodes[i].pos,
+              line.baseCoord + dispBlue[i] + spatialOffset
+            )
+          }
+        }
+        ctx.stroke()
+      }
     }
 
     // 3. Draw Minor Lines
     ctx.strokeStyle = colorMinor
     ctx.lineWidth = 1
-    ctx.beginPath()
 
+    // Draw all minor normal lines (where hasActiveTrails is false) in a single path
+    ctx.beginPath()
     verticalLines.forEach((line) => {
       if (line.isMajor) return
-      if (!isLineVibrating(line)) {
-        ctx.moveTo(line.baseCoord, 0)
-        ctx.lineTo(line.baseCoord, rect.height)
-      } else {
-        ctx.moveTo(line.baseCoord + line.nodes[0].u, line.nodes[0].pos)
-        for (let i = 1; i <= segmentCount; i++) {
-          ctx.lineTo(line.baseCoord + line.nodes[i].u, line.nodes[i].pos)
-        }
-      }
+      if (hasActiveTrails(line)) return
+
+      ctx.moveTo(line.baseCoord, 0)
+      ctx.lineTo(line.baseCoord, rect.height)
     })
 
     horizontalLines.forEach((line) => {
       if (line.isMajor) return
-      if (!isLineVibrating(line)) {
-        ctx.moveTo(0, line.baseCoord)
-        ctx.lineTo(rect.width, line.baseCoord)
-      } else {
+      if (hasActiveTrails(line)) return
+
+      ctx.moveTo(0, line.baseCoord)
+      ctx.lineTo(rect.width, line.baseCoord)
+    })
+    ctx.stroke()
+
+    // Draw active minor lines and their Red, Green, Blue trails
+    let hasMinorTrails = false
+    verticalLines.forEach((line) => {
+      if (line.isMajor) return
+      if (hasActiveTrails(line)) hasMinorTrails = true
+    })
+    horizontalLines.forEach((line) => {
+      if (line.isMajor) return
+      if (hasActiveTrails(line)) hasMinorTrails = true
+    })
+
+    if (hasMinorTrails) {
+      // 3a. Draw the main active minor lines (drawn normally using source-over)
+      ctx.beginPath()
+      verticalLines.forEach((line) => {
+        if (line.isMajor) return
+        if (!hasActiveTrails(line)) return
+
+        ctx.moveTo(line.baseCoord + line.nodes[0].u, line.nodes[0].pos)
+        for (let i = 1; i <= segmentCount; i++) {
+          ctx.lineTo(line.baseCoord + line.nodes[i].u, line.nodes[i].pos)
+        }
+      })
+
+      horizontalLines.forEach((line) => {
+        if (line.isMajor) return
+        if (!hasActiveTrails(line)) return
+
         ctx.moveTo(line.nodes[0].pos, line.baseCoord + line.nodes[0].u)
         for (let i = 1; i <= segmentCount; i++) {
           ctx.lineTo(line.nodes[i].pos, line.baseCoord + line.nodes[i].u)
         }
-      }
-    })
-    ctx.stroke()
+      })
+      ctx.stroke()
+
+      // 3b. Draw the trails behind them using lighter blending
+      const originalGCO = ctx.globalCompositeOperation
+      ctx.globalCompositeOperation = 'lighter'
+
+      verticalLines.forEach((line) => {
+        if (line.isMajor) return
+        if (!hasActiveTrails(line)) return
+        // We boost the base opacity for minor lines trails to make them highly visible on dark backgrounds
+        drawTrailsForLine(line, true, 0.7)
+      })
+
+      horizontalLines.forEach((line) => {
+        if (line.isMajor) return
+        if (!hasActiveTrails(line)) return
+        drawTrailsForLine(line, false, 0.7)
+      })
+
+      ctx.globalCompositeOperation = originalGCO
+    }
 
     // 4. Draw Major Lines
     ctx.strokeStyle = colorMajor
     ctx.lineWidth = 2
-    ctx.beginPath()
 
+    // Draw all major normal lines (where hasActiveTrails is false) in a single path
+    ctx.beginPath()
     verticalLines.forEach((line) => {
       if (!line.isMajor) return
-      if (!isLineVibrating(line)) {
-        ctx.moveTo(line.baseCoord, 0)
-        ctx.lineTo(line.baseCoord, rect.height)
-      } else {
-        ctx.moveTo(line.baseCoord + line.nodes[0].u, line.nodes[0].pos)
-        for (let i = 1; i <= segmentCount; i++) {
-          ctx.lineTo(line.baseCoord + line.nodes[i].u, line.nodes[i].pos)
-        }
-      }
+      if (hasActiveTrails(line)) return
+
+      ctx.moveTo(line.baseCoord, 0)
+      ctx.lineTo(line.baseCoord, rect.height)
     })
 
     horizontalLines.forEach((line) => {
       if (!line.isMajor) return
-      if (!isLineVibrating(line)) {
-        ctx.moveTo(0, line.baseCoord)
-        ctx.lineTo(rect.width, line.baseCoord)
-      } else {
+      if (hasActiveTrails(line)) return
+
+      ctx.moveTo(0, line.baseCoord)
+      ctx.lineTo(rect.width, line.baseCoord)
+    })
+    ctx.stroke()
+
+    // Draw active major lines and their Red, Green, Blue trails
+    let hasMajorTrails = false
+    verticalLines.forEach((line) => {
+      if (!line.isMajor) return
+      if (hasActiveTrails(line)) hasMajorTrails = true
+    })
+    horizontalLines.forEach((line) => {
+      if (!line.isMajor) return
+      if (hasActiveTrails(line)) hasMajorTrails = true
+    })
+
+    if (hasMajorTrails) {
+      // 4a. Draw the main active major lines (drawn normally using source-over)
+      ctx.beginPath()
+      verticalLines.forEach((line) => {
+        if (!line.isMajor) return
+        if (!hasActiveTrails(line)) return
+
+        ctx.moveTo(line.baseCoord + line.nodes[0].u, line.nodes[0].pos)
+        for (let i = 1; i <= segmentCount; i++) {
+          ctx.lineTo(line.baseCoord + line.nodes[i].u, line.nodes[i].pos)
+        }
+      })
+
+      horizontalLines.forEach((line) => {
+        if (!line.isMajor) return
+        if (!hasActiveTrails(line)) return
+
         ctx.moveTo(line.nodes[0].pos, line.baseCoord + line.nodes[0].u)
         for (let i = 1; i <= segmentCount; i++) {
           ctx.lineTo(line.nodes[i].pos, line.baseCoord + line.nodes[i].u)
         }
-      }
-    })
-    ctx.stroke()
+      })
+      ctx.stroke()
+
+      // 4b. Draw the trails behind them using lighter blending
+      const originalGCO = ctx.globalCompositeOperation
+      ctx.globalCompositeOperation = 'lighter'
+
+      verticalLines.forEach((line) => {
+        if (!line.isMajor) return
+        if (!hasActiveTrails(line)) return
+        // We boost the base opacity for major lines trails to make them highly visible on dark backgrounds
+        drawTrailsForLine(line, true, 0.8)
+      })
+
+      horizontalLines.forEach((line) => {
+        if (!line.isMajor) return
+        if (!hasActiveTrails(line)) return
+        drawTrailsForLine(line, false, 0.8)
+      })
+
+      ctx.globalCompositeOperation = originalGCO
+    }
 
     animationFrameId = requestAnimationFrame(tick)
   }

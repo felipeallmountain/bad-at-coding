@@ -76,6 +76,8 @@ $row-gap-height: calc($row-height / spacing.$gap-nav-links);
 
   .bg-grid {
     background-image: none;
+    width: 100%;
+    height: 100%;
     grid-template-columns: var(--grid-cols);
     grid-template-rows: var(--grid-rows);
   }
