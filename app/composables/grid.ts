@@ -43,6 +43,8 @@ export const createGrid = (): TGrid => {
   const BLUE_DELAY = 8
   const MAX_HISTORY = 9
 
+  let ticksSinceLastMouseMove = 100
+
   // Generate normalized random column and row tracks
   const cols = generateNormalizedTracks(colsCount, 2.5, 7.5, 100)
   const rows = generateNormalizedTracks(rowsCount, 6.0, 14.0, 100)
@@ -130,6 +132,7 @@ export const createGrid = (): TGrid => {
     const rect = canvas.getBoundingClientRect()
     mouseX = e.clientX - rect.left
     mouseY = e.clientY - rect.top
+    ticksSinceLastMouseMove = 0
   }
 
   const handleMouseLeave = () => {
@@ -157,6 +160,14 @@ export const createGrid = (): TGrid => {
     }
 
     ctx.clearRect(0, 0, rect.width, rect.height)
+
+    ticksSinceLastMouseMove++
+    const easeFrames = 90
+    const mouseMoveFactor = Math.max(
+      0,
+      1 - ticksSinceLastMouseMove / easeFrames
+    )
+    const glitchEase = mouseMoveFactor * mouseMoveFactor
 
     const computed = getComputedStyle(canvas)
     const colorMajor =
@@ -302,6 +313,7 @@ export const createGrid = (): TGrid => {
     }
 
     const hasActiveTrails = (line: TLine) => {
+      if (glitchEase < 0.01) return false
       const vibration = getLineVibration(line)
       if (vibration > 0.05) return true
       if (line.history) {
@@ -330,7 +342,9 @@ export const createGrid = (): TGrid => {
       opacityBase: number
     ) => {
       const vibration = getLineVibration(line)
-      const intensity = Math.min(1.0, vibration / 6)
+      const intensity = Math.min(1.0, vibration / 6) * glitchEase
+
+      if (intensity < 0.01) return
 
       // opacityFactor guarantees visibility for small movements (starting at 0.3)
       const opacityFactor = 0.3 + 0.7 * intensity
