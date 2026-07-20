@@ -8,8 +8,12 @@ import { createGrid } from './composables/grid3d.js'
 
 const initApp = () => {
   Tempus.patch()
-  createGrid()
-  createPreloader()
+  const grid = createGrid()
+  createPreloader({
+    onComplete: () => {
+      grid.animateIn?.()
+    },
+  })
   const router = createRouter()
   const navigation = createNavigation()
   // const currentPage = L

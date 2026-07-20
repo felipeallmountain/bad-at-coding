@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { GUI } from 'lil-gui'
 import Tempus from 'tempus'
+import gsap from 'gsap'
 import type { TGrid, TNode, TLine } from './grid/types.js'
 import { generateNormalizedTracks } from './grid/utils.js'
 import {
@@ -21,7 +22,7 @@ export const createGrid = (): TGrid => {
   ) as HTMLCanvasElement | null
 
   if (!cuttingMat || !bgGrid || !canvas) {
-    return { destroy: () => { } }
+    return { destroy: () => {} }
   }
 
   // --- 1. CSS Track Sizing Setup (Kept for layout alignment) ---
@@ -45,6 +46,28 @@ export const createGrid = (): TGrid => {
   // --- 2. Physics Simulation State & lil-gui setup ---
   const MAX_HISTORY = 12
   let clickAmplitude = 0
+
+  // Helper to assign random pen stroke properties
+  const setupPenStroke = (lines: TLine[]) => {
+    lines.forEach((line) => {
+      line.randomDelay = Math.random() * 0.55
+      line.strokeSpeed = 0.25 + Math.random() * 0.35
+      line.reversed = Math.random() < 0.5
+    })
+  }
+
+  const drawState = { progress: 0 }
+
+  const animateIn = () => {
+    setupPenStroke(verticalLines)
+    setupPenStroke(horizontalLines)
+    drawState.progress = 0
+    gsap.to(drawState, {
+      progress: 1.0,
+      duration: 1.2,
+      ease: 'power1.inOut',
+    })
+  }
 
   const physicsParams: TPhysicsParams = {
     forceRadius: 150,
@@ -156,6 +179,9 @@ export const createGrid = (): TGrid => {
     baseCoord: 0,
     nodes: createLineNodes(),
   })
+
+  setupPenStroke(verticalLines)
+  setupPenStroke(horizontalLines)
 
   // Mouse coordinates (pixel-based)
   let mouseX = -1000
@@ -337,6 +363,10 @@ export const createGrid = (): TGrid => {
     minorGeom: THREE.BufferGeometry,
     width: number,
     height: number,
+    startX: number,
+    startY: number,
+    gridWidth: number,
+    gridHeight: number,
     getHistCoord: (line: TLine, nodeIndex: number) => number
   ) => {
     const posMajor = majorGeom.attributes.position.array as Float32Array
@@ -377,6 +407,8 @@ export const createGrid = (): TGrid => {
       return z
     }
 
+    const isDrawing = drawState.progress < 1.0
+
     // Fill vertical lines
     verticalLines.forEach((line) => {
       const isMajor = line.isMajor
@@ -385,6 +417,21 @@ export const createGrid = (): TGrid => {
 
       const lineBaseX = line.baseCoord
 
+      let lineProgress = 1.0
+      if (isDrawing) {
+        const delay = line.randomDelay ?? 0
+        const speed = line.strokeSpeed ?? 0.4
+        lineProgress = Math.max(
+          0,
+          Math.min(1, (drawState.progress - delay) / speed)
+        )
+      }
+
+      const lineDrawLength = lineProgress * gridHeight
+      const isReversed = line.reversed ?? false
+      const minY = isReversed ? startY + gridHeight - lineDrawLength : startY
+      const maxY = isReversed ? startY + gridHeight : startY + lineDrawLength
+
       for (let i = 0; i < segmentCount; i++) {
         const nodeA = line.nodes[i]
         const nodeB = line.nodes[i + 1]
@@ -392,42 +439,103 @@ export const createGrid = (): TGrid => {
         const dispA = getHistCoord(line, i)
         const dispB = getHistCoord(line, i + 1)
 
-        const xA = lineBaseX + dispA
-        const yA = nodeA.pos
-        const xB = lineBaseX + dispB
-        const yB = nodeB.pos
+        const yA_orig = nodeA.pos
+        const yB_orig = nodeB.pos
 
-        const zA = computeZ(xA, yA, dispA)
-        const zB = computeZ(xB, yB, dispB)
+        if (isDrawing) {
+          const segMin = Math.max(yA_orig, minY)
+          const segMax = Math.min(yB_orig, maxY)
 
-        if (isMajor) {
-          // Double the line: offset by -0.5 and +0.5 pixels
-          // Line 1 (offset left)
-          posArr[idx++] = xA - 0.5 - halfW
-          posArr[idx++] = halfH - yA
-          posArr[idx++] = zA
+          if (segMin >= segMax) {
+            const yZero = segMin
+            const xZero = lineBaseX
+            if (isMajor) {
+              posArr[idx++] = xZero - 0.5 - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+              posArr[idx++] = xZero - 0.5 - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+              posArr[idx++] = xZero + 0.5 - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+              posArr[idx++] = xZero + 0.5 - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+            } else {
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+            }
+            continue
+          }
 
-          posArr[idx++] = xB - 0.5 - halfW
-          posArr[idx++] = halfH - yB
-          posArr[idx++] = zB
+          const tA = (segMin - yA_orig) / (yB_orig - yA_orig || 1)
+          const tB = (segMax - yA_orig) / (yB_orig - yA_orig || 1)
 
-          // Line 2 (offset right)
-          posArr[idx++] = xA + 0.5 - halfW
-          posArr[idx++] = halfH - yA
-          posArr[idx++] = zA
+          const yA = yA_orig + tA * (yB_orig - yA_orig)
+          const xA = lineBaseX + dispA + tA * (dispB - dispA)
 
-          posArr[idx++] = xB + 0.5 - halfW
-          posArr[idx++] = halfH - yB
-          posArr[idx++] = zB
+          const yB = yA_orig + tB * (yB_orig - yA_orig)
+          const xB = lineBaseX + dispA + tB * (dispB - dispA)
+
+          const zA = computeZ(xA, yA, dispA)
+          const zB = computeZ(xB, yB, dispB)
+
+          if (isMajor) {
+            posArr[idx++] = xA - 0.5 - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB - 0.5 - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+            posArr[idx++] = xA + 0.5 - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB + 0.5 - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+          } else {
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+          }
         } else {
-          // Single line
-          posArr[idx++] = xA - halfW
-          posArr[idx++] = halfH - yA
-          posArr[idx++] = zA
+          const xA = lineBaseX + dispA
+          const yA = yA_orig
+          const xB = lineBaseX + dispB
+          const yB = yB_orig
 
-          posArr[idx++] = xB - halfW
-          posArr[idx++] = halfH - yB
-          posArr[idx++] = zB
+          const zA = computeZ(xA, yA, dispA)
+          const zB = computeZ(xB, yB, dispB)
+
+          if (isMajor) {
+            posArr[idx++] = xA - 0.5 - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB - 0.5 - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+            posArr[idx++] = xA + 0.5 - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB + 0.5 - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+          } else {
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+          }
         }
       }
 
@@ -443,6 +551,21 @@ export const createGrid = (): TGrid => {
 
       const lineBaseY = line.baseCoord
 
+      let lineProgress = 1.0
+      if (isDrawing) {
+        const delay = line.randomDelay ?? 0
+        const speed = line.strokeSpeed ?? 0.4
+        lineProgress = Math.max(
+          0,
+          Math.min(1, (drawState.progress - delay) / speed)
+        )
+      }
+
+      const lineDrawLength = lineProgress * gridWidth
+      const isReversed = line.reversed ?? false
+      const minX = isReversed ? startX + gridWidth - lineDrawLength : startX
+      const maxX = isReversed ? startX + gridWidth : startX + lineDrawLength
+
       for (let i = 0; i < segmentCount; i++) {
         const nodeA = line.nodes[i]
         const nodeB = line.nodes[i + 1]
@@ -450,42 +573,103 @@ export const createGrid = (): TGrid => {
         const dispA = getHistCoord(line, i)
         const dispB = getHistCoord(line, i + 1)
 
-        const xA = nodeA.pos
-        const yA = lineBaseY + dispA
-        const xB = nodeB.pos
-        const yB = lineBaseY + dispB
+        const xA_orig = nodeA.pos
+        const xB_orig = nodeB.pos
 
-        const zA = computeZ(xA, yA, dispA)
-        const zB = computeZ(xB, yB, dispB)
+        if (isDrawing) {
+          const segMin = Math.max(xA_orig, minX)
+          const segMax = Math.min(xB_orig, maxX)
 
-        if (isMajor) {
-          // Double the line: offset by -0.5 and +0.5 pixels in Y
-          // Line 1 (offset up)
-          posArr[idx++] = xA - halfW
-          posArr[idx++] = halfH - (yA - 0.5)
-          posArr[idx++] = zA
+          if (segMin >= segMax) {
+            const xZero = segMin
+            const yZero = lineBaseY
+            if (isMajor) {
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - (yZero - 0.5)
+              posArr[idx++] = 0
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - (yZero - 0.5)
+              posArr[idx++] = 0
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - (yZero + 0.5)
+              posArr[idx++] = 0
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - (yZero + 0.5)
+              posArr[idx++] = 0
+            } else {
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+              posArr[idx++] = xZero - halfW
+              posArr[idx++] = halfH - yZero
+              posArr[idx++] = 0
+            }
+            continue
+          }
 
-          posArr[idx++] = xB - halfW
-          posArr[idx++] = halfH - (yB - 0.5)
-          posArr[idx++] = zB
+          const tA = (segMin - xA_orig) / (xB_orig - xA_orig || 1)
+          const tB = (segMax - xA_orig) / (xB_orig - xA_orig || 1)
 
-          // Line 2 (offset down)
-          posArr[idx++] = xA - halfW
-          posArr[idx++] = halfH - (yA + 0.5)
-          posArr[idx++] = zA
+          const xA = xA_orig + tA * (xB_orig - xA_orig)
+          const yA = lineBaseY + dispA + tA * (dispB - dispA)
 
-          posArr[idx++] = xB - halfW
-          posArr[idx++] = halfH - (yB + 0.5)
-          posArr[idx++] = zB
+          const xB = xA_orig + tB * (xB_orig - xA_orig)
+          const yB = lineBaseY + dispA + tB * (dispB - dispA)
+
+          const zA = computeZ(xA, yA, dispA)
+          const zB = computeZ(xB, yB, dispB)
+
+          if (isMajor) {
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - (yA - 0.5)
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - (yB - 0.5)
+            posArr[idx++] = zB
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - (yA + 0.5)
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - (yB + 0.5)
+            posArr[idx++] = zB
+          } else {
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+          }
         } else {
-          // Single line
-          posArr[idx++] = xA - halfW
-          posArr[idx++] = halfH - yA
-          posArr[idx++] = zA
+          const xA = xA_orig
+          const yA = lineBaseY + dispA
+          const xB = xB_orig
+          const yB = lineBaseY + dispB
 
-          posArr[idx++] = xB - halfW
-          posArr[idx++] = halfH - yB
-          posArr[idx++] = zB
+          const zA = computeZ(xA, yA, dispA)
+          const zB = computeZ(xB, yB, dispB)
+
+          if (isMajor) {
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - (yA - 0.5)
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - (yB - 0.5)
+            posArr[idx++] = zB
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - (yA + 0.5)
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - (yB + 0.5)
+            posArr[idx++] = zB
+          } else {
+            posArr[idx++] = xA - halfW
+            posArr[idx++] = halfH - yA
+            posArr[idx++] = zA
+            posArr[idx++] = xB - halfW
+            posArr[idx++] = halfH - yB
+            posArr[idx++] = zB
+          }
         }
       }
 
@@ -581,6 +765,10 @@ export const createGrid = (): TGrid => {
       geometries.liveMinor,
       width,
       height,
+      startX,
+      startY,
+      gridWidth,
+      gridHeight,
       getGreenCoord
     )
     updateGeometryBuffers(
@@ -588,6 +776,10 @@ export const createGrid = (): TGrid => {
       geometries.trailMinor,
       width,
       height,
+      startX,
+      startY,
+      gridWidth,
+      gridHeight,
       (l, i) => getHistCoordWithFallback(l, i, 4)
     )
 
@@ -599,7 +791,7 @@ export const createGrid = (): TGrid => {
         : 0
       const targetCamY = mouseActive
         ? -((mouseY - height / 2) / (height / 2)) *
-        physicsParams.parallaxStrength
+          physicsParams.parallaxStrength
         : 0
 
       camera.position.x += (targetCamX - camera.position.x) * 0.05
@@ -641,6 +833,7 @@ export const createGrid = (): TGrid => {
   }
 
   return {
+    animateIn,
     destroy,
   }
 }

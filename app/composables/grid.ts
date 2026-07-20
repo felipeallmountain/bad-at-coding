@@ -444,7 +444,10 @@ export const createGrid = (): TGrid => {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
   }
 
+  const animateIn = () => {}
+
   return {
+    animateIn,
     destroy,
   }
 }

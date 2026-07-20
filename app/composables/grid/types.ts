@@ -1,4 +1,5 @@
 export type TGrid = {
+  animateIn?: () => void
   destroy: () => void
 }
 
@@ -14,4 +15,7 @@ export type TLine = {
   baseCoord: number
   nodes: TNode[]
   history?: number[][] // history of displacements: number[frameCount][nodeIndex]
+  randomDelay?: number
+  strokeSpeed?: number
+  reversed?: boolean
 }
