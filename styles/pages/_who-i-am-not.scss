@@ -3,10 +3,7 @@
 @use '@bad-at-coding/styles/layout/containers';
 
 .who-i-am-not {
-  grid-column-start: 5;
-  grid-column-end: 20;
-  grid-row-start: 2;
-  grid-row-end: 11;
+  grid-area: 2 / 6 / 10 / 20;
 
   &__content {
     @extend %flex-column;

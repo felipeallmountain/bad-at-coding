@@ -3,10 +3,7 @@
 @use '@bad-at-coding/styles/layout/containers';
 
 .fail-cases {
-  grid-column-start: 2;
-  grid-column-end: 18;
-  grid-row-start: 3;
-  grid-row-end: 11;
+  grid-area: 1/9/11/21;
 
   &__links {
     display: grid;

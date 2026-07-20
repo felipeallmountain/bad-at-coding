@@ -21,7 +21,7 @@ export const createGrid = (): TGrid => {
   ) as HTMLCanvasElement | null
 
   if (!cuttingMat || !bgGrid || !canvas) {
-    return { destroy: () => {} }
+    return { destroy: () => { } }
   }
 
   // --- 1. CSS Track Sizing Setup (Kept for layout alignment) ---
@@ -47,17 +47,17 @@ export const createGrid = (): TGrid => {
   let clickAmplitude = 0
 
   const physicsParams: TPhysicsParams = {
-    forceRadius: 80,
+    forceRadius: 150,
     baseForceStrength: 0.5,
     springTensionMajor: 0.25,
-    springTensionMinor: 0.12,
+    springTensionMinor: 0.68,
     neighborTensionMajor: 0.08,
     neighborTensionMinor: 0.15,
-    dampingMajor: 0.78,
-    dampingMinor: 0.84,
-    zDepthFactor: 0,
-    zRadius: 180,
-    cameraParallax: false,
+    dampingMajor: 0.6,
+    dampingMinor: 0.6,
+    zDepthFactor: 100,
+    zRadius: 185,
+    cameraParallax: true,
     parallaxStrength: 40,
   }
 
@@ -599,7 +599,7 @@ export const createGrid = (): TGrid => {
         : 0
       const targetCamY = mouseActive
         ? -((mouseY - height / 2) / (height / 2)) *
-          physicsParams.parallaxStrength
+        physicsParams.parallaxStrength
         : 0
 
       camera.position.x += (targetCamX - camera.position.x) * 0.05

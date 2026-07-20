@@ -4,10 +4,7 @@
 @use '@bad-at-coding/styles/layout/containers';
 
 .home {
-  grid-column-start: 3;
-  grid-column-end: 14;
-  grid-row-start: 3;
-  grid-row-end: 11;
+  grid-area: 3 / 2/ 10/ 11;
 
   &__content {
     justify-content: center;
