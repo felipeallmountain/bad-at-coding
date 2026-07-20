@@ -1,13 +1,15 @@
+import Tempus from 'tempus'
 // @ts-expect-error: path alias import for SCSS file stylesheet
 import '@bad-at-coding/styles/main.scss'
 import { createPreloader } from './composables/preloader.js'
 import { createRouter } from './composables/router.js'
 import { createNavigation } from './composables/navigation.js'
-import { createGrid } from './composables/grid.js'
+import { createGrid } from './composables/grid3d.js'
 
 const initApp = () => {
+  Tempus.patch()
   createGrid()
-  const preloader = createPreloader()
+  createPreloader()
   const router = createRouter()
   const navigation = createNavigation()
   // const currentPage = L

@@ -1,3 +1,4 @@
+import Tempus from 'tempus'
 import type { TGrid, TNode, TLine } from './grid/types.js'
 import { generateNormalizedTracks } from './grid/utils.js'
 import { updateLinePhysics, recordDisplacementHistory } from './grid/physics.js'
@@ -138,8 +139,6 @@ export const createGrid = (): TGrid => {
   cuttingMat.addEventListener('mouseleave', handleMouseLeave)
   cuttingMat.addEventListener('mousedown', handleMouseDown)
 
-  let animationFrameId: number
-
   const tick = () => {
     const rect = canvas.getBoundingClientRect()
     const dpr = window.devicePixelRatio || 1
@@ -179,18 +178,25 @@ export const createGrid = (): TGrid => {
       computed.getPropertyValue('--color-border-mat') ||
       'rgba(255, 255, 255, 0.1)'
 
+    const canvasRect = canvas.getBoundingClientRect()
+    const matRect = cuttingMat.getBoundingClientRect()
+    const startX = matRect.left - canvasRect.left
+    const startY = matRect.top - canvasRect.top
+    const gridWidth = matRect.width
+    const gridHeight = matRect.height
+
     // Update coordinates and nodes positions
     verticalLines.forEach((line) => {
-      line.baseCoord = (line.relativeCoord / 100) * rect.width
+      line.baseCoord = startX + (line.relativeCoord / 100) * gridWidth
       for (let i = 0; i <= segmentCount; i++) {
-        line.nodes[i].pos = (i / segmentCount) * rect.height
+        line.nodes[i].pos = startY + (i / segmentCount) * gridHeight
       }
     })
 
     horizontalLines.forEach((line) => {
-      line.baseCoord = (line.relativeCoord / 100) * rect.height
+      line.baseCoord = startY + (line.relativeCoord / 100) * gridHeight
       for (let i = 0; i <= segmentCount; i++) {
-        line.nodes[i].pos = (i / segmentCount) * rect.width
+        line.nodes[i].pos = startX + (i / segmentCount) * gridWidth
       }
     })
 
@@ -423,14 +429,12 @@ export const createGrid = (): TGrid => {
 
       ctx.globalCompositeOperation = originalGCO
     }
-
-    animationFrameId = requestAnimationFrame(tick)
   }
 
-  animationFrameId = requestAnimationFrame(tick)
+  const unsubscribe = Tempus.add(tick)
 
   const destroy = () => {
-    cancelAnimationFrame(animationFrameId)
+    unsubscribe?.()
     cuttingMat.removeEventListener('mousemove', handleMouseMove)
     cuttingMat.removeEventListener('mouseleave', handleMouseLeave)
     cuttingMat.removeEventListener('mousedown', handleMouseDown)
