@@ -6,6 +6,7 @@
   grid-area: 2 / 7 / 10 / 21;
 
   &__content {
+
     @extend %flex-column;
     justify-content: space-between;
     height: 100%;
@@ -14,7 +15,7 @@
       &__items {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        column-gap: spacing.$layout-section-gap;
+        column-gap: spacing.$gap-cards-items;
 
         .item {
           display: flex;

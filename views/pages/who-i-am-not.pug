@@ -7,7 +7,7 @@ mixin item(title, paragraph)
       +line-inline('left-line')
     .item__content.padding-y
       p.content__title.code-command-default.text-color-pure= title
-      p.content__paragraph.body-commentary.text-color-default= paragraph
+      p.content__paragraph.body-micro.text-color-default= paragraph
 
 block variables
   - var template = 'who-i-am-not'
@@ -20,7 +20,6 @@ block paragraph
 
 block body
   .who-i-am-not__content
-    .content__spacer
     .content__items
       +item('[01] NOT A NINJA',"I don't throw shurikens; I push code that coccasionally passes CI/CD pipelines. Let's stop using feudal mercenary metaphors for a sedentary desk job")
       +item('[02] NOT "PROACTIVE"',"I am strictly reactive. Reactive to a competitive salary, transparent specifications, and well-scoped tasks. If the Jira ticket is empty, my congnitive rendering pipeline is too.")

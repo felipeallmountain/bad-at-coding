@@ -1,6 +1,8 @@
 import gsap from 'gsap'
 import { Flip } from 'gsap/Flip'
 import ScrambleTextPlugin from 'gsap/ScrambleTextPlugin'
+import { createEventEmitter, TEventEmitter } from './event-emitter.js'
+import { NAVBAR_ELEMENT } from './navbar.js'
 
 const CONTENT_CONTAINER = '.container'
 const HEADER_CONTAINER = '.header'
@@ -12,11 +14,13 @@ const CONTAINER_CONTENT = '.container__content'
 gsap.registerPlugin(Flip)
 gsap.registerPlugin(ScrambleTextPlugin)
 
-export type TNavigation = {
+export type TNavigation = TEventEmitter & {
   navigate: (url: string, pushState?: boolean) => Promise<void>
 }
 
 export const createNavigation = (): TNavigation => {
+  const eventEmitter = createEventEmitter()
+
   const animateOldTitle = (tl: gsap.core.Timeline, oldTitle: HTMLElement) => {
     tl.to(oldTitle, {
       duration: 5,
@@ -149,6 +153,11 @@ export const createNavigation = (): TNavigation => {
         const headerContainer = document.querySelector(HEADER_CONTAINER)
         if (newHeader && headerContainer) {
           headerContainer.innerHTML = newHeader.innerHTML
+          const newNavbar = document.querySelector(NAVBAR_ELEMENT)
+
+          if (newNavbar) {
+            eventEmitter.fire('updateNavbar', { newNavbar })
+          }
         }
       },
     })
@@ -242,6 +251,7 @@ export const createNavigation = (): TNavigation => {
   }
 
   return {
+    ...eventEmitter,
     navigate,
   }
 }

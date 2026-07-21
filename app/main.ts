@@ -5,18 +5,20 @@ import { createPreloader } from './composables/preloader.js'
 import { createRouter } from './composables/router.js'
 import { createNavigation } from './composables/navigation.js'
 import { createGrid } from './composables/grid3d.js'
+import { createNavbar } from './composables/navbar.js'
 
 const initApp = () => {
   Tempus.patch()
   const grid = createGrid()
+
   createPreloader({
     onComplete: () => {
       grid.animateIn?.()
     },
   })
   const router = createRouter()
+  const navbar = createNavbar()
   const navigation = createNavigation()
-  // const currentPage = L
 
   router.on(
     'navigate',
@@ -24,6 +26,10 @@ const initApp = () => {
       navigation.navigate(url, pushState)
     }
   )
+
+  navigation.on('updateNavbar', ({ newNavbar }: { newNavbar: HTMLElement }) => {
+    navbar.update(newNavbar)
+  })
 }
 
 if (document.readyState === 'loading') {
