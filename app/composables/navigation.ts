@@ -64,6 +64,9 @@ export const createNavigation = (): TNavigation => {
         text: newTitle.innerHTML,
         speed: 4,
       },
+      onComplete: () => {
+        oldTitle.parentElement!.className = newTitle.parentElement!.className
+      }
     })
   }
 
@@ -123,6 +126,7 @@ export const createNavigation = (): TNavigation => {
     ) as HTMLElement | null
     if (oldBody && newBody) {
       oldBody.innerHTML = newBody.innerHTML
+      oldBody.className = newBody.className
     }
     const oldTemplate = contentContainer.getAttribute('data-template') || ''
     const newTemplate = newContent.getAttribute('data-template') || ''

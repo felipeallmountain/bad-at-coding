@@ -11,6 +11,7 @@
 @use './layout-colors';
 @use './layout-spacing';
 
+@use './layout/mixins';
 @use './layout/containers';
 @use './layout/page';
 @use './layout/cutting-mat';

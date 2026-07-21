@@ -1,6 +1,7 @@
 @use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/typography' as typography;
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/layout/mixins';
 
 .preloader {
   position: fixed;
@@ -26,6 +27,8 @@
     display: inline-block;
     animation: preloader-blink 1s infinite steps(1);
   }
+
+  @extend %texture;
 }
 
 @keyframes preloader-blink {

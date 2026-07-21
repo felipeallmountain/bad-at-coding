@@ -2,6 +2,7 @@
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
 @use '@bad-at-coding/styles/layout/containers';
+@use '@bad-at-coding/styles/layout/mixins';
 
 html,
 body {
@@ -20,15 +21,7 @@ html {
   width: 100%;
   height: 100%;
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    backdrop-filter: url('#dirty-grain');
-    opacity: 0.3; // Subtle dirty overlay
-    mix-blend-mode: color-dodge;
-  }
+  @extend %texture;
 }
 
 .content {

@@ -1,0 +1,12 @@
+%texture {
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    backdrop-filter: url('#dirty-grain');
+    opacity: 0.2; // Subtle dirty overlay
+    mix-blend-mode: color-dodge;
+  }
+}
