@@ -70,7 +70,7 @@ export const createNavigation = (): TNavigation => {
       },
       onComplete: () => {
         oldTitle.parentElement!.className = newTitle.parentElement!.className
-      }
+      },
     })
   }
 
@@ -152,8 +152,7 @@ export const createNavigation = (): TNavigation => {
       onComplete: () => {
         const headerContainer = document.querySelector(HEADER_CONTAINER)
         if (newHeader && headerContainer) {
-          headerContainer.innerHTML = newHeader.innerHTML
-          const newNavbar = document.querySelector(NAVBAR_ELEMENT)
+          const newNavbar = newHeader.querySelector(NAVBAR_ELEMENT)
 
           if (newNavbar) {
             eventEmitter.fire('updateNavbar', { newNavbar })
