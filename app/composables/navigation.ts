@@ -148,7 +148,7 @@ export const createNavigation = (): TNavigation => {
     Flip.from(state, {
       duration: 0.5,
       ease: 'power2.inOut',
-      absolute: true,
+      // absolute: true,
       onComplete: () => {
         const headerContainer = document.querySelector(HEADER_CONTAINER)
         if (newHeader && headerContainer) {
@@ -232,6 +232,8 @@ export const createNavigation = (): TNavigation => {
         }
 
         updateBodyContent(contentContainer, newContent, newDoc, pushState, url)
+        const newState = Flip.getState(contentContainer)
+        console.log(state, newState)
         if (newHeader) {
           animateContainer(state, newHeader)
         }
