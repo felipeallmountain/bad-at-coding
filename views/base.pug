@@ -44,7 +44,16 @@ html(lang='en')
       main.content.padding-content
         .cutting-mat
           .bg-grid
-            .container.bg-color-surface.shadow-right-up.padding-x-y(class=template, data-template=template)
+            .container.bg-color-surface.shadow-right-up.padding-x-y(
+              class=`
+                ${template}
+                ${template}--col-start
+                ${template}--col-end
+                ${template}--row-start
+                ${template}--row-end
+              `,
+              data-template=template
+            )
               .container__title.padding-x-y(class=template+'__title')
                 h1.heading-display.text-color-pure=pageTitle
                 if showParagraph

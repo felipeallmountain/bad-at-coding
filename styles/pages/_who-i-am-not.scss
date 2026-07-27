@@ -3,7 +3,21 @@
 @use '@bad-at-coding/styles/layout/containers';
 
 .who-i-am-not {
-  grid-area: 3 / 7 / 11 / 21;
+  &--row-start {
+    grid-row-start: 3;
+  }
+
+  &--col-start {
+    grid-column-start: 10;
+  }
+
+  &--row-end {
+    grid-row-end: 11;
+  }
+
+  &--col-end {
+    grid-column-end: 20;
+  }
 
   &__content {
 

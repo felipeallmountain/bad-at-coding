@@ -129,7 +129,10 @@ export const createNavigation = (): TNavigation => {
       CONTAINER_CONTENT
     ) as HTMLElement | null
     if (oldBody && newBody) {
-      oldBody.innerHTML = newBody.innerHTML
+      if (oldBody.firstChild && newBody.firstChild) {
+        oldBody.removeChild(oldBody.firstChild)
+        oldBody.append(newBody.firstChild)
+      }
       oldBody.className = newBody.className
     }
     const oldTemplate = contentContainer.getAttribute('data-template') || ''
@@ -142,24 +145,62 @@ export const createNavigation = (): TNavigation => {
     if (pushState) {
       window.history.pushState({}, '', url)
     }
+
+    return { newTemplate, oldTemplate }
   }
 
-  const animateContainer = (state: Flip.FlipState, newHeader: HTMLElement) => {
-    Flip.from(state, {
-      duration: 0.5,
-      ease: 'power2.inOut',
-      // absolute: true,
-      onComplete: () => {
-        const headerContainer = document.querySelector(HEADER_CONTAINER)
-        if (newHeader && headerContainer) {
-          const newNavbar = newHeader.querySelector(NAVBAR_ELEMENT)
-
-          if (newNavbar) {
-            eventEmitter.fire('updateNavbar', { newNavbar })
-          }
+  const animateContainerFragment = (
+    container: HTMLElement,
+    state: Flip.FlipState,
+    ease: gsap.EaseString
+  ): Promise<Flip.FlipState> => {
+    return new Promise((resolve) => {
+      Flip.from(state, {
+        delay: .07,
+        duration: .4,
+        ease,
+        absolute: true,
+        onComplete: () => {
+          resolve(Flip.getState(container))
         }
-      },
+      })
     })
+  }
+
+  const swapPageLayout = async (
+    contentContainer: HTMLElement,
+    state: Flip.FlipState,
+    oldTemplate: string,
+    newTemplate: string,
+    gridPosition: 'col-start' | 'col-end' | 'row-start' | 'row-end',
+    ease: gsap.EaseString
+  ) => {
+    contentContainer.classList.replace(
+      `${oldTemplate}--${gridPosition}`, `${newTemplate}--${gridPosition}`
+    )
+
+    return await animateContainerFragment(contentContainer, state, ease)
+  }
+
+  const fitPageContent = async (
+    state: Flip.FlipState,
+    contentContainer: HTMLElement,
+    oldTemplate: string,
+    newTemplate: string,
+  ) => {
+    let newState = state
+    newState = await swapPageLayout(
+      contentContainer, newState, oldTemplate, newTemplate, 'col-end', 'back.in'
+    )
+    newState = await swapPageLayout(
+      contentContainer, newState, oldTemplate, newTemplate, 'col-start', 'back.in'
+    )
+    newState = await swapPageLayout(
+      contentContainer, newState, oldTemplate, newTemplate, 'row-start', 'back.out'
+    )
+    newState = await swapPageLayout(
+      contentContainer, newState, oldTemplate, newTemplate, 'row-end', 'back.out'
+    )
   }
 
   const navigate = async (url: string, pushState = true) => {
@@ -218,7 +259,7 @@ export const createNavigation = (): TNavigation => {
         animateNewTitle(oldTitle, newTitle, tl)
       }
 
-      if (newContent) {
+      if (newContent && newHeader) {
         const state = Flip.getState(contentContainer)
         const newParagraph = newContent.querySelector(
           CONTAINER_PARAGRAPH
@@ -231,12 +272,18 @@ export const createNavigation = (): TNavigation => {
           }
         }
 
-        updateBodyContent(contentContainer, newContent, newDoc, pushState, url)
-        const newState = Flip.getState(contentContainer)
-        console.log(state, newState)
-        if (newHeader) {
-          animateContainer(state, newHeader)
+        const { newTemplate, oldTemplate } = updateBodyContent(
+          contentContainer, newContent, newDoc, pushState, url
+        )
+
+        await fitPageContent(state, contentContainer, oldTemplate, newTemplate)
+
+        const newNavbar = newHeader.querySelector(NAVBAR_ELEMENT)
+        if (newNavbar) {
+          eventEmitter.fire('updateNavbar', { newNavbar })
         }
+
+
       } else {
         throw new Error('Content layout missing in new page')
       }

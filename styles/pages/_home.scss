@@ -4,7 +4,22 @@
 @use '@bad-at-coding/styles/layout/containers';
 
 .home {
-  grid-area: 2 / 3/ 11/ 13;
+  &--row-start {
+    grid-row-start: 2;
+  }
+
+  &--col-start {
+    grid-column-start: 2;
+  }
+
+  &--row-end {
+    grid-row-end: 11;
+  }
+
+  &--col-end {
+    grid-column-end: 12;
+  }
+
 
   &__content {
     justify-content: center;
