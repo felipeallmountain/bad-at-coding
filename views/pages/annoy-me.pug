@@ -1,0 +1,34 @@
+extends ../base.pug
+include ../mixins/line.pug
+
+mixin link(title, url, description)
+  .link
+    .symbol__start
+      +line-inline('left-line')
+    .link__content.code-command-default
+      .text-color-default= title
+      .text-color-pure.code-command-link= url
+      .text-color-muted=description
+
+block variables
+  - var template = 'annoy-me'
+  - var pageTitle = 'ONLY IF STRCITLY NECESSARY_'
+  - var links = [{ label: '/annoy-me', url: '/annoy-me' }]
+  - var showParagraph = true
+
+block paragraph
+  p [!] DIRECT_HARASSMENT_CHANNELS
+  p If you insist on interrupting my flow state with meetings that could have been an asynchronous terminal log, choose your poison:
+
+block body
+  .annoy-me__links 
+    +link(
+      '[EMAIL]',
+      'bad-at-coding@gmail.com',
+      '(Guaranteed delay: ~48h or filed into /dev/null)'
+    )
+    +link(
+      '[LINKEDIN]',
+      'https://www.linkedin.com/in/felipe-vega-38184924/',
+      '(Warning: Contains corporate jargon filter)'
+    )

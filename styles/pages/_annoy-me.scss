@@ -1,0 +1,17 @@
+.annoy-me {
+  &--row-start {
+    grid-row-start: 3;
+  }
+
+  &--col-start {
+    grid-column-start: 3;
+  }
+
+  &--row-end {
+    grid-row-end: 10;
+  }
+
+  &--col-end {
+    grid-column-end: 13;
+  }
+}
