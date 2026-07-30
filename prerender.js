@@ -20,6 +20,8 @@ const pages = [
   { view: 'fail-cases', output: 'fail-cases/index.html' },
   { view: 'who-i-am-not', output: 'who-i-am-not.html' },
   { view: 'who-i-am-not', output: 'who-i-am-not/index.html' },
+  { view: 'annoy-me', output: 'annoy-me.html' },
+  { view: 'annoy-me', output: 'annoy-me/index.html' },
 ]
 
 pages.forEach(({ view, output }) => {
