@@ -4,11 +4,11 @@
 
 .fail-cases {
   &--row-start {
-    grid-row-start: 1;
+    grid-row-start: 2;
   }
 
   &--col-start {
-    grid-column-start: 10;
+    grid-column-start: 2;
   }
 
   &--row-end {
@@ -16,7 +16,7 @@
   }
 
   &--col-end {
-    grid-column-end: 21;
+    grid-column-end: 12;
   }
 
 
