@@ -84,41 +84,47 @@ export const createGrid = (): TGrid => {
     parallaxStrength: 40,
   }
 
-  const gui = new GUI({ title: 'Grid 3D Physics' })
+  let gui: GUI | null = null
 
-  const forceFolder = gui.addFolder('Force & Interaction')
-  forceFolder.add(physicsParams, 'forceRadius', 10, 400, 1).name('Force Radius')
-  forceFolder
-    .add(physicsParams, 'baseForceStrength', 0.05, 3.0, 0.05)
-    .name('Force Strength')
+  if (import.meta.env.DEV) {
+    gui = new GUI({ title: 'Grid 3D Physics' })
 
-  const springFolder = gui.addFolder('Spring & Tension')
-  springFolder
-    .add(physicsParams, 'springTensionMajor', 0.01, 1.0, 0.01)
-    .name('Spring (Major)')
-  springFolder
-    .add(physicsParams, 'springTensionMinor', 0.01, 1.0, 0.01)
-    .name('Spring (Minor)')
-  springFolder
-    .add(physicsParams, 'neighborTensionMajor', 0.001, 0.5, 0.005)
-    .name('Neighbor (Major)')
-  springFolder
-    .add(physicsParams, 'neighborTensionMinor', 0.001, 0.5, 0.005)
-    .name('Neighbor (Minor)')
-  springFolder
-    .add(physicsParams, 'dampingMajor', 0.5, 0.99, 0.01)
-    .name('Damping (Major)')
-  springFolder
-    .add(physicsParams, 'dampingMinor', 0.5, 0.99, 0.01)
-    .name('Damping (Minor)')
+    const forceFolder = gui.addFolder('Force & Interaction')
+    forceFolder
+      .add(physicsParams, 'forceRadius', 10, 400, 1)
+      .name('Force Radius')
+    forceFolder
+      .add(physicsParams, 'baseForceStrength', 0.05, 3.0, 0.05)
+      .name('Force Strength')
 
-  const depthFolder = gui.addFolder('3D Volume & Camera')
-  depthFolder.add(physicsParams, 'zDepthFactor', 0, 200, 1).name('Z Depth')
-  depthFolder.add(physicsParams, 'zRadius', 20, 400, 1).name('Z Radius')
-  depthFolder.add(physicsParams, 'cameraParallax').name('Camera Parallax')
-  depthFolder
-    .add(physicsParams, 'parallaxStrength', 0, 150, 1)
-    .name('Parallax Power')
+    const springFolder = gui.addFolder('Spring & Tension')
+    springFolder
+      .add(physicsParams, 'springTensionMajor', 0.01, 1.0, 0.01)
+      .name('Spring (Major)')
+    springFolder
+      .add(physicsParams, 'springTensionMinor', 0.01, 1.0, 0.01)
+      .name('Spring (Minor)')
+    springFolder
+      .add(physicsParams, 'neighborTensionMajor', 0.001, 0.5, 0.005)
+      .name('Neighbor (Major)')
+    springFolder
+      .add(physicsParams, 'neighborTensionMinor', 0.001, 0.5, 0.005)
+      .name('Neighbor (Minor)')
+    springFolder
+      .add(physicsParams, 'dampingMajor', 0.5, 0.99, 0.01)
+      .name('Damping (Major)')
+    springFolder
+      .add(physicsParams, 'dampingMinor', 0.5, 0.99, 0.01)
+      .name('Damping (Minor)')
+
+    const depthFolder = gui.addFolder('3D Volume & Camera')
+    depthFolder.add(physicsParams, 'zDepthFactor', 0, 200, 1).name('Z Depth')
+    depthFolder.add(physicsParams, 'zRadius', 20, 400, 1).name('Z Radius')
+    depthFolder.add(physicsParams, 'cameraParallax').name('Camera Parallax')
+    depthFolder
+      .add(physicsParams, 'parallaxStrength', 0, 150, 1)
+      .name('Parallax Power')
+  }
 
   const createLineNodes = (): TNode[] => {
     const nodes: TNode[] = []
@@ -816,7 +822,7 @@ export const createGrid = (): TGrid => {
 
   const destroy = () => {
     unsubscribe?.()
-    gui.destroy()
+    gui?.destroy()
     window.removeEventListener('resize', handleResize)
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseleave', handleMouseLeave)

@@ -1,5 +1,4 @@
 import Tempus from 'tempus'
-// @ts-expect-error: path alias import for SCSS file stylesheet
 import '@bad-at-coding/styles/main.scss'
 import { createPreloader } from './composables/preloader.js'
 import { createRouter } from './composables/router.js'

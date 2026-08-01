@@ -10,6 +10,7 @@
       "@bad-at-coding/*": ["./*"]
     },
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["vite/client"],
     "noEmit": true
   },
   "exclude": ["node_modules", "dist", "server"]
