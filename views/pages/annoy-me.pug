@@ -7,7 +7,7 @@ mixin link(title, url, description)
       +line-inline('left-line')
     .link__content.code-command-default
       .text-color-default= title
-      .text-color-pure.code-command-link= url
+      a.text-color-pure.code-command-link(href=url.startsWith('http') ? url : 'mailto:' + url, target=url.startsWith('http') ? '_blank' : '_self')= url
       .text-color-muted=description
 
 block variables

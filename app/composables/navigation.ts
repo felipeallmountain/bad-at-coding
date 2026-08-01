@@ -156,13 +156,13 @@ export const createNavigation = (): TNavigation => {
   ): Promise<Flip.FlipState> => {
     return new Promise((resolve) => {
       Flip.from(state, {
-        delay: .07,
-        duration: .4,
+        delay: 0.07,
+        duration: 0.4,
         ease,
         absolute: true,
         onComplete: () => {
           resolve(Flip.getState(container))
-        }
+        },
       })
     })
   }
@@ -176,7 +176,8 @@ export const createNavigation = (): TNavigation => {
     ease: gsap.EaseString
   ) => {
     contentContainer.classList.replace(
-      `${oldTemplate}--${gridPosition}`, `${newTemplate}--${gridPosition}`
+      `${oldTemplate}--${gridPosition}`,
+      `${newTemplate}--${gridPosition}`
     )
 
     return await animateContainerFragment(contentContainer, state, ease)
@@ -186,20 +187,40 @@ export const createNavigation = (): TNavigation => {
     state: Flip.FlipState,
     contentContainer: HTMLElement,
     oldTemplate: string,
-    newTemplate: string,
+    newTemplate: string
   ) => {
     let newState = state
     newState = await swapPageLayout(
-      contentContainer, newState, oldTemplate, newTemplate, 'col-end', 'back.in'
+      contentContainer,
+      newState,
+      oldTemplate,
+      newTemplate,
+      'col-end',
+      'back.in'
     )
     newState = await swapPageLayout(
-      contentContainer, newState, oldTemplate, newTemplate, 'col-start', 'back.in'
+      contentContainer,
+      newState,
+      oldTemplate,
+      newTemplate,
+      'col-start',
+      'back.in'
     )
     newState = await swapPageLayout(
-      contentContainer, newState, oldTemplate, newTemplate, 'row-start', 'back.out'
+      contentContainer,
+      newState,
+      oldTemplate,
+      newTemplate,
+      'row-start',
+      'back.out'
     )
-    newState = await swapPageLayout(
-      contentContainer, newState, oldTemplate, newTemplate, 'row-end', 'back.out'
+    await swapPageLayout(
+      contentContainer,
+      newState,
+      oldTemplate,
+      newTemplate,
+      'row-end',
+      'back.out'
     )
   }
 
@@ -273,7 +294,11 @@ export const createNavigation = (): TNavigation => {
         }
 
         const { newTemplate, oldTemplate } = updateBodyContent(
-          contentContainer, newContent, newDoc, pushState, url
+          contentContainer,
+          newContent,
+          newDoc,
+          pushState,
+          url
         )
 
         await fitPageContent(state, contentContainer, oldTemplate, newTemplate)
@@ -282,8 +307,6 @@ export const createNavigation = (): TNavigation => {
         if (newNavbar) {
           eventEmitter.fire('updateNavbar', { newNavbar })
         }
-
-
       } else {
         throw new Error('Content layout missing in new page')
       }

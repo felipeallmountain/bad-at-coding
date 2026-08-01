@@ -6,9 +6,11 @@ import { createRouter } from './composables/router.js'
 import { createNavigation } from './composables/navigation.js'
 import { createGrid } from './composables/grid3d.js'
 import { createNavbar } from './composables/navbar.js'
+import { initScrambleLinks } from './composables/scramble-links.js'
 
 const initApp = () => {
   Tempus.patch()
+  initScrambleLinks()
   const grid = createGrid()
 
   createPreloader({

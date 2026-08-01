@@ -36,9 +36,11 @@ html {
   // font-size: clamp(2px, calc(100vw / 1280 * 4), 6px);
   // font-size: clamp(2px, calc(100vmin / 1280 * 16), 6px);
 
-  font-size: clamp(2px,
-      min(calc(100vw / 1280 * 4), calc(100vh / 800 * 4)),
-      6px);
+  font-size: clamp(
+    2px,
+    min(calc(100vw / 1280 * 4), calc(100vh / 800 * 4)),
+    6px
+  );
 }
 
 a {
