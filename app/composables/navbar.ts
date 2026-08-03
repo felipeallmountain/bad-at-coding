@@ -29,7 +29,6 @@ export const createNavbar = (): TNavbar => {
         },
       })
     } else if (navbarElement!.children.length > newNavbar.children.length) {
-      // navbarElement!.removeChild(navbarElement!.lastElementChild!)
       const lastElementLink =
         navbarElement?.lastElementChild!.querySelector('.link')
       const lastElementText = lastElementLink?.textContent

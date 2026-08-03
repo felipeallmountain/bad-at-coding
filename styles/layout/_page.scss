@@ -1,6 +1,7 @@
 @use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
+@use '@bad-at-coding/styles/variables/breakpoints' as breakpoints;
 @use '@bad-at-coding/styles/layout/containers';
 @use '@bad-at-coding/styles/layout/mixins';
 
@@ -35,6 +36,16 @@ html {
   gap: spacing.$gap-cards-items;
   margin: stroke.$line-focus;
   overflow: hidden;
+
+  &__desktop-content {
+    @extend %flex-column;
+    gap: spacing.$gap-cards-items;
+    height: 100%;
+  }
+
+  &__mobile-placeholder {
+    display: none;
+  }
 
   &__title {
     @extend %flex-column;
@@ -73,4 +84,40 @@ html {
   right: 0;
   padding-inline-end: spacing.$gap-nav-links;
   padding-block-end: spacing.$gap-text-line;
+}
+
+@include breakpoints.media-down('lg') {
+  .header,
+  .footer {
+    display: none !important;
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing.$layout-padding-mobile;
+  }
+
+  .container {
+    grid-column-start: 4 !important;
+    grid-column-end: 18 !important;
+    grid-row-start: 3 !important;
+    grid-row-end: 9 !important;
+
+    &__desktop-content {
+      display: none !important;
+    }
+
+    &__mobile-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: spacing.$gap-cards-items;
+      padding: spacing.$component-padding-y spacing.$component-padding-x;
+      height: 100%;
+    }
+  }
 }

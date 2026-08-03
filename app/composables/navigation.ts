@@ -27,7 +27,7 @@ export const createNavigation = (): TNavigation => {
       ease: 'power2.out',
       repeat: -1,
       scrambleText: {
-        text: oldTitle.innerHTML,
+        text: 'LOADING',
         chars: oldTitle.innerHTML,
         speed: 3,
         rightToLeft: true,

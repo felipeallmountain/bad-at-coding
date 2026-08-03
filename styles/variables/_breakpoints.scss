@@ -1,0 +1,55 @@
+@use 'sass:map';
+@use 'primitives' as primitives;
+
+// Semantic Breakpoints
+$breakpoint-xs: primitives.$screen-xs;
+$breakpoint-sm: primitives.$screen-sm;
+$breakpoint-md: primitives.$screen-md;
+$breakpoint-lg: primitives.$screen-lg;
+$breakpoint-xl: primitives.$screen-xl;
+$breakpoint-2xl: primitives.$screen-2xl;
+
+// Breakpoints Map
+$breakpoints: (
+  'xs': $breakpoint-xs,
+  'sm': $breakpoint-sm,
+  'md': $breakpoint-md,
+  'lg': $breakpoint-lg,
+  'xl': $breakpoint-xl,
+  '2xl': $breakpoint-2xl,
+);
+
+// Mixins for responsive queries
+@mixin media-up($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+  @if $value {
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoint: #{$breakpoint}. Available: #{map.keys($breakpoints)}";
+  }
+}
+
+@mixin media-down($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+  @if $value {
+    @media (max-width: $value) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoint: #{$breakpoint}. Available: #{map.keys($breakpoints)}";
+  }
+}
+
+@mixin media-between($min, $max) {
+  $min-value: map.get($breakpoints, $min);
+  $max-value: map.get($breakpoints, $max);
+  @if $min-value and $max-value {
+    @media (min-width: $min-value) and (max-width: $max-value) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoints range: #{$min} to #{$max}.";
+  }
+}
