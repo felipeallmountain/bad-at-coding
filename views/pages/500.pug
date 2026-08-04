@@ -1,0 +1,23 @@
+extends ../base.pug
+include ../mixins/line.pug
+
+block variables
+  - var template = 'error-500'
+  - var statusCode = typeof statusCode !== 'undefined' ? statusCode : 500
+  - var pageTitle = 'SERVER EXCEPTION_'
+  - var showParagraph = true
+  - var errorMessage = typeof errorMessage !== 'undefined' ? errorMessage : 'An unexpected error occurred.'
+
+block paragraph
+  p [ FATAL ] SERVER EXCEPTION (#{statusCode})
+
+block body
+  .error-500__terminal.shadow-left-down.padding-x-y
+    +line-block('top-line')
+    p.code-command-default.text-color-default > Message: #{errorMessage}
+    if errorStack
+      p.code-command-default.text-color-muted > Stack Trace:
+      pre.error-500__stack.body-micro.text-color-muted= errorStack
+    .error-500__actions.padding-y
+      a.code-command-link.text-color-pure(href='/') &lt;-- RETURN TO SAFETY
+    +line-block('bottom-line')

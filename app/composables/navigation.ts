@@ -257,9 +257,6 @@ export const createNavigation = (): TNavigation => {
           'X-requested-with': 'XMLHttpRequest',
         },
       })
-      if (!response.ok) {
-        throw new Error(`Failed to load page: ${response.status}`)
-      }
 
       const htmlText = await response.text()
       const parser = new DOMParser()
@@ -275,6 +272,12 @@ export const createNavigation = (): TNavigation => {
       const newTitle = newDoc.querySelector(
         CONTAINER_TITLE
       ) as HTMLElement | null
+
+      // 404/500 pages still return the site layout — transition into them
+      // instead of hard-reloading (which would re-run the preloader).
+      if (!response.ok && !(newContent && newHeader)) {
+        throw new Error(`Failed to load page: ${response.status}`)
+      }
 
       if (newTitle && oldTitle) {
         animateNewTitle(oldTitle, newTitle, tl)

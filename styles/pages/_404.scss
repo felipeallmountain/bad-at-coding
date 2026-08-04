@@ -1,0 +1,43 @@
+@use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/layout/containers';
+
+.error-404 {
+  &--row-start {
+    grid-row-start: 3;
+  }
+
+  &--col-start {
+    grid-column-start: 3;
+  }
+
+  &--row-end {
+    grid-row-end: 11;
+  }
+
+  &--col-end {
+    grid-column-end: 12;
+  }
+
+  &__terminal {
+    @extend %flex-column;
+    gap: spacing.$gap-text-line;
+    height: 100%;
+    justify-content: center;
+  }
+
+  &__cursor {
+    animation: error-404-blink 1s infinite;
+    color: colors.$color-feedback-disaster;
+  }
+
+  &__actions {
+    margin-block-start: spacing.$gap-nav-links;
+  }
+}
+
+@keyframes error-404-blink {
+  50% {
+    opacity: 0;
+  }
+}

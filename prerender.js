@@ -22,6 +22,8 @@ const pages = [
   { view: 'who-i-am-not', output: 'who-i-am-not/index.html' },
   { view: 'annoy-me', output: 'annoy-me.html' },
   { view: 'annoy-me', output: 'annoy-me/index.html' },
+  { view: '404', output: '404.html' },
+  { view: '500', output: '500.html' },
 ]
 
 pages.forEach(({ view, output }) => {

@@ -22,3 +22,5 @@
 @use './pages/fail-cases';
 @use './pages/who-i-am-not';
 @use './pages/annoy-me';
+@use './pages/404' as error404;
+@use './pages/500' as error500;

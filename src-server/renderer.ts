@@ -43,7 +43,8 @@ export function getViteServer(): ViteDevServer | null {
 
 export const renderView = (
   viewName: string,
-  locals: Record<string, unknown> = {}
+  locals: Record<string, unknown> = {},
+  statusCode = 200
 ) => {
   return async (
     req: Request,
@@ -88,7 +89,7 @@ export const renderView = (
           .replace('../fonts/jetbrains-mono-v24-latin-500.woff2', jm500)
       }
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(finalHtml)
+      res.status(statusCode).set({ 'Content-Type': 'text/html' }).end(finalHtml)
     } catch (error) {
       next(error)
     }

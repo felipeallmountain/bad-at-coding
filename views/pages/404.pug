@@ -1,0 +1,24 @@
+extends ../base.pug
+include ../mixins/line.pug
+
+block variables
+  - var template = 'error-404'
+  - var pageTitle = 'CODE 404: ROUTE NOT FOUND_'
+  - var showParagraph = true
+  - var attemptedUrl = typeof attemptedUrl !== 'undefined' ? attemptedUrl : '[unknown route]'
+
+block paragraph
+  p [ ERROR ] The requested resource is missing, vaporized, or was never written due to chronic procrastination.
+
+block body
+  .error-404__terminal.shadow-left-down.padding-x-y
+    +line-block('top-line')
+    p.code-command-default.text-color-default > Attempted to fetch: #{attemptedUrl}
+    p.code-command-default.text-color-muted > Status: ROUTE NOT FOUND
+    p.code-command-default.text-color-muted > Advice: Go back to home or read a book.
+    p.code-command-default.text-color-default
+      | >
+      span.error-404__cursor _
+    .error-404__actions.padding-y
+      a.code-command-link.text-color-pure(href='/') &lt;-- RETURN TO SAFETY
+    +line-block('bottom-line')
