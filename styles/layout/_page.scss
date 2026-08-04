@@ -100,10 +100,10 @@ html {
   }
 
   .container {
-    grid-column-start: 4 !important;
-    grid-column-end: 18 !important;
-    grid-row-start: 3 !important;
-    grid-row-end: 9 !important;
+    grid-column-start: 2 !important;
+    grid-column-end: 20 !important;
+    grid-row-start: 2 !important;
+    grid-row-end: 10 !important;
 
     &__desktop-content {
       display: none !important;
@@ -111,13 +111,33 @@ html {
 
     &__mobile-placeholder {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: spacing.$gap-cards-items;
-      padding: spacing.$component-padding-y spacing.$component-padding-x;
       height: 100%;
+
+      .mobile-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: spacing.$gap-cards-items;
+        padding: spacing.$component-padding-y spacing.$component-padding-x;
+        text-wrap: pretty;
+      }
+
+      .mobile-guard {
+        display: flex;
+        flex-direction: column;
+        gap: spacing.$gap-text-line;
+        width: fit-content;
+
+        &__header {
+          width: 100%;
+        }
+      }
+
+      .header-content {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+      }
     }
   }
 }

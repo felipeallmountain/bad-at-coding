@@ -1,3 +1,4 @@
+include mixins/line.pug
 block variables
 
 doctype html
@@ -63,12 +64,42 @@ html(lang='en')
                 .container__content(class=template+'__content')
                   block body
 
-              .container__mobile-placeholder
-                .container__title--mobile.padding-x-y
-                  h1.heading-display.text-color-pure [ ERR_402: VIEWPORT_TOO_POOR ]
-                .container__paragraph--mobile.code-command-lg.text-color-default.padding-x-y
-                  p [ FAIL ]I’ll refactor a mobile layout when I run out of excuses. 
-                  p Until then, respect the developer's laziness and switch to a real screen.
+              // mobile container
+              .container__mobile-placeholder.code-command-lg.text-color-default
+                +line-inline('left-line')
+                .mobile-content
+                  .mobile-guard.mobile-guard__header
+                    +line-block('top-line')
+                    .header-content
+                      span.mobile-guard__tag [ ERR_402: VIEWPORT TOO POOR ]
+                      span.mobile-guard__status SYS_HALT
+                  
+                  .mobile-guard
+                    +line-block('top-line')
+                    h1.mobile-guard__title LAZY DEVELOPER GUARDRAIL ACTIVE
+                    
+                  .mobile-guard
+                    +line-block('top-line')
+                    .terminal-content
+                      p.mobile-guard__line > ANALYZING DISPLAY SPECIFICATIONS...
+                      p.mobile-guard__line > ASPECT RATIO: VERTICAL SLAB (UNSUPPORTED)
+                      p.mobile-guard__line > DIAGNOSTIC: CSS Responsive engine bypassed on purpose.
+                      p.mobile-guard__line.mobile-guard__line--highlight 
+                        | > "I’ll refactor a mobile layout when I run out of excuses. Until then, respect the developer's laziness and switch to a real screen."
+                  
+                  .mobile-guard
+                    +line-block('top-line')
+                    .metric-content
+                      .mobile-guard__metric
+                        span.mobile-guard__label SUGGESTED_ACTION:
+                        span.mobile-guard__value RESIZE_TO_MIN_1280PX
+                      .mobile-guard__metric
+                        span.mobile-guard__label ESTIMATED_MOBILE_ETA:
+                        span.mobile-guard__value  WHEN I RUN OUT OF EXCUSES [ 0.0% ]
+
+                  .mobile-guard
+                    +line-block('top-line')
+                    span.mobile-guard__footnote [ SYSTEM LOCKED — NO TOUCH EVENTS ALLOWED ]
 
       footer.footer.body-micro.text-color-muted
         .span bad-at-coding.com - ©️2026. All rights reserved. Or not. Whatever
