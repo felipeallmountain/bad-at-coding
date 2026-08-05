@@ -12,7 +12,7 @@ block paragraph
   p [ FATAL ] SERVER EXCEPTION (#{statusCode})
 
 block body
-  .error-500__terminal.shadow-left-down.padding-x-y
+  .error-500__terminal.bg-color-surface.padding-x-y
     +line-block('top-line')
     p.code-command-default.text-color-default > Message: #{errorMessage}
     if errorStack

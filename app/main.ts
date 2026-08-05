@@ -4,6 +4,7 @@ import { createPreloader } from './composables/preloader.js'
 import { createRouter } from './composables/router.js'
 import { createNavigation } from './composables/navigation.js'
 import { createGrid } from './composables/grid3d.js'
+import { createGrain } from './composables/grain.js'
 import { createNavbar } from './composables/navbar.js'
 import { initScrambleLinks } from './composables/scramble-links.js'
 
@@ -11,6 +12,7 @@ const initApp = () => {
   Tempus.patch()
   initScrambleLinks()
   const grid = createGrid()
+  createGrain()
 
   createPreloader({
     onComplete: () => {

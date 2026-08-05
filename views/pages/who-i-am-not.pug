@@ -2,7 +2,7 @@ extends ../base.pug
 include ../mixins/line.pug
 
 mixin item(title, paragraph)
-  article.item.shadow-left-down
+  article.item.bg-color-surface
     .item__space
       +line-inline('left-line')
     .item__content.padding-y
@@ -24,7 +24,7 @@ block body
       +item('[01] NOT A NINJA',"I don't throw shurikens; I push code that coccasionally passes CI/CD pipelines. Let's stop using feudal mercenary metaphors for a sedentary desk job")
       +item('[02] NOT "PROACTIVE"',"I am strictly reactive. Reactive to a competitive salary, transparent specifications, and well-scoped tasks. If the Jira ticket is empty, my congnitive rendering pipeline is too.")
       +item('[03] NOT "PASSIONATE"',"Passion didn't write this codel an over-extracted batch of dark roast and a desire to fund a mountain biking trip did. I don't code in my sleep; I sleep in my sleep.")
-    .content__footer.shadow-right-up.padding-x-y
+    .content__footer.bg-color-surface.padding-x-y
       h2.text-color-default.code-command-default [ALLOWED VARIABLES]
       .footer__content.text-color-muted.body-commentary
         p > 01. Dark roast coffee, extracted past reasonable safety limits

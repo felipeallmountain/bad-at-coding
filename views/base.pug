@@ -33,6 +33,7 @@ html(lang='en')
           .preloader__line [OK] BYPASSING CODE REVIEW RULES... 
           .preloader__line [OK] READY TO DISSAPOINT... 
     .wrapper
+      canvas.grain-canvas
       canvas.cutting-mat-canvas
       header.header.code-command-default
         nav.nav
@@ -45,7 +46,7 @@ html(lang='en')
       main.content.padding-content
         .cutting-mat
           .bg-grid
-            .container.bg-color-surface.shadow-right-up.padding-x-y(
+            .container.bg-color-surface.padding-x-y(
               class=`
                 ${template}
                 ${template}--col-start
@@ -103,11 +104,5 @@ html(lang='en')
 
       footer.footer.body-micro.text-color-muted
         .span bad-at-coding.com - ©️2026. All rights reserved. Or not. Whatever
-
-      // Invisible SVG filter definition
-      svg
-        filter#dirty-grain
-          feTurbulence(type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise")
-          feColorMatrix(type="saturate" values="0")
 
     script(async, src='../app/main.ts', type='module')
