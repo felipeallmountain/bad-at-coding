@@ -59,7 +59,12 @@ export const renderView = (
         `${viewName}.pug`
       )
       const compiledTemplate = pug.compileFile(templatePath)
-      const htmlTemplate = compiledTemplate(locals)
+      const htmlTemplate = compiledTemplate({
+        siteUrl: config.siteUrl,
+        siteName: config.siteName,
+        canonicalPath: url.split('?')[0] || '/',
+        ...locals,
+      })
 
       let finalHtml = htmlTemplate
       if (config.isDev && viteServer) {

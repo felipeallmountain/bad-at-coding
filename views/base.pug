@@ -1,6 +1,15 @@
 include mixins/line.pug
 block variables
 
+- var siteUrl = typeof siteUrl !== 'undefined' ? siteUrl : 'https://bad-at-coding.com'
+- var siteName = typeof siteName !== 'undefined' ? siteName : 'bad at coding'
+- var canonicalPath = typeof canonicalPath !== 'undefined' ? canonicalPath : '/'
+- var pageTitle = typeof pageTitle !== 'undefined' ? pageTitle : 'BAD AT CODING_'
+- var pageDescription = typeof pageDescription !== 'undefined' ? pageDescription : 'Code that works out of pure spite and designs that ignore your feelings.'
+- var documentTitle = pageTitle.replace(/_+$/, '') + ' · ' + siteName
+- var canonicalUrl = siteUrl + (canonicalPath === '/' ? '/' : canonicalPath)
+- var ogImageUrl = siteUrl + '/og-image.jpg'
+
 doctype html
 
 mixin nav-link(url, label)
@@ -14,9 +23,31 @@ html(lang='en')
 
     base(href='/')
 
-    title= 'bad at coding'
+    title= documentTitle
+    meta(name='description', content=pageDescription)
+    link(rel='canonical', href=canonicalUrl)
 
-    meta(name='description', content='content')
+    meta(property='og:type', content='website')
+    meta(property='og:site_name', content=siteName)
+    meta(property='og:title', content=pageTitle.replace(/_+$/, ''))
+    meta(property='og:description', content=pageDescription)
+    meta(property='og:url', content=canonicalUrl)
+    meta(property='og:image', content=ogImageUrl)
+    meta(property='og:image:type', content='image/jpeg')
+    meta(property='og:image:width', content='1200')
+    meta(property='og:image:height', content='630')
+    meta(property='og:image:alt', content='bad at coding — WELCOME TO MY MISERY')
+    meta(property='og:locale', content='en_US')
+
+    meta(name='twitter:card', content='summary_large_image')
+    meta(name='twitter:title', content=pageTitle.replace(/_+$/, ''))
+    meta(name='twitter:description', content=pageDescription)
+    meta(name='twitter:image', content=ogImageUrl)
+    meta(name='twitter:image:alt', content='bad at coding — WELCOME TO MY MISERY')
+
+    link(rel='icon', href='/favicon.ico', sizes='any')
+    link(rel='icon', type='image/png', href='/favicon.png', sizes='32x32')
+    link(rel='apple-touch-icon', href='/apple-touch-icon.png')
 
     link(rel='preload', href='../fonts/big-shoulders-stencil-v4-latin-500.woff2', as='font', type='font/woff2', crossorigin)
     link(rel='preload', href='../fonts/jetbrains-mono-v24-latin-regular.woff2', as='font', type='font/woff2', crossorigin)
