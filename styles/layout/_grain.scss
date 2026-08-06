@@ -8,6 +8,13 @@
   mix-blend-mode: screen;
 }
 
+// Lifted over the preloader until the boot screen is gone. `.wrapper` is not a
+// stacking context, so this competes with the preloader in the root one.
+.grain-canvas--elevated {
+  position: fixed;
+  z-index: 10000;
+}
+
 .no-grain-gl .grain-canvas {
   display: none;
 }

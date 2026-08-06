@@ -1,8 +1,10 @@
 import * as THREE from 'three'
 import { GUI } from 'lil-gui'
 import Tempus from 'tempus'
+import gsap from 'gsap'
 
 export type TGrain = {
+  settle: () => void
   destroy: () => void
 }
 
@@ -143,7 +145,7 @@ export const createGrain = (): TGrain => {
   ) as HTMLCanvasElement | null
 
   if (!canvas) {
-    return { destroy: () => {} }
+    return { settle: () => {}, destroy: () => {} }
   }
 
   const prefersReducedMotion = window.matchMedia(
@@ -156,7 +158,13 @@ export const createGrain = (): TGrain => {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: false })
   } catch {
     document.documentElement.classList.add('no-grain-gl')
-    return { destroy: () => {} }
+    return { settle: () => {}, destroy: () => {} }
+  }
+
+  const elevatedClass = 'grain-canvas--elevated'
+
+  if (document.querySelector('.preloader')) {
+    canvas.classList.add(elevatedClass)
   }
 
   const params: TGrainParams = {
@@ -219,6 +227,16 @@ export const createGrain = (): TGrain => {
     uniforms.uResolution.value.set(width, height)
   }
   syncViewport()
+
+  // Drops the layer back behind the grid once the preloader is out of the way
+  const settle = () => {
+    canvas.classList.remove(elevatedClass)
+    syncViewport()
+
+    if (prefersReducedMotion) {
+      renderer.render(scene, camera)
+    }
+  }
 
   // Pointer state in shader space (origin bottom-left, CSS pixels)
   let pointerX = -9999
@@ -307,6 +325,15 @@ export const createGrain = (): TGrain => {
     clickFolder.add(params, 'shockDecay', 0.2, 6, 0.1).name('Ring Decay')
   }
 
+  // Dust builds up from nothing so the boot screen fades in clean
+  const introTween = prefersReducedMotion
+    ? null
+    : gsap.fromTo(
+        uniforms.uIntensity,
+        { value: 0 },
+        { value: params.intensity, duration: 2.4, ease: 'power2.out' }
+      )
+
   let lastTime = performance.now()
 
   const tick = () => {
@@ -359,6 +386,7 @@ export const createGrain = (): TGrain => {
 
   const destroy = () => {
     unsubscribe?.()
+    introTween?.kill()
     gui?.destroy()
     window.removeEventListener('resize', handleResize)
     window.removeEventListener('mousemove', handleMouseMove)
@@ -371,5 +399,5 @@ export const createGrain = (): TGrain => {
     renderer.dispose()
   }
 
-  return { destroy }
+  return { settle, destroy }
 }

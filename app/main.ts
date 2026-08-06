@@ -12,11 +12,12 @@ const initApp = () => {
   Tempus.patch()
   initScrambleLinks()
   const grid = createGrid()
-  createGrain()
+  const grain = createGrain()
 
   createPreloader({
     onComplete: () => {
       grid.animateIn?.()
+      grain.settle()
     },
   })
   const router = createRouter()
