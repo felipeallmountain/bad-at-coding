@@ -133,6 +133,12 @@ export const createNavigation = (): TNavigation => {
       oldBody.className = newBody.className
       oldBody.scrollTop = 0
     }
+    const desktopContent = contentContainer.querySelector<HTMLElement>(
+      '.container__desktop-content'
+    )
+    if (desktopContent) {
+      desktopContent.scrollTop = 0
+    }
     const oldTemplate = contentContainer.getAttribute('data-template') || ''
     const newTemplate = newContent.getAttribute('data-template') || ''
     contentContainer.setAttribute('data-template', newTemplate)

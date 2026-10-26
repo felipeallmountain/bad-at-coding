@@ -8,11 +8,13 @@ import { createGrain } from './composables/grain.js'
 import { createNavbar } from './composables/navbar.js'
 import { initScrambleLinks } from './composables/scramble-links.js'
 import { initFailCaseGallery } from './composables/fail-case-gallery.js'
+import { createSmoothScroll } from './composables/smooth-scroll.js'
 
 const initApp = () => {
   Tempus.patch()
   initScrambleLinks()
   initFailCaseGallery()
+  const smoothScroll = createSmoothScroll()
   const grid = createGrid()
   const grain = createGrain()
 
@@ -35,6 +37,7 @@ const initApp = () => {
 
   navigation.on('updateNavbar', ({ newNavbar }: { newNavbar: HTMLElement }) => {
     navbar.update(newNavbar)
+    smoothScroll.refresh()
   })
 }
 

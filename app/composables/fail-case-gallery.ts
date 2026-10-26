@@ -1,3 +1,5 @@
+import { getSmoothScroll } from './smooth-scroll.js'
+
 export const initFailCaseGallery = (): void => {
   let currentIndex = 0
 
@@ -78,14 +80,27 @@ export const initFailCaseGallery = (): void => {
       const targetId = jumpBtn.dataset.target
       if (!targetId) return
       const sectionEl = document.getElementById(targetId)
-      const scrollContainer =
-        document.querySelector<HTMLElement>('.v-feed-06__scroll')
-      if (sectionEl && scrollContainer) {
-        const containerRect = scrollContainer.getBoundingClientRect()
-        const sectionRect = sectionEl.getBoundingClientRect()
-        const offset =
-          sectionRect.top - containerRect.top + scrollContainer.scrollTop - 12
-        scrollContainer.scrollTo({ top: offset, behavior: 'smooth' })
+      if (!sectionEl) return
+
+      const toolbar = document.querySelector<HTMLElement>('.v-feed-06__toolbar')
+      const toolbarHeight = toolbar ? toolbar.offsetHeight + 8 : 12
+      const smoothScroll = getSmoothScroll()
+      if (smoothScroll) {
+        smoothScroll.scrollTo(sectionEl, { offset: -toolbarHeight })
+      } else {
+        const scrollContainer =
+          document.querySelector<HTMLElement>('.container__content') ||
+          document.querySelector<HTMLElement>('.v-feed-06__scroll')
+        if (scrollContainer) {
+          const containerRect = scrollContainer.getBoundingClientRect()
+          const sectionRect = sectionEl.getBoundingClientRect()
+          const offset =
+            sectionRect.top -
+            containerRect.top +
+            scrollContainer.scrollTop -
+            toolbarHeight
+          scrollContainer.scrollTo({ top: offset, behavior: 'smooth' })
+        }
       }
       return
     }
@@ -108,6 +123,7 @@ export const initFailCaseGallery = (): void => {
         const shouldShow = category === 'all' || itemCat === category
         item.classList.toggle('is-hidden', !shouldShow)
       })
+      getSmoothScroll()?.resize()
       return
     }
 
