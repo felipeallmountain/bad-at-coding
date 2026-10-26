@@ -68,7 +68,7 @@ export const renderView = (
 
       let finalHtml = htmlTemplate
       if (config.isDev && viteServer) {
-        finalHtml = await viteServer.transformIndexHtml(url, htmlTemplate)
+        finalHtml = await viteServer.transformIndexHtml('/', htmlTemplate)
       } else {
         // Rewrite paths using the production manifest
         const mainTs = manifest['app/main.ts']

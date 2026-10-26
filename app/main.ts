@@ -7,10 +7,12 @@ import { createGrid } from './composables/grid3d.js'
 import { createGrain } from './composables/grain.js'
 import { createNavbar } from './composables/navbar.js'
 import { initScrambleLinks } from './composables/scramble-links.js'
+import { initFailCaseGallery } from './composables/fail-case-gallery.js'
 
 const initApp = () => {
   Tempus.patch()
   initScrambleLinks()
+  initFailCaseGallery()
   const grid = createGrid()
   const grain = createGrain()
 

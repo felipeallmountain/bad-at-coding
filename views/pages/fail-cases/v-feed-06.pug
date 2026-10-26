@@ -1,0 +1,500 @@
+extends ../../base.pug
+include ../../mixins/line.pug
+
+block variables
+  - var template = 'v-feed-06'
+  - var links = [{ label: '/fail-cases', url: '/fail-cases' }, { label: '/v-feed-06', url: '/fail-cases/v-feed-06' }]
+  - var pageTitle = 'V-FEED [06]_'
+  - var pageDescription = 'Fail Case #01: Building a 60 FPS WebGL CRT Simulator & AI Body-Tracking Spaceship to Fight 6 Physical TVs and HDMI-to-RCA Adapters.'
+  - var showParagraph = true
+  -
+    var vFeedPhotos = [
+      {
+        id: 'photo-01',
+        file: '/assets/v-feed-06/DSC_3270.jpg',
+        title: 'The Physical Setup / Totem in Situ',
+        caption: '6 screens, miles of composite cabling, a webcam binder-clipped to a steel rack, and the gap between CAD diagrams and gravity.',
+        alt: 'V-FEED [06] physical setup showing 6 vintage CRT televisions stacked in a 2x3 steel rack matrix with purple floor tape markers and cable spaghetti',
+        aspect: '16:9 SETUP',
+        orientation: 'landscape',
+        category: 'primary'
+      },
+      {
+        id: 'photo-02',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-288.jpg',
+        title: 'The "Human Antenna" in Action',
+        caption: 'Trying to convince real humans to hold "UHF Loop Halo" and "Yagi Point" poses in public while MediaPipe tracks 33 joints at 60 FPS.',
+        alt: 'Gallery visitor raising an arm in front of the 6-CRT matrix to trigger pose recognition while green wireframe telemetry renders on screen',
+        aspect: '16:9 ACTION',
+        orientation: 'landscape',
+        category: 'primary'
+      },
+      {
+        id: 'photo-03',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-287.jpg',
+        title: 'The 2,839-Line Calibration HUD (CalibrationConsole.ts)',
+        caption: 'When you refuse to move a physical screen 2 centimeters to the left, so you write an inverse bilinear keystone solver in GLSL instead—complete with the "CRT [01}" typo on the top-left tube.',
+        alt: 'Close-up of the CRT screens displaying per-screen calibration HUD overlays, antenna lock percentages, and the CRT [01} label typo',
+        aspect: '16:9 HUD',
+        orientation: 'landscape',
+        category: 'primary'
+      },
+      {
+        id: 'photo-04',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-289.jpg',
+        title: 'The Shader Matrix & Skeleton Overlay',
+        caption: 'Simulated CRT phosphor masks, scanlines, and green phosphor MediaPipe skeletons rendered at 60 FPS on top of real leaded CRT glass.',
+        alt: 'Close-up of CRT [01} and CRT [03] showing the ZAP NEXT VID trigger overlay, simulated scanlines, and live query synthesis telemetry',
+        aspect: '16:9 SHADER',
+        orientation: 'landscape',
+        category: 'primary'
+      },
+      {
+        id: 'photo-05',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-285.jpg',
+        title: 'Improvised Dipole Hardware',
+        caption: 'A visitor discovering that waving an octagonal event sign confuses the wrist-velocity zero-crossing classifier into thinking she is dancing at 1.8 Hz.',
+        alt: 'Vertical shot of a visitor holding an octagonal sign paddle in front of the 6-CRT totem on the gallery floor',
+        aspect: '9:16 TOTEM',
+        orientation: 'portrait',
+        category: 'vertical'
+      },
+      {
+        id: 'photo-06',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-286.jpg',
+        title: 'The 2×3 Totem vs. Gallery Scale',
+        caption: 'Standing on purple gaffer-tape rangefinder marks (1m–3m) while six 15,734 Hz flyback transformers and a Bose subwoofer hum in unison.',
+        alt: 'Vertical full-height view of the 6-CRT installation rack and visitor standing on the purple floor distance markers',
+        aspect: '9:16 TOTEM',
+        orientation: 'portrait',
+        category: 'vertical'
+      },
+      {
+        id: 'photo-07',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-225.jpg',
+        title: 'Edge-Case Rangefinder Testing (Height < 1.1m)',
+        caption: 'My inverse-square shoulder-span distance estimator (landmarks 11 and 12) immediately assuming a child standing 30cm away is a full-grown adult standing 2.8 meters back.',
+        alt: 'A woman and a young child inspecting the 6-CRT totem at close range in the exhibition space',
+        aspect: '16:9 FIELD',
+        orientation: 'landscape',
+        category: 'field'
+      },
+      {
+        id: 'photo-08',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-230.jpg',
+        title: 'Zero-Engagement Telemetry',
+        caption: 'A spectator ignoring 2,839 lines of calibration code to check her actual phone—ironically the exact behavior the installation was supposed to critique.',
+        alt: 'Gallery visitor looking down at her smartphone while standing on the purple antenna floor markers in front of the glowing CRT array',
+        aspect: '16:9 FIELD',
+        orientation: 'landscape',
+        category: 'field'
+      },
+      {
+        id: 'photo-09',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-228.jpg',
+        title: 'Ambient Glare & Exhibition Physics',
+        caption: 'Competing with adjacent wall projections and gallery floodlights that turned carefully tuned 48×48 HSV torso-color sampling into a random number generator.',
+        alt: 'Wide gallery view showing the 6-CRT totem alongside another bright projection installation and visitors walking through the venue',
+        aspect: '16:9 FIELD',
+        orientation: 'landscape',
+        category: 'field'
+      }
+    ]
+  -
+    var receiptRows = [
+      {
+        metric: 'Calibration Console (CalibrationConsole.ts)',
+        value: '2,839 lines',
+        notes: 'More code to calibrate the screens than to render them'
+      },
+      {
+        metric: 'Architecture Documentation Suite',
+        value: '12 markdown files',
+        notes: 'Written for a team of 1 (me), including 8 full architecture manuals'
+      },
+      {
+        metric: 'GLSL Uniforms in CompositeShader.ts',
+        value: '38 uniforms',
+        notes: 'Including uCorners[24] for 24-point quad warping'
+      },
+      {
+        metric: 'NTSC Flyback Sine Oscillator',
+        value: '15,734 Hz',
+        notes: 'Synthesizing a sound that CRT hardware makes for free'
+      },
+      {
+        metric: 'Initial Pose Hold Debounce',
+        value: '1,800 ms',
+        notes: 'Panic-reduced to 400 ms (zapHoldDurationMs) in production'
+      },
+      {
+        metric: 'YouTube API Quota Runway',
+        value: '5.3 hours',
+        notes: 'For an 8-hour exhibition day (919.9 units/hr burn rate)'
+      },
+      {
+        metric: 'Floating-Point Calibration Scars',
+        value: '-0.00600000000000001',
+        notes: 'Actual frames.offsetX committed to config/calibration.json'
+      }
+    ]
+
+block paragraph
+  p [ FAIL CASE #01 — INTERACTIVE TRANSMEDIA CRT INSTALLATION ]
+  p Building a 60 FPS WebGL CRT Simulator & AI Body-Tracking Spaceship to Fight 6 Physical TVs and HDMI-to-RCA Adapters.
+
+block body
+  .v-feed-06__wrapper
+    .v-feed-06__toolbar.bg-color-surface
+      .toolbar__left
+        a.toolbar__back.body-micro.text-color-pure(href='/fail-cases', target='_self') &lt;-- INDEX /FAIL-CASES
+        span.toolbar__badge.body-micro OVER-ENGINEERED / HARDWARE REALITY CHECK
+      nav.toolbar__jumps(aria-label='Post-mortem section navigation')
+        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-dossier') [00. DOSSIER]
+        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-pitch') [01. PITCH_VS_REALITY]
+        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-gallery') [02. EVIDENCE_09]
+        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-pillars') [03. 4_PILLARS_OF_DOOM]
+        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-receipts') [04. RECEIPTS]
+        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-takeaways') [05. AUTOPSY]
+
+    .v-feed-06__scroll
+      //- 1. HEADER / CASE DOSSIER BANNER
+      section#section-dossier.dossier-section.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .dossier-header
+          .dossier-header__top
+            span.body-micro.text-color-muted // SECTION 00 :: CASE DOSSIER &amp; METADATA SPEC SHEET
+            span.body-micro.text-color-default CASE_ID: FAIL-01 // REV_2026.10
+          .dossier-grid
+            .dossier-cell
+              span.dossier-cell__label.body-micro.text-color-muted PROJECT
+              span.dossier-cell__value.code-command-default.text-color-pure V-FEED [06]
+            .dossier-cell
+              span.dossier-cell__label.body-micro.text-color-muted CLASSIFICATION
+              span.dossier-cell__value.body-commentary.text-color-default FAIL CASE #01 — Interactive Transmedia CRT Installation
+            .dossier-cell
+              span.dossier-cell__label.body-micro.text-color-muted TL;DR METRIC
+              span.dossier-cell__value.body-commentary.text-color-pure 2,839 LOC Calibration GUI vs. 1 Loose Composite Cable
+            .dossier-cell
+              span.dossier-cell__label.body-micro.text-color-muted REPOSITORY
+              .dossier-cell__link
+                span.code-command-default.text-color-default $
+                a.code-command-link.text-color-pure(href='https://github.com/felipeallmountain/v-feed-06', target='_blank', rel='noopener noreferrer') github.com/felipeallmountain/v-feed-06
+            .dossier-cell.dossier-cell--wide
+              span.dossier-cell__label.body-micro.text-color-muted STACK
+              ul.dossier-tags
+                each tech in ['TypeScript', 'Three.js / WebGL', 'Custom GLSL', '@mediapipe/tasks-vision', 'Web Audio API', 'Express', 'yt-dlp', '6x CRT Matrix']
+                  li.dossier-tag.body-micro.text-color-default [#{tech}]
+
+          .dossier-verdict
+            +line-inline('left-line')
+            .dossier-verdict__content
+              span.body-micro.text-color-muted OFFICIAL AUTOPSY VERDICT ::
+              p.code-command-lg.text-color-pure "Wrote closed-form inverse bilinear quad-warping shaders and a 2,839-line calibration deck to fix problems that belonged to physics."
+        +line-block('bottom-line')
+
+      //- 2. THE PITCH VS. THE REALITY
+      section#section-pitch.dossier-section.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .section-heading
+          span.body-micro.text-color-muted // SECTION 01 :: EXPECTATION VS. EXHIBITION TELEMETRY
+          h2.heading-title.text-color-pure THE PITCH VS. THE REALITY_
+
+        .pitch-reality-grid
+          article.pitch-card
+            .pitch-card__header
+              span.pitch-card__tag.body-micro.text-color-pure [ THE ART SCHOOL PITCH // WHAT I THOUGHT I WAS BUILDING ]
+              span.body-micro.text-color-muted SPEC_THEORY
+            .pitch-card__body
+              +line-inline('left-line')
+              .pitch-card__copy.body-reading.text-color-default
+                p An interactive transmedia art installation projecting vertical YouTube Shorts across a vertical totem of #[strong.text-color-pure 6 vintage Cathode Ray Tube (CRT) televisions] arranged in a #[strong.text-color-pure 2×3 matrix]—conceived as a cybernetic tribute to video artist Joshua Ellingson.
+                p.pitch-card__quote.text-color-pure "Six cathode ray tubes, a YouTube feed, and a motion sensor: the user is the only missing wire in the system."
+                p Spectators act as a #[strong.text-color-pure "Human Antenna"]—their physical distance (#[code 3m] to #[code 1m]), movement velocity, and body postures tuning or corrupting the analog broadcast in real time like human dipole antennas.
+
+          article.pitch-card.pitch-card--reality
+            .pitch-card__header
+              span.pitch-card__tag.pitch-card__tag--disaster.body-micro [ EXHIBITION FLOOR REALITY // WHAT ACTUALLY HAPPENED ]
+              span.body-micro.text-color-muted FIELD_INCIDENT
+            .pitch-card__body
+              +line-inline('left-line')
+              .pitch-card__copy.body-reading.text-color-default
+                p Me crouched in the dark hitting #[code.text-color-pure Ctrl+Shift+C] to tweak #[code.text-color-pure poseGuideOffsetX: 0.29] and #[code.text-color-pure rgbSplit: 1.269] because the camera couldn't tell a gallery visitor from a shadow, while #[code.text-color-pure yt-dlp] downloaded 313 videos of boats sinking.
+                p Instead of a seamless human-machine symbiosis, I built a 60 FPS WebGL spaceship to fight $4 plastic HDMI-to-RCA composite adapters, ambient gallery floodlights glaring off curved leaded glass, a webcam held to a steel shelf with a binder clip, and strangers who understandably refused to hold a "Rabbit Ears" pose in public for 1.8 seconds.
+        +line-block('bottom-line')
+
+      //- 3. PHOTO & MEDIA EVIDENCE GALLERY
+      section#section-gallery.dossier-section.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .section-heading.section-heading--split
+          .section-heading__left
+            span.body-micro.text-color-muted // SECTION 02 :: PHOTOGRAPHIC FIELD EVIDENCE (/PUBLIC/ASSETS/V-FEED-06)
+            h2.heading-title.text-color-pure PHOTO &amp; MEDIA EVIDENCE_
+          .gallery-filters(role='tablist', aria-label='Filter evidence photos')
+            button.gallery-filter.body-micro.is-active.js-gallery-filter(type='button', data-filter='all') [ALL :: 09]
+            button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='primary') [CORE_EVIDENCE :: 04]
+            button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='vertical') [9:16_TOTEM :: 02]
+            button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='field') [FIELD_LOGS :: 03]
+
+        p.body-commentary.text-color-default Click any evidence frame to launch the full-resolution blueprint inspection view. Includes both 16:9 setup/HUD captures and vertical totem shots from the exhibition floor.
+
+        .evidence-gallery
+          each photo, idx in vFeedPhotos
+            figure.evidence-card.js-gallery-item(
+              class=`evidence-card--${photo.orientation}`,
+              data-id=photo.id,
+              data-src=photo.file,
+              data-file=photo.file,
+              data-title=photo.title,
+              data-caption=photo.caption,
+              data-aspect=photo.aspect,
+              data-category=photo.category,
+              tabindex='0',
+              role='button',
+              aria-label=`Inspect ${photo.id}: ${photo.title}`
+            )
+              .evidence-card__top.body-micro
+                span.text-color-pure [#{photo.id.toUpperCase()}]
+                span.text-color-muted= photo.aspect
+              .evidence-card__media
+                img.evidence-card__img(src=photo.file, alt=photo.alt, loading=idx < 4 ? 'eager' : 'lazy')
+                .evidence-card__zoom.body-micro.text-color-pure [ + INSPECT FRAME ]
+              figcaption.evidence-card__caption
+                .evidence-card__title.code-command-default.text-color-pure= photo.title
+                p.evidence-card__desc.body-commentary.text-color-default= photo.caption
+                .evidence-card__file.body-micro.text-color-muted= photo.file
+        +line-block('bottom-line')
+
+      //- 4. ANATOMY OF THE OVER-ENGINEERING (THE 4 PILLARS OF DOOM)
+      section#section-pillars.dossier-section.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .section-heading
+          span.body-micro.text-color-muted // SECTION 03 :: HOW I BUILT A SPACESHIP FOR A TOASTER PROBLEM
+          h2.heading-title.text-color-pure ANATOMY OF THE OVER-ENGINEERING (THE 4 PILLARS OF DOOM)_
+
+        .pillars-list
+          //- PILLAR 01
+          article.pillar-card
+            .pillar-card__header
+              span.pillar-card__num.code-command-lg.text-color-pure [01]
+              .pillar-card__titles
+                h3.code-command-lg.text-color-pure SIMULATING CRTS IN SOFTWARE... FOR REAL ANALOG CRTS
+                span.body-micro.text-color-muted CompositeShader.ts (346 LOC) + CRTShader.ts + NoiseShader.ts + AudioEngine.ts
+            .pillar-card__body
+              +line-inline('left-line')
+              .pillar-card__content
+                .body-reading.text-color-default
+                  p The installation was designed for #[strong.text-color-pure six physical 14"–20" CRT televisions]—literal vacuum tubes with real curved leaded glass, real shadow-mask phosphor triads, real plastic bezels, and real 15.734 kHz flyback transformers.
+                  p Instead of just sending video to the TVs, I wrote a #[strong.text-color-pure 346-line single-pass GLSL fragment shader (#[code CompositeShader.ts])] that mathematically simulates barrel glass curvature (#[code uCurvature], #[code uTubeCurve]), RGB shadow-mask phosphor triads and horizontal scanlines (#[code CRTShader.ts]), a 3D beveled dark plastic monitor chassis with specular highlights (#[code uBezelChassis]), chromatic aberration (#[code uRgbSplit]), V-Hold vertical frame roll (#[code uVHold]), horizontal sync jitter (#[code uHJitter]), and Gaussian RF snow (#[code NoiseShader.ts]).
+                  p On top of that, I built a #[strong.text-color-pure Web Audio API synthesizer (#[code AudioEngine.ts])] with pink/white noise buffers and a sine oscillator locked to #[strong.text-color-pure 15,734 Hz] to emulate the NTSC CRT flyback transformer whine—for a room meant to have six real flyback transformers already screaming at 15,734 Hz. And when physical hardware and projection realities hit, the software ended up having to pretend to be the hardware it was supposed to feed.
+
+                .code-evidence
+                  .code-evidence__header.body-micro
+                    span.text-color-pure // FILE: src/shaders/CompositeShader.ts (Closed-Form Inverse Bilinear Quad-Warping)
+                    span.text-color-muted GLSL FRAGMENT SHADER :: 38 UNIFORMS
+                  pre.code-evidence__pre.body-commentary.text-color-default
+                    code.
+                      float cross2d(vec2 a, vec2 b) {
+                        return a.x * b.y - a.y * b.x;
+                      }
+
+                      // Closed-form inverse bilinear interpolation for 24-point keystone pinning
+                      vec2 invBilinear(vec2 p, vec2 p0, vec2 p1, vec2 p2, vec2 p3) {
+                        vec2 e = p1 - p0;
+                        vec2 f = p3 - p0;
+                        vec2 g = p0 - p1 + p2 - p3;
+                        vec2 h = p - p0;
+
+                        float k2 = cross2d(g, f);
+                        float k1 = cross2d(e, f) + cross2d(h, g);
+                        float k0 = cross2d(h, e);
+
+                        if (abs(k2) &lt; 0.0001) {
+                          float u = (h.x * k1 + f.x * k0) / (e.x * k1 - g.x * k0 + 0.00001);
+                          float v = -k0 / (k1 + 0.00001);
+                          return vec2(u, v);
+                        }
+
+                        float w = k1 * k1 - 4.0 * k0 * k2;
+                        if (w &lt; 0.0) return vec2(-1.0);
+                        w = sqrt(w);
+
+                        float v1 = (-k1 - w) / (2.0 * k2);
+                        float u1 = (h.x - f.x * v1) / (e.x + g.x * v1 + 0.00001);
+                        return vec2(u1, v1);
+                      }
+
+          //- PILLAR 02
+          article.pillar-card
+            .pillar-card__header
+              span.pillar-card__num.code-command-lg.text-color-pure [02]
+              .pillar-card__titles
+                h3.code-command-lg.text-color-pure SOLVING CARPENTRY WITH LIL-GUI: THE 2,839-LINE CALIBRATION CONSOLE
+                span.body-micro.text-color-muted CalibrationConsole.ts (2,839 LOC) + SyncChannel.ts + config/calibration.json (351 LOC)
+            .pillar-card__body
+              +line-inline('left-line')
+              .pillar-card__content
+                .body-reading.text-color-default
+                  p Mounting and aligning 6 displays in a real physical space is messy. Instead of solving alignment with a wrench, a shim, or a spirit level, I tried to solve carpentry in WebGL.
+                  p I built #[code.text-color-pure CalibrationConsole.ts]—a #[strong.text-color-pure 2,839-line #[code lil-gui] mission control deck] synced across browser windows via #[code BroadcastChannel] (#[code SyncChannel.ts]) and backed by a #[strong.text-color-pure 351-line JSON config (#[code config/calibration.json])]. It featured #[strong.text-color-pure 24-point 4-corner perspective keystone pinning] (#[code uCorners[24]]) solved per-pixel in GLSL, per-screen discrete 90° rotations, fine continuous angle rotation (#[code -180°] to #[code +180°]), X/Y sub-pixel offsets, individual horizontal/vertical flips for all 6 screens, per-screen signal lock and noise gain overrides, plus custom SMPTE color bars, crosshatch patterns, and focus reticles.
+
+                .code-evidence
+                  .code-evidence__header.body-micro
+                    span.text-color-pure // FILE: config/calibration.json (Actual Committed Production Battle Scars)
+                    span.text-color-muted IEEE-754 DESPERATION &amp; TYPO IMMORTALITY
+                  pre.code-evidence__pre.body-commentary.text-color-default
+                    code.
+                      {
+                        "shader": {
+                          "curvature": 2.6,
+                          "rgbSplit": 1.269,
+                          "vHold": 0,
+                          "bezelChassis": true
+                        },
+                        "tracking": {
+                          "zapHoldDurationMs": 400,
+                          "poseGuideOffsetX": 0.29
+                        },
+                        "frames": [
+                          {
+                            "id": 0,
+                            "label": "CRT [01}",
+                            "offsetX": -0.00600000000000001,
+                            "offsetY": 0.014,
+                            "fineAngle": -1.4,
+                            "rotation": 0,
+                            "flipX": false,
+                            "flipY": false
+                          }
+                        ]
+                      }
+
+          //- PILLAR 03
+          article.pillar-card
+            .pillar-card__header
+              span.pillar-card__num.code-command-lg.text-color-pure [03]
+              .pillar-card__titles
+                h3.code-command-lg.text-color-pure THE OVER-THINKER'S COMPUTER VISION PIPELINE: HUMAN WALKIE-TALKIES
+                span.body-micro.text-color-muted FeatureExtractor.ts + BroadcastQuerySynthesizer.ts (@mediapipe/tasks-vision @ 60 FPS)
+            .pillar-card__body
+              +line-inline('left-line')
+              .pillar-card__content
+                .body-reading.text-color-default
+                  p Using #[code.text-color-pure @mediapipe/tasks-vision] (running #[code PoseLandmarker] with 33 3D body joints + #[code HandLandmarker] with 21 hand joints in Wasm/GPU at 60 FPS), I refused to simply map proximity to static noise. Instead, I engineered a full semantic classifier that:
+                  p #[strong.text-color-pure 1. Optical Inverse-Square Rangefinder:] Estimates physical distance in meters using the Euclidean span between shoulder landmarks #[code 11] and #[code 12] (which immediately hallucinated whenever a child walked into the frame).
+                  p #[strong.text-color-pure 2. Harmonic Wrist Zero-Crossing Dance Detector:] Analyzes a #[code 1,800 ms] rolling window of vertical wrist velocity zero-crossings (#[code 1.2 Hz–2.5 Hz]) to classify whether the spectator is #[strong.text-color-pure dancing rhythmically] (#[code RHYTHMIC]) versus #[strong.text-color-pure flailing erratically] (#[code HIGH_MOTION]).
+                  p #[strong.text-color-pure 3. Torso HSV Clothing Color Sampler:] Samples a #[code 48×48] offscreen canvas across the user's torso, converts RGB to HSV, and classifies their outfit (#[code WARM_RED], #[code COOL_BLUE], #[code DARK_NEUTRAL], #[code NEUTRAL]) to tint the YouTube search query mood.
+                  p #[strong.text-color-pure 4. Six Antenna Postures &amp; The 1.8s Panic Patch:] Mapped 6 specific body postures 1:1 to the 6 CRT screens—originally requiring visitors to hold a pose for #[strong.text-color-pure 1.8 seconds] (#[code 1,800 ms]), which had to be panic-tuned down to #[code.text-color-pure zapHoldDurationMs: 400] because no human being in an art gallery will hold a T-pose for 1.8 seconds in front of strangers without feeling ridiculous.
+
+                .pose-matrix-grid
+                  .pose-chip
+                    span.body-micro.text-color-muted CRT [01} :: POSE_ANTENNA
+                    span.code-command-default.text-color-pure "Rabbit Ears"
+                  .pose-chip
+                    span.body-micro.text-color-muted CRT [02] :: POSE_DIAL_TUNER
+                    span.code-command-default.text-color-pure "Yagi Point"
+                  .pose-chip
+                    span.body-micro.text-color-muted CRT [03] :: POSE_SURPRISE
+                    span.code-command-default.text-color-pure "TV Shock"
+                  .pose-chip
+                    span.body-micro.text-color-muted CRT [04] :: POSE_WINGSUIT
+                    span.code-command-default.text-color-pure "Horizontal Dipole"
+                  .pose-chip
+                    span.body-micro.text-color-muted CRT [05] :: POSE_LOOP_HALO
+                    span.code-command-default.text-color-pure "UHF Loop"
+                  .pose-chip
+                    span.body-micro.text-color-muted CRT [06] :: POSE_SIGNAL_LOCK
+                    span.code-command-default.text-color-pure "Human Capacitor"
+
+          //- PILLAR 04
+          article.pillar-card
+            .pillar-card__header
+              span.pillar-card__num.code-command-lg.text-color-pure [04]
+              .pillar-card__titles
+                h3.code-command-lg.text-color-pure THE 4.5-HOUR SOAK TEST, YOUTUBE QUOTA BURN &amp; EXHIBITION PHYSICS
+                span.body-micro.text-color-muted QuotaGuard.ts + LRU Disk Cache + reports/perf-report-latest.md
+            .pillar-card__body
+              +line-inline('left-line')
+              .pillar-card__content
+                .body-reading.text-color-default
+                  p Every synthesized body query hit the #[strong.text-color-pure YouTube Data API v3 (#[code search.list])] at #[strong.text-color-pure 100 quota units per call], spawning #[code yt-dlp] and #[code ffmpeg] on an Express backend to transcode vertical MP4s on the fly.
+                  p During a #[strong.text-color-pure 4.5-hour soak test] (#[code reports/perf-report-latest.md]), the installation downloaded #[strong.text-color-pure 313 bizarre vintage Shorts]—ranging from #[em 1950s TV test patterns] and #[em Max Headroom] to #[em SpongeBob lost episodes] and #[em pontoon boats hitting rocks]—burning #[strong.text-color-pure 4,140 quota units] at #[strong.text-color-pure 919.9 units/hr]. That meant the 10,000-unit daily Google Cloud quota would die #[strong.text-color-pure 5.3 hours into an 8-hour gallery day], forcing me to emergency-engineer a #[code QuotaGuard.ts] circuit breaker and an LRU disk cache pruner.
+                  p Meanwhile, in the physical venue: camera angles, portrait webcam rotation matrices (#[code 0°/90°/180°/270°]), ambient glare on glass, cable spaghetti, and real human behavior proved that no amount of TypeScript architecture diagrams (I wrote #[strong.text-color-pure 8 full architecture manuals]—12 markdown files total—for a 1-person project) survives first contact with an exhibition space.
+        +line-block('bottom-line')
+
+      //- 5. "BY THE NUMBERS" RECEIPT TABLE
+      section#section-receipts.dossier-section.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .section-heading
+          span.body-micro.text-color-muted // SECTION 04 :: THE OVER-ENGINEERING RECEIPT
+          h2.heading-title.text-color-pure "BY THE NUMBERS" RECEIPT TABLE_
+
+        .receipt-table-wrap
+          table.receipt-table
+            thead
+              tr.body-micro.text-color-muted
+                th METRIC / SUBSYSTEM
+                th RECORDED VALUE
+                th FIELD AUDIT NOTES
+            tbody
+              each row in receiptRows
+                tr
+                  td.code-command-default.text-color-pure= row.metric
+                  td.receipt-table__val.code-command-default= row.value
+                  td.body-commentary.text-color-default= row.notes
+        +line-block('bottom-line')
+
+      //- 6. POST-MORTEM TAKEAWAYS ("WHY IT'S IN /FAIL-CASES")
+      section#section-takeaways.dossier-section.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .section-heading
+          span.body-micro.text-color-muted // SECTION 05 :: AUTOPSY SUMMARY &amp; LESSONS LEARNED
+          h2.heading-title.text-color-pure WHY IT'S IN /FAIL-CASES_
+
+        .takeaways-grid
+          article.takeaway-item
+            .takeaway-item__line
+              +line-inline('left-line')
+            .takeaway-item__body
+              span.code-command-default.text-color-pure [01] ATOMS ARE UNDEFEATED
+              p.body-reading.text-color-default Software is frictionless; atoms are undefeated. No shader uniform can fix a loose RCA composite plug or a $4 plastic signal converter overheating behind a steel shelf.
+          article.takeaway-item
+            .takeaway-item__line
+              +line-inline('left-line')
+            .takeaway-item__body
+              span.code-command-default.text-color-pure [02] PUT DOWN THE KEYBOARD, PICK UP A SCREWDRIVER
+              p.body-reading.text-color-default If you find yourself writing a 2D cross-product quadratic solver in a fragment shader because a display is crooked, put down the keyboard and pick up a screwdriver.
+          article.takeaway-item
+            .takeaway-item__line
+              +line-inline('left-line')
+            .takeaway-item__body
+              span.code-command-default.text-color-pure [03] HUMANS ARE NOT DETERMINISTIC STATE MACHINES
+              p.body-reading.text-color-default Twelve architecture markdown files and a 4.5-hour soak test won't save you when your entire interactive loop depends on strangers doing "Rabbit Ears" poses for 1.8 seconds in front of a binder-clipped webcam.
+
+        .dossier-footer
+          .dossier-footer__nav
+            span.code-command-default.text-color-default $
+            a.code-command-link.text-color-pure(href='/fail-cases', target='_self') cd /fail-cases
+          .dossier-footer__nav
+            span.code-command-default.text-color-default $
+            a.code-command-link.text-color-pure(href='https://github.com/felipeallmountain/v-feed-06', target='_blank', rel='noopener noreferrer') git clone https://github.com/felipeallmountain/v-feed-06
+        +line-block('bottom-line')
+
+    //- LIGHTBOX MODAL FOR PHOTO INSPECTION
+    .gallery-lightbox.js-gallery-lightbox(aria-hidden='true', role='dialog', aria-label='Evidence photo inspector')
+      .gallery-lightbox__dialog.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .gallery-lightbox__header
+          .gallery-lightbox__meta-group
+            span.body-micro.text-color-pure.js-lightbox-id [ PHOTO-01 // 01 OF 09 ]
+            span.body-micro.text-color-muted.js-lightbox-meta 16:9 SETUP · /assets/v-feed-06/DSC_3270.jpg
+          .gallery-lightbox__controls
+            button.lightbox-btn.body-micro.text-color-pure.js-lightbox-prev(type='button') [&lt; PREV]
+            button.lightbox-btn.body-micro.text-color-pure.js-lightbox-next(type='button') [NEXT &gt;]
+            button.lightbox-btn.lightbox-btn--close.body-micro.js-lightbox-close(type='button') [X ESC]
+        .gallery-lightbox__stage
+          img.gallery-lightbox__img.js-lightbox-img(src='/assets/v-feed-06/DSC_3270.jpg', alt='Evidence inspection preview')
+        .gallery-lightbox__footer
+          p.code-command-default.text-color-pure.js-lightbox-title The Physical Setup / Totem in Situ
+          p.body-commentary.text-color-default.js-lightbox-caption 6 screens, miles of composite cabling, and the gap between CAD diagrams and gravity.
+        +line-block('bottom-line')

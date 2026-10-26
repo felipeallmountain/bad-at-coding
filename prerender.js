@@ -18,6 +18,14 @@ const pages = [
   { view: 'home', output: 'index.html' },
   { view: 'fail-cases', output: 'fail-cases.html' },
   { view: 'fail-cases', output: 'fail-cases/index.html' },
+  {
+    view: 'fail-cases/v-feed-06',
+    output: 'fail-cases/v-feed-06.html',
+  },
+  {
+    view: 'fail-cases/v-feed-06',
+    output: 'fail-cases/v-feed-06/index.html',
+  },
   { view: 'who-i-am-not', output: 'who-i-am-not.html' },
   { view: 'who-i-am-not', output: 'who-i-am-not/index.html' },
   { view: 'annoy-me', output: 'annoy-me.html' },

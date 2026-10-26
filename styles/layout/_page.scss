@@ -41,6 +41,7 @@ html {
     @extend %flex-column;
     gap: spacing.$gap-cards-items;
     height: 100%;
+    min-height: 0;
   }
 
   &__mobile-placeholder {
@@ -50,6 +51,7 @@ html {
   &__title {
     @extend %flex-column;
     gap: spacing.$gap-cards-items;
+    flex-shrink: 0;
   }
 
   &__paragraph {
@@ -63,6 +65,7 @@ html {
   &__content {
     @extend %flex-column;
     height: 100%;
+    min-height: 0;
   }
 }
 

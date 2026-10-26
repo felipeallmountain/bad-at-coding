@@ -8,11 +8,11 @@ export function notFoundHandler(
   next: NextFunction
 ): void {
   if (req.accepts('html')) {
-    void renderView(
-      '404',
-      { attemptedUrl: req.originalUrl },
-      404
-    )(req, res, next)
+    void renderView('404', { attemptedUrl: req.originalUrl }, 404)(
+      req,
+      res,
+      next
+    )
     return
   }
 

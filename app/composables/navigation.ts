@@ -129,11 +129,9 @@ export const createNavigation = (): TNavigation => {
       CONTAINER_CONTENT
     ) as HTMLElement | null
     if (oldBody && newBody) {
-      if (oldBody.firstChild && newBody.firstChild) {
-        oldBody.removeChild(oldBody.firstChild)
-        oldBody.append(newBody.firstChild)
-      }
+      oldBody.replaceChildren(...Array.from(newBody.childNodes))
       oldBody.className = newBody.className
+      oldBody.scrollTop = 0
     }
     const oldTemplate = contentContainer.getAttribute('data-template') || ''
     const newTemplate = newContent.getAttribute('data-template') || ''

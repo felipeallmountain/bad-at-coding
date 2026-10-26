@@ -19,6 +19,30 @@ router.get('/api/health', (_, res) => {
   })
 })
 
+// Nested dynamic view router matching views/pages/:section/:slug.pug
+router.get('/:section/:slug', (req, res, next) => {
+  const { section, slug } = req.params
+
+  if (/[^a-zA-Z0-9_-]/.test(section) || /[^a-zA-Z0-9_-]/.test(slug)) {
+    next()
+    return
+  }
+
+  const nestedView = `${section}/${slug}`
+  const templatePath = path.resolve(
+    config.paths.views,
+    'pages',
+    section,
+    `${slug}.pug`
+  )
+
+  if (fs.existsSync(templatePath)) {
+    renderView(nestedView)(req, res, next)
+  } else {
+    next()
+  }
+})
+
 // Dynamic view router matching views/pages/:page.pug (new feature)
 router.get('/:page', (req, res, next) => {
   const pageName = req.params.page

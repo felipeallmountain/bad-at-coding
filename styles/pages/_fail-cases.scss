@@ -1,7 +1,37 @@
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
+@use '@bad-at-coding/styles/variables/colors' as colors;
+@use '@bad-at-coding/styles/variables/primitives' as primitives;
+@use '@bad-at-coding/styles/variables/typography' as typography;
 @use '@bad-at-coding/styles/layout/containers';
 
+// Custom blueprint scrollbar mixin
+@mixin blueprint-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: colors.$color-border-blueprint colors.$color-bg-surface;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: colors.$color-bg-surface;
+    border-inline-start: stroke.$line-thin solid colors.$color-border-mat;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: colors.$color-border-blueprint;
+
+    &:hover {
+      background: colors.$color-text-pure;
+    }
+  }
+}
+
+// ============================================================================
+// 1. /FAIL-CASES INDEX CATALOG
+// ============================================================================
 .fail-cases {
   &--row-start {
     grid-row-start: 2;
@@ -16,42 +46,811 @@
   }
 
   &--col-end {
-    grid-column-end: 14;
+    grid-column-end: 19;
   }
 
-  &__links {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: min-content;
-    gap: spacing.$layout-padding-default;
+  &__catalog {
+    @extend %flex-column;
+    justify-content: space-between;
+    gap: spacing.$gap-cards-items;
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    padding-inline-end: primitives.$space-1;
+    @include blueprint-scrollbar;
+  }
 
-    .link {
+  &__telemetry {
+    border: stroke.$line-thin solid colors.$color-border-mat;
+    flex-shrink: 0;
+
+    .telemetry__row {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
       gap: spacing.$gap-nav-links;
+    }
+  }
+}
 
-      &__content {
-        @extend %flex-column;
-        gap: spacing.$gap-text-line;
+.fail-card {
+  @extend %flex-column;
+  gap: spacing.$gap-nav-links;
+  border: stroke.$line-default solid colors.$color-border-mat;
+  transition: border-color 0.25s ease;
 
-        .content {
-          &__top {
-            width: fit-content;
+  &:hover {
+    border-color: colors.$color-border-blueprint;
+  }
 
-            .top {
-              &__url {
-                display: flex;
-                gap: spacing.$gap-nav-links;
-              }
-            }
-          }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: spacing.$gap-nav-links;
+  }
 
-          &__description {
-            @extend %flex-column;
-            gap: spacing.$gap-text-line;
-            text-wrap: balance;
-          }
+  &__identity {
+    display: flex;
+    align-items: baseline;
+    gap: spacing.$gap-nav-links;
+  }
+
+  &__id {
+    padding: primitives.$space-1 primitives.$space-2;
+    border: stroke.$line-thin solid colors.$color-border-blueprint;
+    background-color: primitives.$color-darkblue-opaque-50;
+  }
+
+  &__title-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: spacing.$gap-text-line;
+  }
+
+  &__title {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__badge {
+    padding: primitives.$space-1 primitives.$space-2;
+    color: colors.$color-feedback-disaster;
+    background-color: colors.$color-feedback-disaster-bg;
+    border: stroke.$line-thin solid colors.$color-feedback-disaster;
+    letter-spacing: 0.05em;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(240px, 0.95fr);
+    gap: spacing.$gap-cards-items;
+    align-items: stretch;
+  }
+
+  &__details {
+    @extend %flex-column;
+    justify-content: space-between;
+    gap: spacing.$gap-nav-links;
+  }
+
+  &__lead {
+    display: flex;
+    gap: spacing.$gap-nav-links;
+  }
+
+  &__copy {
+    @extend %flex-column;
+    gap: spacing.$gap-text-line;
+    padding-block: primitives.$space-1;
+  }
+
+  &__subtitle {
+    text-wrap: pretty;
+  }
+
+  &__summary {
+    text-wrap: pretty;
+  }
+
+  &__metric-box {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: spacing.$gap-nav-links;
+    padding: primitives.$space-2 primitives.$space-3;
+    background-color: primitives.$color-darkblue-opaque-75;
+    border: stroke.$line-thin solid colors.$color-border-blueprint;
+  }
+
+  &__footer {
+    @extend %flex-column;
+    gap: spacing.$gap-nav-links;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: primitives.$space-2;
+  }
+
+  &__tag {
+    padding: primitives.$space-0 primitives.$space-2;
+    border: stroke.$line-thin solid colors.$color-border-mat;
+    background-color: primitives.$color-white-opaque-5;
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    gap: spacing.$gap-text-line;
+  }
+
+  &__media {
+    display: flex;
+    flex-direction: column;
+    border: stroke.$line-thin solid colors.$color-border-blueprint;
+    overflow: hidden;
+    position: relative;
+    background-color: primitives.$color-black-opaque-50;
+
+    &-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 44rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    &-overlay {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: primitives.$space-2 primitives.$space-3;
+      background: linear-gradient(
+        to top,
+        rgba(0, 21, 41, 0.95),
+        rgba(0, 21, 41, 0.65)
+      );
+      border-block-start: stroke.$line-thin solid colors.$color-border-mat;
+    }
+  }
+
+  &__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: contrast(1.06) saturate(0.92);
+    transition:
+      transform 0.4s ease,
+      filter 0.4s ease;
+  }
+
+  &__media:hover &__img {
+    transform: scale(1.03);
+    filter: contrast(1.12) saturate(1.05);
+  }
+}
+
+// ============================================================================
+// 2. /FAIL-CASES/V-FEED-06 DETAIL POST-MORTEM VIEW
+// ============================================================================
+.v-feed-06 {
+  &--row-start {
+    grid-row-start: 2;
+  }
+
+  &--col-start {
+    grid-column-start: 2;
+  }
+
+  &--row-end {
+    grid-row-end: 11;
+  }
+
+  &--col-end {
+    grid-column-end: 20;
+  }
+
+  &__title {
+    padding-block: primitives.$space-2 !important;
+    gap: primitives.$space-2 !important;
+  }
+
+  &__wrapper {
+    @extend %flex-column;
+    gap: spacing.$gap-nav-links;
+    height: 100%;
+    min-height: 0;
+    position: relative;
+  }
+
+  &__toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: spacing.$gap-nav-links;
+    padding: primitives.$space-2 spacing.$component-padding-x;
+    border-block: stroke.$line-thin solid colors.$color-border-blueprint;
+    flex-shrink: 0;
+
+    .toolbar {
+      &__left {
+        display: flex;
+        align-items: center;
+        gap: spacing.$gap-nav-links;
+      }
+
+      &__back {
+        text-decoration: underline;
+      }
+
+      &__badge {
+        padding: primitives.$space-0 primitives.$space-2;
+        color: colors.$color-feedback-disaster;
+        background-color: colors.$color-feedback-disaster-bg;
+        border: stroke.$line-thin solid colors.$color-feedback-disaster;
+      }
+
+      &__jumps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: primitives.$space-2;
+      }
+
+      &__jump {
+        background: transparent;
+        cursor: pointer;
+        padding: primitives.$space-0 primitives.$space-2;
+        border: stroke.$line-thin solid colors.$color-border-mat;
+        transition:
+          color 0.2s ease,
+          border-color 0.2s ease,
+          background-color 0.2s ease;
+
+        &:hover {
+          color: colors.$color-text-pure;
+          border-color: colors.$color-border-blueprint;
+          background-color: primitives.$color-white-opaque-5;
         }
       }
     }
+  }
+
+  &__scroll {
+    @extend %flex-column;
+    gap: spacing.$gap-cards-items;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-inline-end: primitives.$space-2;
+    padding-block-end: spacing.$component-padding-panel;
+    @include blueprint-scrollbar;
+  }
+}
+
+.dossier-section {
+  @extend %flex-column;
+  gap: spacing.$gap-nav-links;
+  border: stroke.$line-thin solid colors.$color-border-mat;
+  flex-shrink: 0;
+
+  code {
+    font-family: typography.$font-family-code;
+    padding-inline: primitives.$space-1;
+    background-color: primitives.$color-white-opaque-10;
+    color: colors.$color-text-pure;
+  }
+}
+
+.section-heading {
+  @extend %flex-column;
+  gap: primitives.$space-1;
+
+  &--split {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: spacing.$gap-nav-links;
+  }
+
+  &__left {
+    @extend %flex-column;
+    gap: primitives.$space-1;
+  }
+}
+
+// Section 00: Case Dossier Spec Sheet
+.dossier-header {
+  @extend %flex-column;
+  gap: spacing.$gap-nav-links;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: spacing.$gap-nav-links;
+  }
+}
+
+.dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: primitives.$space-2;
+}
+
+.dossier-cell {
+  @extend %flex-column;
+  gap: primitives.$space-1;
+  padding: primitives.$space-2 primitives.$space-3;
+  border: stroke.$line-thin solid colors.$color-border-mat;
+  background-color: primitives.$color-darkblue-opaque-50;
+
+  &--wide {
+    grid-column: span 4;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: primitives.$space-1;
+    overflow-wrap: anywhere;
+  }
+}
+
+.dossier-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: primitives.$space-2;
+}
+
+.dossier-tag {
+  padding: primitives.$space-0 primitives.$space-2;
+  border: stroke.$line-thin solid colors.$color-border-blueprint;
+  background-color: primitives.$color-white-opaque-5;
+}
+
+.dossier-verdict {
+  display: flex;
+  gap: spacing.$gap-nav-links;
+  padding: primitives.$space-2 primitives.$space-3;
+  background-color: primitives.$color-darkblue-opaque-75;
+  border: stroke.$line-thin solid colors.$color-border-blueprint;
+
+  &__content {
+    @extend %flex-column;
+    gap: primitives.$space-1;
+  }
+}
+
+// Section 01: Pitch vs Reality
+.pitch-reality-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: spacing.$gap-cards-items;
+}
+
+.pitch-card {
+  @extend %flex-column;
+  gap: spacing.$gap-nav-links;
+  padding: primitives.$space-3;
+  border: stroke.$line-thin solid colors.$color-border-blueprint;
+  background-color: primitives.$color-darkblue-opaque-50;
+
+  &--reality {
+    border-color: colors.$color-feedback-disaster;
+    background-color: rgba(51, 0, 4, 0.22);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: primitives.$space-2;
+    padding-block-end: primitives.$space-2;
+    border-block-end: stroke.$line-thin solid colors.$color-border-mat;
+  }
+
+  &__tag--disaster {
+    color: colors.$color-feedback-disaster;
+  }
+
+  &__body {
+    display: flex;
+    gap: spacing.$gap-nav-links;
+    height: 100%;
+  }
+
+  &__copy {
+    @extend %flex-column;
+    gap: primitives.$space-2;
+
+    p + p {
+      margin-block-start: 0;
+    }
+  }
+
+  &__quote {
+    padding: primitives.$space-2;
+    border-inline-start: stroke.$line-focus solid colors.$color-border-blueprint;
+    background-color: primitives.$color-white-opaque-5;
+    font-style: italic;
+  }
+}
+
+// Section 02: Photo & Media Evidence Gallery
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: primitives.$space-2;
+}
+
+.gallery-filter {
+  background: transparent;
+  color: colors.$color-text-muted;
+  border: stroke.$line-thin solid colors.$color-border-mat;
+  padding: primitives.$space-1 primitives.$space-2;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+
+  &:hover,
+  &.is-active {
+    color: colors.$color-text-pure;
+    border-color: colors.$color-border-blueprint;
+    background-color: primitives.$color-white-opaque-10;
+  }
+}
+
+.evidence-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: spacing.$gap-nav-links;
+  align-items: start;
+}
+
+.evidence-card {
+  @extend %flex-column;
+  gap: primitives.$space-2;
+  padding: primitives.$space-2;
+  border: stroke.$line-thin solid colors.$color-border-mat;
+  background-color: primitives.$color-darkblue-opaque-50;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease;
+
+  &.is-hidden {
+    display: none;
+  }
+
+  &:hover {
+    border-color: colors.$color-border-blueprint;
+    transform: translateY(-2px);
+
+    .evidence-card__zoom {
+      opacity: 1;
+    }
+
+    .evidence-card__img {
+      transform: scale(1.03);
+    }
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__media {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: stroke.$line-thin solid colors.$color-border-mat;
+    background-color: primitives.$color-black;
+    aspect-ratio: 3 / 2;
+  }
+
+  &--portrait &__media {
+    aspect-ratio: 3 / 4;
+    max-height: 64rem;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+
+  &--portrait &__img {
+    object-fit: contain;
+    background-color: primitives.$color-darkblue;
+  }
+
+  &__zoom {
+    position: absolute;
+    bottom: primitives.$space-2;
+    right: primitives.$space-2;
+    padding: primitives.$space-1 primitives.$space-2;
+    background-color: rgba(0, 21, 41, 0.9);
+    border: stroke.$line-thin solid colors.$color-border-blueprint;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &__caption {
+    @extend %flex-column;
+    gap: primitives.$space-1;
+  }
+
+  &__desc {
+    text-wrap: pretty;
+  }
+
+  &__file {
+    margin-block-start: primitives.$space-1;
+    overflow-wrap: anywhere;
+  }
+}
+
+// Section 03: The 4 Pillars of Doom
+.pillars-list {
+  @extend %flex-column;
+  gap: spacing.$gap-cards-items;
+}
+
+.pillar-card {
+  @extend %flex-column;
+  gap: spacing.$gap-nav-links;
+  padding: primitives.$space-3;
+  border: stroke.$line-thin solid colors.$color-border-mat;
+  background-color: primitives.$color-darkblue-opaque-50;
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    gap: spacing.$gap-nav-links;
+    padding-block-end: primitives.$space-2;
+    border-block-end: stroke.$line-thin solid colors.$color-border-mat;
+  }
+
+  &__titles {
+    @extend %flex-column;
+    gap: primitives.$space-1;
+  }
+
+  &__body {
+    display: flex;
+    gap: spacing.$gap-nav-links;
+  }
+
+  &__content {
+    @extend %flex-column;
+    gap: spacing.$gap-nav-links;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.code-evidence {
+  @extend %flex-column;
+  border: stroke.$line-thin solid colors.$color-border-blueprint;
+  background-color: rgba(0, 10, 22, 0.85);
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: primitives.$space-2;
+    padding: primitives.$space-2 primitives.$space-3;
+    background-color: primitives.$color-white-opaque-5;
+    border-block-end: stroke.$line-thin solid colors.$color-border-mat;
+  }
+
+  &__pre {
+    margin: 0;
+    padding: primitives.$space-3;
+    overflow-x: auto;
+    @include blueprint-scrollbar;
+
+    code {
+      background: transparent;
+      padding: 0;
+      color: colors.$color-text-default;
+      display: block;
+      line-height: 1.45;
+    }
+  }
+}
+
+.pose-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: primitives.$space-2;
+}
+
+.pose-chip {
+  @extend %flex-column;
+  gap: primitives.$space-1;
+  padding: primitives.$space-2 primitives.$space-3;
+  border: stroke.$line-thin solid colors.$color-border-blueprint;
+  background-color: primitives.$color-white-opaque-5;
+}
+
+// Section 04: "By The Numbers" Receipt Table
+.receipt-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: stroke.$line-thin solid colors.$color-border-blueprint;
+}
+
+.receipt-table {
+  width: 100%;
+  text-align: left;
+
+  th,
+  td {
+    padding: primitives.$space-2 primitives.$space-3;
+    border-block-end: stroke.$line-thin solid colors.$color-border-mat;
+    border-inline-end: stroke.$line-thin solid colors.$color-border-mat;
+
+    &:last-child {
+      border-inline-end: none;
+    }
+  }
+
+  thead tr {
+    background-color: primitives.$color-darkblue-opaque-75;
+    border-block-end: stroke.$line-default solid colors.$color-border-blueprint;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: primitives.$color-white-opaque-5;
+  }
+
+  &__val {
+    color: colors.$color-feedback-disaster;
+    white-space: nowrap;
+  }
+}
+
+// Section 05: Post-Mortem Takeaways
+.takeaways-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: spacing.$gap-nav-links;
+}
+
+.takeaway-item {
+  display: flex;
+  gap: spacing.$gap-nav-links;
+  padding: primitives.$space-3;
+  border: stroke.$line-thin solid colors.$color-border-mat;
+  background-color: primitives.$color-darkblue-opaque-50;
+
+  &__body {
+    @extend %flex-column;
+    gap: primitives.$space-2;
+  }
+}
+
+.dossier-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: spacing.$gap-nav-links;
+  padding-block-start: primitives.$space-2;
+  border-block-start: stroke.$line-thin solid colors.$color-border-mat;
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: primitives.$space-1;
+  }
+}
+
+// Lightbox Inspector Modal
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: rgba(0, 12, 24, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: spacing.$component-padding-panel;
+
+  &.is-open {
+    display: flex;
+  }
+
+  &__dialog {
+    @extend %flex-column;
+    gap: primitives.$space-2;
+    width: min(90vw, 240rem);
+    max-height: 90vh;
+    border: stroke.$line-focus solid colors.$color-border-blueprint;
+    background-color: colors.$color-bg-abyss;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: primitives.$space-2;
+  }
+
+  &__meta-group {
+    display: flex;
+    align-items: center;
+    gap: spacing.$gap-nav-links;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: primitives.$space-2;
+  }
+
+  &__stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: primitives.$color-black;
+    border: stroke.$line-thin solid colors.$color-border-mat;
+    overflow: hidden;
+    max-height: 62vh;
+  }
+
+  &__img {
+    max-width: 100%;
+    max-height: 62vh;
+    object-fit: contain;
+    display: block;
+  }
+
+  &__footer {
+    @extend %flex-column;
+    gap: primitives.$space-1;
+  }
+}
+
+.lightbox-btn {
+  background: transparent;
+  padding: primitives.$space-1 primitives.$space-2;
+  border: stroke.$line-thin solid colors.$color-border-blueprint;
+  cursor: pointer;
+
+  &:hover {
+    background-color: primitives.$color-white-opaque-10;
+  }
+
+  &--close {
+    color: colors.$color-feedback-disaster;
+    border-color: colors.$color-feedback-disaster;
   }
 }

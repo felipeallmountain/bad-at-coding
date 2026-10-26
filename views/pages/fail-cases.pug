@@ -1,29 +1,76 @@
 extends ../base.pug
 include ../mixins/line.pug
 
-mixin link(number, label, url, description)
-  .link.bg-color-surface.padding-x-y
-    .link__number.code-command-default.padding-y.text-color-muted [#{number}]
-    .link__content
-      .content__top
-        +line-block('top-line')
-        .top__url
-          .url__symbol.code-command-default.text-color-default $
-          a.code-command-link.text-color-pure(href=url, target='_self')= label
-      .content__description.body-commentary
-        p.padding-y.text-color-default= description
-        +line-block('bottom-line')
-
 block variables
   - var template = 'fail-cases'
   - var links = [{ label: '/fail-cases', url: '/fail-cases' }]
   - var pageTitle = 'THE GALLERY OF MEDIOCRITY_'
-  - var pageDescription = 'A gallery of spiteful experiments, visually abusive portfolios, and tools that generate more errors than code.'
+  - var pageDescription = 'A catalog of over-engineered, cursed, and gloriously doomed engineering projects where software hubris collided with physical reality.'
+  - var showParagraph = true
+  -
+    var failCases = [
+      {
+        id: 'FAIL-01',
+        slug: 'v-feed-06',
+        url: '/fail-cases/v-feed-06',
+        title: 'V-FEED [06]',
+        subtitle: 'Building a 60 FPS WebGL CRT Simulator & AI Body-Tracking Spaceship to Fight 6 Physical TVs and HDMI-to-RCA Adapters',
+        status: 'OVER-ENGINEERED / HARDWARE REALITY CHECK',
+        tags: ['Three.js', 'GLSL', 'MediaPipe Wasm', 'Web Audio API', 'Node.js', '6x CRT Matrix'],
+        tldrMetric: '2,839 LOC Calibration GUI vs. 1 Loose Composite Cable',
+        thumbnail: '/assets/v-feed-06/DSC_3270.jpg',
+        thumbnailAlt: 'V-FEED [06] — 6 physical CRT televisions mounted in a 2x3 steel rack matrix on the exhibition floor',
+        summary: 'Wrote a 346-line single-pass CRT shader, a 15,734 Hz NTSC flyback oscillator, a 60 FPS MediaPipe pose & clothing-color classifier, and a 2,839-line calibration deck to fix problems that belonged to a screwdriver and a $4 composite adapter.'
+      }
+    ]
+
+block paragraph
+  p // A catalog of over-engineered, cursed, or gloriously doomed engineering projects.
+  p When a problem requires a wrench, I write a closed-form quadratic solver in GLSL and wonder why the room is on fire.
 
 block body
-  .fail-cases__links
-    +link('01', '/the-spite-ful-portfolio', '/the-spite-ful-portfolio', 'A portfolio that is, frankly, visually abusive')
-    +link('02', '/the-user-friendly-nav', '/the-user-friendly-nav', 'The navigation menu I designed while deliberately ignoring every standard UX principle.')
-    +link('03', '/rejection-letter-generator', '/rejection-letter-generator', "Simulate being rejected from that desired work you're applying, or reject that person you don't wish to work with")
-    +link('04', '/boring-clock', '/boring-clock', 'Procrastinate your time by watching time, waste your precious time and postpone your deadlines, feel free to blame me when you get fired.')
-    +link('05', '/compiler-annoying-tool', '/compiler-annoying-tool', 'A script that generates more errors than code')
+  .fail-cases__catalog
+    each item in failCases
+      article.fail-card.bg-color-surface.padding-x-y
+        +line-block('top-line')
+        .fail-card__header
+          .fail-card__identity
+            span.fail-card__id.code-command-default.text-color-pure [#{item.id}]
+            .fail-card__title-wrap
+              span.url__symbol.code-command-default.text-color-default $
+              a.fail-card__title.heading-title.text-color-pure(href=item.url, target='_self')= item.title
+          span.fail-card__badge.body-micro= item.status
+
+        .fail-card__body
+          .fail-card__details
+            .fail-card__lead
+              +line-inline('left-line')
+              .fail-card__copy
+                p.fail-card__subtitle.code-command-lg.text-color-pure= item.subtitle
+                p.fail-card__summary.body-commentary.text-color-default= item.summary
+
+            .fail-card__metric-box
+              span.metric-box__label.body-micro.text-color-muted TL;DR_METRIC ::
+              span.metric-box__value.code-command-default.text-color-pure= item.tldrMetric
+
+            .fail-card__footer
+              ul.fail-card__tags
+                each tag in item.tags
+                  li.fail-card__tag.body-micro.text-color-default [#{tag}]
+              .fail-card__cta
+                span.code-command-default.text-color-default $
+                a.code-command-link.text-color-pure(href=item.url, target='_self') cat /fail-cases/#{item.slug} --post-mortem
+
+          a.fail-card__media(href=item.url, target='_self', aria-label=`Open ${item.title} post-mortem`)
+            .fail-card__media-frame
+              img.fail-card__img(src=item.thumbnail, alt=item.thumbnailAlt, loading='eager')
+              .fail-card__media-overlay
+                span.body-micro.text-color-pure [ EXHIBIT_EVIDENCE :: 09 PHOTOS ATTACHED ]
+                span.body-micro.text-color-default.js-scramble-text OPEN DOSSIER -&gt;
+
+        +line-block('bottom-line')
+
+    .fail-cases__telemetry.bg-color-surface.padding-x-y
+      .telemetry__row.body-micro.text-color-muted
+        span [ ARCHIVE_STATUS: 01 DECLASSIFIED DOSSIER // 04 INCIDENTS PENDING AUTOPSY ]
+        span [ FILTER: HARDWARE_HUBRIS = TRUE | COST_TO_BENEFIT_RATIO = NaN ]
