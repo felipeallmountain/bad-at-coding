@@ -1,6 +1,8 @@
 import Lenis, { type ScrollToOptions } from 'lenis'
 import Tempus from 'tempus'
 
+export type TScrollCallback = (lenis: Lenis) => void
+
 export type TSmoothScroll = {
   refresh: () => void
   scrollTo: (
@@ -8,6 +10,7 @@ export type TSmoothScroll = {
     options?: ScrollToOptions
   ) => void
   resize: () => void
+  onScroll: (cb: TScrollCallback) => () => void
   destroy: () => void
 }
 
@@ -17,6 +20,12 @@ export const getSmoothScroll = (): TSmoothScroll | null => activeInstance
 
 export const createSmoothScroll = (): TSmoothScroll => {
   let lenis: Lenis | null = null
+  const scrollListeners = new Set<TScrollCallback>()
+
+  const notifyScroll = () => {
+    if (!lenis) return
+    scrollListeners.forEach((cb) => cb(lenis!))
+  }
 
   const mount = () => {
     lenis?.destroy()
@@ -39,9 +48,14 @@ export const createSmoothScroll = (): TSmoothScroll => {
         Boolean(node.closest('.gallery-lightbox')),
     })
 
+    lenis.on('scroll', () => {
+      notifyScroll()
+    })
+
     lenis.scrollTo(0, { immediate: true })
     requestAnimationFrame(() => {
       lenis?.resize()
+      notifyScroll()
     })
   }
 
@@ -69,9 +83,21 @@ export const createSmoothScroll = (): TSmoothScroll => {
 
   const resize = () => {
     lenis?.resize()
+    notifyScroll()
+  }
+
+  const onScroll = (cb: TScrollCallback) => {
+    scrollListeners.add(cb)
+    if (lenis) {
+      cb(lenis)
+    }
+    return () => {
+      scrollListeners.delete(cb)
+    }
   }
 
   const destroy = () => {
+    scrollListeners.clear()
     unsubscribe?.()
     lenis?.destroy()
     lenis = null
@@ -84,6 +110,7 @@ export const createSmoothScroll = (): TSmoothScroll => {
     refresh,
     scrollTo,
     resize,
+    onScroll,
     destroy,
   }
 

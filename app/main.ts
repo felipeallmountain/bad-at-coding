@@ -13,8 +13,8 @@ import { createSmoothScroll } from './composables/smooth-scroll.js'
 const initApp = () => {
   Tempus.patch()
   initScrambleLinks()
-  initFailCaseGallery()
   const smoothScroll = createSmoothScroll()
+  const failCaseGallery = initFailCaseGallery()
   const grid = createGrid()
   const grain = createGrain()
 
@@ -38,6 +38,7 @@ const initApp = () => {
   navigation.on('updateNavbar', ({ newNavbar }: { newNavbar: HTMLElement }) => {
     navbar.update(newNavbar)
     smoothScroll.refresh()
+    failCaseGallery.refresh()
   })
 }
 

@@ -158,52 +158,52 @@ block body
 
     .v-feed-06__scroll
       //- 1. HEADER / CASE DOSSIER BANNER
-      section#section-dossier.dossier-section.bg-color-surface.padding-x-y
+      section#section-dossier.dossier-section.bg-color-surface.padding-x-y(data-reveal-section)
         +line-block('top-line')
         .dossier-header
           .dossier-header__top
-            span.body-micro.text-color-muted // SECTION 00 :: CASE DOSSIER &amp; METADATA SPEC SHEET
-            span.body-micro.text-color-default CASE_ID: FAIL-01 // REV_2026.10
+            span.body-micro.text-color-muted(data-scramble) // SECTION 00 :: CASE DOSSIER &amp; METADATA SPEC SHEET
+            span.body-micro.text-color-default(data-scramble) CASE_ID: FAIL-01 // REV_2026.10
           .dossier-grid
-            .dossier-cell
-              span.dossier-cell__label.body-micro.text-color-muted PROJECT
-              span.dossier-cell__value.code-command-default.text-color-pure V-FEED [06]
-            .dossier-cell
-              span.dossier-cell__label.body-micro.text-color-muted CLASSIFICATION
+            .dossier-cell(data-reveal-item, data-parallax='-0.03')
+              span.dossier-cell__label.body-micro.text-color-muted(data-scramble) PROJECT
+              span.dossier-cell__value.code-command-default.text-color-pure(data-scramble) V-FEED [06]
+            .dossier-cell(data-reveal-item, data-parallax='-0.015')
+              span.dossier-cell__label.body-micro.text-color-muted(data-scramble) CLASSIFICATION
               span.dossier-cell__value.body-commentary.text-color-default FAIL CASE #01 — Interactive Transmedia CRT Installation
-            .dossier-cell
-              span.dossier-cell__label.body-micro.text-color-muted TL;DR METRIC
-              span.dossier-cell__value.body-commentary.text-color-pure 2,839 LOC Calibration GUI vs. 1 Loose Composite Cable
-            .dossier-cell
-              span.dossier-cell__label.body-micro.text-color-muted REPOSITORY
+            .dossier-cell(data-reveal-item, data-parallax='0.015')
+              span.dossier-cell__label.body-micro.text-color-muted(data-scramble) TL;DR METRIC
+              span.dossier-cell__value.body-commentary.text-color-pure(data-scramble) 2,839 LOC Calibration GUI vs. 1 Loose Composite Cable
+            .dossier-cell(data-reveal-item, data-parallax='0.03')
+              span.dossier-cell__label.body-micro.text-color-muted(data-scramble) REPOSITORY
               .dossier-cell__link
                 span.code-command-default.text-color-default $
                 a.code-command-link.text-color-pure(href='https://github.com/felipeallmountain/v-feed-06', target='_blank', rel='noopener noreferrer') github.com/felipeallmountain/v-feed-06
-            .dossier-cell.dossier-cell--wide
-              span.dossier-cell__label.body-micro.text-color-muted STACK
+            .dossier-cell.dossier-cell--wide(data-reveal-item)
+              span.dossier-cell__label.body-micro.text-color-muted(data-scramble) STACK
               ul.dossier-tags
                 each tech in ['TypeScript', 'Three.js / WebGL', 'Custom GLSL', '@mediapipe/tasks-vision', 'Web Audio API', 'Express', 'yt-dlp', '6x CRT Matrix']
-                  li.dossier-tag.body-micro.text-color-default [#{tech}]
+                  li.dossier-tag.body-micro.text-color-default(data-scramble) [#{tech}]
 
-          .dossier-verdict
+          .dossier-verdict(data-reveal-item, data-parallax='0.04')
             +line-inline('left-line')
             .dossier-verdict__content
-              span.body-micro.text-color-muted OFFICIAL AUTOPSY VERDICT ::
+              span.body-micro.text-color-muted(data-scramble) OFFICIAL AUTOPSY VERDICT ::
               p.code-command-lg.text-color-pure "Wrote closed-form inverse bilinear quad-warping shaders and a 2,839-line calibration deck to fix problems that belonged to physics."
         +line-block('bottom-line')
 
       //- 2. THE PITCH VS. THE REALITY
-      section#section-pitch.dossier-section.bg-color-surface.padding-x-y
+      section#section-pitch.dossier-section.bg-color-surface.padding-x-y(data-reveal-section)
         +line-block('top-line')
-        .section-heading
-          span.body-micro.text-color-muted // SECTION 01 :: EXPECTATION VS. EXHIBITION TELEMETRY
-          h2.heading-title.text-color-pure THE PITCH VS. THE REALITY_
+        .section-heading(data-parallax='-0.03')
+          span.body-micro.text-color-muted(data-scramble) // SECTION 01 :: EXPECTATION VS. EXHIBITION TELEMETRY
+          h2.heading-title.text-color-pure(data-scramble) THE PITCH VS. THE REALITY_
 
         .pitch-reality-grid
-          article.pitch-card
+          article.pitch-card(data-reveal-item, data-parallax='-0.04')
             .pitch-card__header
-              span.pitch-card__tag.body-micro.text-color-pure [ THE ART SCHOOL PITCH // WHAT I THOUGHT I WAS BUILDING ]
-              span.body-micro.text-color-muted SPEC_THEORY
+              span.pitch-card__tag.body-micro.text-color-pure(data-scramble) [ THE ART SCHOOL PITCH // WHAT I THOUGHT I WAS BUILDING ]
+              span.body-micro.text-color-muted(data-scramble) SPEC_THEORY
             .pitch-card__body
               +line-inline('left-line')
               .pitch-card__copy.body-reading.text-color-default
@@ -211,10 +211,10 @@ block body
                 p.pitch-card__quote.text-color-pure "Six cathode ray tubes, a YouTube feed, and a motion sensor: the user is the only missing wire in the system."
                 p Spectators act as a #[strong.text-color-pure "Human Antenna"]—their physical distance (#[code 3m] to #[code 1m]), movement velocity, and body postures tuning or corrupting the analog broadcast in real time like human dipole antennas.
 
-          article.pitch-card.pitch-card--reality
+          article.pitch-card.pitch-card--reality(data-reveal-item, data-parallax='0.05')
             .pitch-card__header
-              span.pitch-card__tag.pitch-card__tag--disaster.body-micro [ EXHIBITION FLOOR REALITY // WHAT ACTUALLY HAPPENED ]
-              span.body-micro.text-color-muted FIELD_INCIDENT
+              span.pitch-card__tag.pitch-card__tag--disaster.body-micro(data-scramble) [ EXHIBITION FLOOR REALITY // WHAT ACTUALLY HAPPENED ]
+              span.body-micro.text-color-muted(data-scramble) FIELD_INCIDENT
             .pitch-card__body
               +line-inline('left-line')
               .pitch-card__copy.body-reading.text-color-default
@@ -223,24 +223,27 @@ block body
         +line-block('bottom-line')
 
       //- 3. PHOTO & MEDIA EVIDENCE GALLERY
-      section#section-gallery.dossier-section.bg-color-surface.padding-x-y
+      section#section-gallery.dossier-section.bg-color-surface.padding-x-y(data-reveal-section)
         +line-block('top-line')
-        .section-heading.section-heading--split
+        .section-heading.section-heading--split(data-parallax='-0.03')
           .section-heading__left
-            span.body-micro.text-color-muted // SECTION 02 :: PHOTOGRAPHIC FIELD EVIDENCE (/PUBLIC/ASSETS/V-FEED-06)
-            h2.heading-title.text-color-pure PHOTO &amp; MEDIA EVIDENCE_
+            span.body-micro.text-color-muted(data-scramble) // SECTION 02 :: PHOTOGRAPHIC FIELD EVIDENCE (/PUBLIC/ASSETS/V-FEED-06)
+            h2.heading-title.text-color-pure(data-scramble) PHOTO &amp; MEDIA EVIDENCE_
           .gallery-filters(role='tablist', aria-label='Filter evidence photos')
             button.gallery-filter.body-micro.is-active.js-gallery-filter(type='button', data-filter='all') [ALL :: 09]
             button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='primary') [CORE_EVIDENCE :: 04]
             button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='vertical') [9:16_TOTEM :: 02]
             button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='field') [FIELD_LOGS :: 03]
 
-        p.body-commentary.text-color-default Click any evidence frame to launch the full-resolution blueprint inspection view. Includes both 16:9 setup/HUD captures and vertical totem shots from the exhibition floor.
+        p.body-commentary.text-color-default(data-reveal-item) Click any evidence frame to launch the full-resolution blueprint inspection view. Includes both 16:9 setup/HUD captures and vertical totem shots from the exhibition floor.
 
         .evidence-gallery
           each photo, idx in vFeedPhotos
+            - var colOffset = (idx % 3 === 1) ? '0.045' : (idx % 3 === 2 ? '-0.03' : '0.02')
             figure.evidence-card.js-gallery-item(
               class=`evidence-card--${photo.orientation}`,
+              data-reveal-item,
+              data-parallax=colOffset,
               data-id=photo.id,
               data-src=photo.file,
               data-file=photo.file,
@@ -253,10 +256,10 @@ block body
               aria-label=`Inspect ${photo.id}: ${photo.title}`
             )
               .evidence-card__top.body-micro
-                span.text-color-pure [#{photo.id.toUpperCase()}]
-                span.text-color-muted= photo.aspect
+                span.text-color-pure(data-scramble) [#{photo.id.toUpperCase()}]
+                span.text-color-muted(data-scramble)= photo.aspect
               .evidence-card__media
-                img.evidence-card__img(src=photo.file, alt=photo.alt, loading=idx < 4 ? 'eager' : 'lazy')
+                img.evidence-card__img(src=photo.file, alt=photo.alt, loading=idx < 4 ? 'eager' : 'lazy', data-parallax-img='0.14')
                 .evidence-card__zoom.body-micro.text-color-pure [ + INSPECT FRAME ]
               figcaption.evidence-card__caption
                 .evidence-card__title.code-command-default.text-color-pure= photo.title
@@ -265,20 +268,20 @@ block body
         +line-block('bottom-line')
 
       //- 4. ANATOMY OF THE OVER-ENGINEERING (THE 4 PILLARS OF DOOM)
-      section#section-pillars.dossier-section.bg-color-surface.padding-x-y
+      section#section-pillars.dossier-section.bg-color-surface.padding-x-y(data-reveal-section)
         +line-block('top-line')
-        .section-heading
-          span.body-micro.text-color-muted // SECTION 03 :: HOW I BUILT A SPACESHIP FOR A TOASTER PROBLEM
-          h2.heading-title.text-color-pure ANATOMY OF THE OVER-ENGINEERING (THE 4 PILLARS OF DOOM)_
+        .section-heading(data-parallax='-0.03')
+          span.body-micro.text-color-muted(data-scramble) // SECTION 03 :: HOW I BUILT A SPACESHIP FOR A TOASTER PROBLEM
+          h2.heading-title.text-color-pure(data-scramble) ANATOMY OF THE OVER-ENGINEERING (THE 4 PILLARS OF DOOM)_
 
         .pillars-list
           //- PILLAR 01
-          article.pillar-card
+          article.pillar-card(data-reveal-item, data-parallax='0.025')
             .pillar-card__header
-              span.pillar-card__num.code-command-lg.text-color-pure [01]
+              span.pillar-card__num.code-command-lg.text-color-pure(data-scramble, data-parallax='-0.08') [01]
               .pillar-card__titles
-                h3.code-command-lg.text-color-pure SIMULATING CRTS IN SOFTWARE... FOR REAL ANALOG CRTS
-                span.body-micro.text-color-muted CompositeShader.ts (346 LOC) + CRTShader.ts + NoiseShader.ts + AudioEngine.ts
+                h3.code-command-lg.text-color-pure(data-scramble) SIMULATING CRTS IN SOFTWARE... FOR REAL ANALOG CRTS
+                span.body-micro.text-color-muted(data-scramble) CompositeShader.ts (346 LOC) + CRTShader.ts + NoiseShader.ts + AudioEngine.ts
             .pillar-card__body
               +line-inline('left-line')
               .pillar-card__content
@@ -287,10 +290,10 @@ block body
                   p Instead of just sending video to the TVs, I wrote a #[strong.text-color-pure 346-line single-pass GLSL fragment shader (#[code CompositeShader.ts])] that mathematically simulates barrel glass curvature (#[code uCurvature], #[code uTubeCurve]), RGB shadow-mask phosphor triads and horizontal scanlines (#[code CRTShader.ts]), a 3D beveled dark plastic monitor chassis with specular highlights (#[code uBezelChassis]), chromatic aberration (#[code uRgbSplit]), V-Hold vertical frame roll (#[code uVHold]), horizontal sync jitter (#[code uHJitter]), and Gaussian RF snow (#[code NoiseShader.ts]).
                   p On top of that, I built a #[strong.text-color-pure Web Audio API synthesizer (#[code AudioEngine.ts])] with pink/white noise buffers and a sine oscillator locked to #[strong.text-color-pure 15,734 Hz] to emulate the NTSC CRT flyback transformer whine—for a room meant to have six real flyback transformers already screaming at 15,734 Hz. And when physical hardware and projection realities hit, the software ended up having to pretend to be the hardware it was supposed to feed.
 
-                .code-evidence
+                .code-evidence(data-reveal-item, data-parallax='0.04')
                   .code-evidence__header.body-micro
-                    span.text-color-pure // FILE: src/shaders/CompositeShader.ts (Closed-Form Inverse Bilinear Quad-Warping)
-                    span.text-color-muted GLSL FRAGMENT SHADER :: 38 UNIFORMS
+                    span.text-color-pure(data-scramble) // FILE: src/shaders/CompositeShader.ts (Closed-Form Inverse Bilinear Quad-Warping)
+                    span.text-color-muted(data-scramble) GLSL FRAGMENT SHADER :: 38 UNIFORMS
                   pre.code-evidence__pre.body-commentary.text-color-default
                     code.
                       float cross2d(vec2 a, vec2 b) {
@@ -324,12 +327,12 @@ block body
                       }
 
           //- PILLAR 02
-          article.pillar-card
+          article.pillar-card(data-reveal-item, data-parallax='-0.025')
             .pillar-card__header
-              span.pillar-card__num.code-command-lg.text-color-pure [02]
+              span.pillar-card__num.code-command-lg.text-color-pure(data-scramble, data-parallax='-0.08') [02]
               .pillar-card__titles
-                h3.code-command-lg.text-color-pure SOLVING CARPENTRY WITH LIL-GUI: THE 2,839-LINE CALIBRATION CONSOLE
-                span.body-micro.text-color-muted CalibrationConsole.ts (2,839 LOC) + SyncChannel.ts + config/calibration.json (351 LOC)
+                h3.code-command-lg.text-color-pure(data-scramble) SOLVING CARPENTRY WITH LIL-GUI: THE 2,839-LINE CALIBRATION CONSOLE
+                span.body-micro.text-color-muted(data-scramble) CalibrationConsole.ts (2,839 LOC) + SyncChannel.ts + config/calibration.json (351 LOC)
             .pillar-card__body
               +line-inline('left-line')
               .pillar-card__content
@@ -337,10 +340,10 @@ block body
                   p Mounting and aligning 6 displays in a real physical space is messy. Instead of solving alignment with a wrench, a shim, or a spirit level, I tried to solve carpentry in WebGL.
                   p I built #[code.text-color-pure CalibrationConsole.ts]—a #[strong.text-color-pure 2,839-line #[code lil-gui] mission control deck] synced across browser windows via #[code BroadcastChannel] (#[code SyncChannel.ts]) and backed by a #[strong.text-color-pure 351-line JSON config (#[code config/calibration.json])]. It featured #[strong.text-color-pure 24-point 4-corner perspective keystone pinning] (#[code uCorners[24]]) solved per-pixel in GLSL, per-screen discrete 90° rotations, fine continuous angle rotation (#[code -180°] to #[code +180°]), X/Y sub-pixel offsets, individual horizontal/vertical flips for all 6 screens, per-screen signal lock and noise gain overrides, plus custom SMPTE color bars, crosshatch patterns, and focus reticles.
 
-                .code-evidence
+                .code-evidence(data-reveal-item, data-parallax='0.04')
                   .code-evidence__header.body-micro
-                    span.text-color-pure // FILE: config/calibration.json (Actual Committed Production Battle Scars)
-                    span.text-color-muted IEEE-754 DESPERATION &amp; TYPO IMMORTALITY
+                    span.text-color-pure(data-scramble) // FILE: config/calibration.json (Actual Committed Production Battle Scars)
+                    span.text-color-muted(data-scramble) IEEE-754 DESPERATION &amp; TYPO IMMORTALITY
                   pre.code-evidence__pre.body-commentary.text-color-default
                     code.
                       {
@@ -369,12 +372,12 @@ block body
                       }
 
           //- PILLAR 03
-          article.pillar-card
+          article.pillar-card(data-reveal-item, data-parallax='0.025')
             .pillar-card__header
-              span.pillar-card__num.code-command-lg.text-color-pure [03]
+              span.pillar-card__num.code-command-lg.text-color-pure(data-scramble, data-parallax='-0.08') [03]
               .pillar-card__titles
-                h3.code-command-lg.text-color-pure THE OVER-THINKER'S COMPUTER VISION PIPELINE: HUMAN WALKIE-TALKIES
-                span.body-micro.text-color-muted FeatureExtractor.ts + BroadcastQuerySynthesizer.ts (@mediapipe/tasks-vision @ 60 FPS)
+                h3.code-command-lg.text-color-pure(data-scramble) THE OVER-THINKER'S COMPUTER VISION PIPELINE: HUMAN WALKIE-TALKIES
+                span.body-micro.text-color-muted(data-scramble) FeatureExtractor.ts + BroadcastQuerySynthesizer.ts (@mediapipe/tasks-vision @ 60 FPS)
             .pillar-card__body
               +line-inline('left-line')
               .pillar-card__content
@@ -386,32 +389,32 @@ block body
                   p #[strong.text-color-pure 4. Six Antenna Postures &amp; The 1.8s Panic Patch:] Mapped 6 specific body postures 1:1 to the 6 CRT screens—originally requiring visitors to hold a pose for #[strong.text-color-pure 1.8 seconds] (#[code 1,800 ms]), which had to be panic-tuned down to #[code.text-color-pure zapHoldDurationMs: 400] because no human being in an art gallery will hold a T-pose for 1.8 seconds in front of strangers without feeling ridiculous.
 
                 .pose-matrix-grid
-                  .pose-chip
-                    span.body-micro.text-color-muted CRT [01} :: POSE_ANTENNA
-                    span.code-command-default.text-color-pure "Rabbit Ears"
-                  .pose-chip
-                    span.body-micro.text-color-muted CRT [02] :: POSE_DIAL_TUNER
-                    span.code-command-default.text-color-pure "Yagi Point"
-                  .pose-chip
-                    span.body-micro.text-color-muted CRT [03] :: POSE_SURPRISE
-                    span.code-command-default.text-color-pure "TV Shock"
-                  .pose-chip
-                    span.body-micro.text-color-muted CRT [04] :: POSE_WINGSUIT
-                    span.code-command-default.text-color-pure "Horizontal Dipole"
-                  .pose-chip
-                    span.body-micro.text-color-muted CRT [05] :: POSE_LOOP_HALO
-                    span.code-command-default.text-color-pure "UHF Loop"
-                  .pose-chip
-                    span.body-micro.text-color-muted CRT [06] :: POSE_SIGNAL_LOCK
-                    span.code-command-default.text-color-pure "Human Capacitor"
+                  .pose-chip(data-reveal-item, data-parallax='-0.02')
+                    span.body-micro.text-color-muted(data-scramble) CRT [01} :: POSE_ANTENNA
+                    span.code-command-default.text-color-pure(data-scramble) "Rabbit Ears"
+                  .pose-chip(data-reveal-item, data-parallax='0.02')
+                    span.body-micro.text-color-muted(data-scramble) CRT [02] :: POSE_DIAL_TUNER
+                    span.code-command-default.text-color-pure(data-scramble) "Yagi Point"
+                  .pose-chip(data-reveal-item, data-parallax='-0.02')
+                    span.body-micro.text-color-muted(data-scramble) CRT [03] :: POSE_SURPRISE
+                    span.code-command-default.text-color-pure(data-scramble) "TV Shock"
+                  .pose-chip(data-reveal-item, data-parallax='0.02')
+                    span.body-micro.text-color-muted(data-scramble) CRT [04] :: POSE_WINGSUIT
+                    span.code-command-default.text-color-pure(data-scramble) "Horizontal Dipole"
+                  .pose-chip(data-reveal-item, data-parallax='-0.02')
+                    span.body-micro.text-color-muted(data-scramble) CRT [05] :: POSE_LOOP_HALO
+                    span.code-command-default.text-color-pure(data-scramble) "UHF Loop"
+                  .pose-chip(data-reveal-item, data-parallax='0.02')
+                    span.body-micro.text-color-muted(data-scramble) CRT [06] :: POSE_SIGNAL_LOCK
+                    span.code-command-default.text-color-pure(data-scramble) "Human Capacitor"
 
           //- PILLAR 04
-          article.pillar-card
+          article.pillar-card(data-reveal-item, data-parallax='-0.02')
             .pillar-card__header
-              span.pillar-card__num.code-command-lg.text-color-pure [04]
+              span.pillar-card__num.code-command-lg.text-color-pure(data-scramble, data-parallax='-0.08') [04]
               .pillar-card__titles
-                h3.code-command-lg.text-color-pure THE 4.5-HOUR SOAK TEST, YOUTUBE QUOTA BURN &amp; EXHIBITION PHYSICS
-                span.body-micro.text-color-muted QuotaGuard.ts + LRU Disk Cache + reports/perf-report-latest.md
+                h3.code-command-lg.text-color-pure(data-scramble) THE 4.5-HOUR SOAK TEST, YOUTUBE QUOTA BURN &amp; EXHIBITION PHYSICS
+                span.body-micro.text-color-muted(data-scramble) QuotaGuard.ts + LRU Disk Cache + reports/perf-report-latest.md
             .pillar-card__body
               +line-inline('left-line')
               .pillar-card__content
@@ -422,55 +425,55 @@ block body
         +line-block('bottom-line')
 
       //- 5. "BY THE NUMBERS" RECEIPT TABLE
-      section#section-receipts.dossier-section.bg-color-surface.padding-x-y
+      section#section-receipts.dossier-section.bg-color-surface.padding-x-y(data-reveal-section)
         +line-block('top-line')
-        .section-heading
-          span.body-micro.text-color-muted // SECTION 04 :: THE OVER-ENGINEERING RECEIPT
-          h2.heading-title.text-color-pure "BY THE NUMBERS" RECEIPT TABLE_
+        .section-heading(data-parallax='-0.03')
+          span.body-micro.text-color-muted(data-scramble) // SECTION 04 :: THE OVER-ENGINEERING RECEIPT
+          h2.heading-title.text-color-pure(data-scramble) "BY THE NUMBERS" RECEIPT TABLE_
 
-        .receipt-table-wrap
+        .receipt-table-wrap(data-parallax='0.03')
           table.receipt-table
             thead
               tr.body-micro.text-color-muted
-                th METRIC / SUBSYSTEM
-                th RECORDED VALUE
-                th FIELD AUDIT NOTES
+                th(data-scramble) METRIC / SUBSYSTEM
+                th(data-scramble) RECORDED VALUE
+                th(data-scramble) FIELD AUDIT NOTES
             tbody
               each row in receiptRows
-                tr
+                tr(data-reveal-item)
                   td.code-command-default.text-color-pure= row.metric
-                  td.receipt-table__val.code-command-default= row.value
+                  td.receipt-table__val.code-command-default(data-scramble)= row.value
                   td.body-commentary.text-color-default= row.notes
         +line-block('bottom-line')
 
       //- 6. POST-MORTEM TAKEAWAYS ("WHY IT'S IN /FAIL-CASES")
-      section#section-takeaways.dossier-section.bg-color-surface.padding-x-y
+      section#section-takeaways.dossier-section.bg-color-surface.padding-x-y(data-reveal-section)
         +line-block('top-line')
-        .section-heading
-          span.body-micro.text-color-muted // SECTION 05 :: AUTOPSY SUMMARY &amp; LESSONS LEARNED
-          h2.heading-title.text-color-pure WHY IT'S IN /FAIL-CASES_
+        .section-heading(data-parallax='-0.03')
+          span.body-micro.text-color-muted(data-scramble) // SECTION 05 :: AUTOPSY SUMMARY &amp; LESSONS LEARNED
+          h2.heading-title.text-color-pure(data-scramble) WHY IT'S IN /FAIL-CASES_
 
         .takeaways-grid
-          article.takeaway-item
+          article.takeaway-item(data-reveal-item, data-parallax='-0.03')
             .takeaway-item__line
               +line-inline('left-line')
             .takeaway-item__body
-              span.code-command-default.text-color-pure [01] ATOMS ARE UNDEFEATED
+              span.code-command-default.text-color-pure(data-scramble) [01] ATOMS ARE UNDEFEATED
               p.body-reading.text-color-default Software is frictionless; atoms are undefeated. No shader uniform can fix a loose RCA composite plug or a $4 plastic signal converter overheating behind a steel shelf.
-          article.takeaway-item
+          article.takeaway-item(data-reveal-item, data-parallax='0.0')
             .takeaway-item__line
               +line-inline('left-line')
             .takeaway-item__body
-              span.code-command-default.text-color-pure [02] PUT DOWN THE KEYBOARD, PICK UP A SCREWDRIVER
+              span.code-command-default.text-color-pure(data-scramble) [02] PUT DOWN THE KEYBOARD, PICK UP A SCREWDRIVER
               p.body-reading.text-color-default If you find yourself writing a 2D cross-product quadratic solver in a fragment shader because a display is crooked, put down the keyboard and pick up a screwdriver.
-          article.takeaway-item
+          article.takeaway-item(data-reveal-item, data-parallax='0.03')
             .takeaway-item__line
               +line-inline('left-line')
             .takeaway-item__body
-              span.code-command-default.text-color-pure [03] HUMANS ARE NOT DETERMINISTIC STATE MACHINES
+              span.code-command-default.text-color-pure(data-scramble) [03] HUMANS ARE NOT DETERMINISTIC STATE MACHINES
               p.body-reading.text-color-default Twelve architecture markdown files and a 4.5-hour soak test won't save you when your entire interactive loop depends on strangers doing "Rabbit Ears" poses for 1.8 seconds in front of a binder-clipped webcam.
 
-        .dossier-footer
+        .dossier-footer(data-reveal-item)
           .dossier-footer__nav
             span.code-command-default.text-color-default $
             a.code-command-link.text-color-pure(href='/fail-cases', target='_self') cd /fail-cases
