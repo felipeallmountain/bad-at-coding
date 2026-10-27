@@ -3,9 +3,22 @@ include ../mixins/line.pug
 
 block variables
   - var template = 'fail-cases'
+  - var canonicalPath = '/fail-cases'
   - var links = [{ label: '/fail-cases', url: '/fail-cases' }]
   - var pageTitle = 'THE GALLERY OF MEDIOCRITY_'
   - var pageDescription = 'A catalog of over-engineered, cursed, and gloriously doomed engineering projects where software hubris collided with physical reality.'
+  - var ogType = 'website'
+  - var ogTitle = 'THE GALLERY OF MEDIOCRITY · /fail-cases'
+  - var ogDescription = 'A catalog of over-engineered, cursed, and gloriously doomed engineering projects where software hubris collided with physical reality. Featuring [FAIL-01] V-FEED [06].'
+  - var ogImage = '/og-fail-cases.jpg'
+  - var ogImageWidth = 1200
+  - var ogImageHeight = 630
+  - var ogImageAlt = 'bad at coding /fail-cases — THE GALLERY OF MEDIOCRITY featuring V-FEED [06] 6x CRT matrix'
+  - var pageKeywords = 'fail cases, engineering post-mortem, over-engineering, creative coding, WebGL, Three.js, GLSL, CRT installation, bad at coding'
+  - var twitterLabel1 = 'ARCHIVE STATUS'
+  - var twitterData1 = '01 Declassified Dossier // 04 Pending'
+  - var twitterLabel2 = 'FEATURED INCIDENT'
+  - var twitterData2 = 'FAIL-01 :: V-FEED [06]'
   - var showParagraph = true
   -
     var failCases = [

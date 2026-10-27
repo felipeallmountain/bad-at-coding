@@ -145,6 +145,25 @@ export const createNavigation = (): TNavigation => {
     contentContainer.classList.replace(oldTemplate, newTemplate)
 
     document.title = newDoc.title
+    const newCanonical = newDoc.head.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    )
+    const oldCanonical = document.head.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    )
+    if (newCanonical && oldCanonical) {
+      oldCanonical.href = newCanonical.href
+    }
+
+    const metaSelector =
+      'meta[name="description"], meta[name="keywords"], meta[name="author"], meta[property^="og:"], meta[property^="article:"], meta[name^="twitter:"]'
+    document.head
+      .querySelectorAll(metaSelector)
+      .forEach((metaEl) => metaEl.remove())
+    newDoc.head.querySelectorAll(metaSelector).forEach((metaEl) => {
+      document.head.appendChild(metaEl.cloneNode(true))
+    })
+
     window.scrollTo(0, 0)
     if (pushState) {
       window.history.pushState({}, '', url)

@@ -15,33 +15,62 @@ if (!fs.existsSync(manifestPath)) {
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'))
 
 const pages = [
-  { view: 'home', output: 'index.html' },
-  { view: 'fail-cases', output: 'fail-cases.html' },
-  { view: 'fail-cases', output: 'fail-cases/index.html' },
+  { view: 'home', output: 'index.html', canonicalPath: '/' },
+  {
+    view: 'fail-cases',
+    output: 'fail-cases.html',
+    canonicalPath: '/fail-cases',
+  },
+  {
+    view: 'fail-cases',
+    output: 'fail-cases/index.html',
+    canonicalPath: '/fail-cases',
+  },
   {
     view: 'fail-cases/v-feed-06',
     output: 'fail-cases/v-feed-06.html',
+    canonicalPath: '/fail-cases/v-feed-06',
   },
   {
     view: 'fail-cases/v-feed-06',
     output: 'fail-cases/v-feed-06/index.html',
+    canonicalPath: '/fail-cases/v-feed-06',
   },
-  { view: 'who-i-am-not', output: 'who-i-am-not.html' },
-  { view: 'who-i-am-not', output: 'who-i-am-not/index.html' },
-  { view: 'annoy-me', output: 'annoy-me.html' },
-  { view: 'annoy-me', output: 'annoy-me/index.html' },
-  { view: '404', output: '404.html' },
-  { view: '500', output: '500.html' },
+  {
+    view: 'who-i-am-not',
+    output: 'who-i-am-not.html',
+    canonicalPath: '/who-i-am-not',
+  },
+  {
+    view: 'who-i-am-not',
+    output: 'who-i-am-not/index.html',
+    canonicalPath: '/who-i-am-not',
+  },
+  { view: 'annoy-me', output: 'annoy-me.html', canonicalPath: '/annoy-me' },
+  {
+    view: 'annoy-me',
+    output: 'annoy-me/index.html',
+    canonicalPath: '/annoy-me',
+  },
+  { view: '404', output: '404.html', canonicalPath: '/404' },
+  { view: '500', output: '500.html', canonicalPath: '/500' },
 ]
 
-pages.forEach(({ view, output }) => {
+pages.forEach(({ view, output, canonicalPath }) => {
   const templatePath = path.resolve(rootDir, 'views', 'pages', `${view}.pug`)
   if (!fs.existsSync(templatePath)) {
     console.error(`Template not found at ${templatePath}`)
     return
   }
   const compiledTemplate = pug.compileFile(templatePath)
-  const htmlTemplate = compiledTemplate({})
+  const htmlTemplate = compiledTemplate({
+    siteUrl: (process.env.SITE_URL || 'https://bad-at-coding.com').replace(
+      /\/$/,
+      ''
+    ),
+    siteName: 'bad at coding',
+    canonicalPath,
+  })
 
   // Rewrite paths using the production manifest
   const mainTs = manifest['app/main.ts']
