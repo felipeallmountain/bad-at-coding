@@ -212,6 +212,30 @@ export const createNavigation = (): TNavigation => {
     oldTemplate: string,
     newTemplate: string
   ) => {
+    const isUnifiedMobileGrid = window.matchMedia('(max-width: 1024px)').matches
+
+    if (isUnifiedMobileGrid) {
+      const positions: Array<
+        'col-start' | 'col-end' | 'row-start' | 'row-end'
+      > = ['col-end', 'col-start', 'row-start', 'row-end']
+      positions.forEach((pos) => {
+        contentContainer.classList.replace(
+          `${oldTemplate}--${pos}`,
+          `${newTemplate}--${pos}`
+        )
+      })
+      const contentBody =
+        contentContainer.querySelector<HTMLElement>(CONTAINER_CONTENT)
+      if (contentBody) {
+        await gsap.fromTo(
+          contentBody,
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+        )
+      }
+      return
+    }
+
     let newState = state
     newState = await swapPageLayout(
       contentContainer,

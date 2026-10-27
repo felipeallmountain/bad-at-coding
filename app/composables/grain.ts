@@ -220,7 +220,10 @@ export const createGrain = (): TGrain => {
     const rect = canvas.getBoundingClientRect()
     const width = rect.width
     const height = rect.height
-    const dpr = Math.min(window.devicePixelRatio, 1.5)
+    const isMobile = window.matchMedia(
+      '(max-width: 1024px), (pointer: coarse)'
+    ).matches
+    const dpr = Math.min(window.devicePixelRatio, isMobile ? 1.0 : 1.5)
 
     renderer.setPixelRatio(dpr)
     renderer.setSize(width, height, false)
@@ -267,9 +270,40 @@ export const createGrain = (): TGrain => {
     uniforms.uShockAmp.value = 1
   }
 
+  const handleTouchStart = (e: TouchEvent) => {
+    const touch = e.touches[0]
+    if (!touch) return
+    const rect = canvas.getBoundingClientRect()
+    const x = touch.clientX - rect.left
+    const y = rect.bottom - touch.clientY
+    pointerX = x
+    pointerY = y
+    targetActive = 1
+    uniforms.uShockOrigin.value.set(x, y)
+    uniforms.uShockAge.value = 0
+    uniforms.uShockAmp.value = 1
+  }
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0]
+    if (!touch) return
+    const rect = canvas.getBoundingClientRect()
+    pointerX = touch.clientX - rect.left
+    pointerY = rect.bottom - touch.clientY
+    targetActive = 1
+  }
+
+  const handleTouchEnd = () => {
+    targetActive = 0
+  }
+
   window.addEventListener('mousemove', handleMouseMove)
   window.addEventListener('mouseleave', handleMouseLeave)
   window.addEventListener('mousedown', handleMouseDown)
+  window.addEventListener('touchstart', handleTouchStart, { passive: true })
+  window.addEventListener('touchmove', handleTouchMove, { passive: true })
+  window.addEventListener('touchend', handleTouchEnd, { passive: true })
+  window.addEventListener('touchcancel', handleTouchEnd, { passive: true })
 
   let gui: GUI | null = null
 
@@ -392,6 +426,10 @@ export const createGrain = (): TGrain => {
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseleave', handleMouseLeave)
     window.removeEventListener('mousedown', handleMouseDown)
+    window.removeEventListener('touchstart', handleTouchStart)
+    window.removeEventListener('touchmove', handleTouchMove)
+    window.removeEventListener('touchend', handleTouchEnd)
+    window.removeEventListener('touchcancel', handleTouchEnd)
 
     scene.remove(quad)
     geometry.dispose()

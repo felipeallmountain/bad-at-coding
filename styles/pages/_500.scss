@@ -24,6 +24,7 @@
     gap: spacing.$gap-text-line;
     height: 100%;
     justify-content: center;
+    overflow-wrap: anywhere;
   }
 
   &__stack {

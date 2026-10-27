@@ -1,6 +1,8 @@
 @use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/primitives' as primitives;
+@use '@bad-at-coding/styles/variables/breakpoints' as breakpoints;
 @use '@bad-at-coding/styles/layout/containers';
 
 .home {
@@ -22,6 +24,10 @@
 
   &__content {
     justify-content: center;
+
+    @include breakpoints.media-down('md') {
+      justify-content: flex-start;
+    }
   }
 
   &__links {
@@ -46,6 +52,36 @@
       &__link {
         display: flex;
         gap: spacing.$gap-text-line;
+      }
+    }
+
+    @include breakpoints.media-down('md') {
+      grid-template-columns: max-content minmax(0, 1fr);
+      column-gap: primitives.$space-3;
+      width: 100%;
+      padding-inline: primitives.$space-2;
+
+      .link {
+        grid-column: span 2;
+        row-gap: primitives.$space-1;
+
+        &:not(:first-child, :last-child, :nth-child(2)) {
+          margin-block-start: primitives.$space-4;
+        }
+
+        &__symbol {
+          grid-row: span 2;
+          align-items: center;
+        }
+
+        &__description {
+          grid-column: 2;
+        }
+
+        &.top .top__end,
+        &.bottom .bottom__end {
+          display: none;
+        }
       }
     }
   }

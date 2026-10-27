@@ -12,6 +12,11 @@
   justify-content: center;
   background-color: colors.$color-bg-abyss;
 
+  &__content {
+    max-width: 100%;
+    padding-inline: spacing.$layout-padding-mobile;
+  }
+
   &__terminal {
     display: flex;
     flex-direction: column;

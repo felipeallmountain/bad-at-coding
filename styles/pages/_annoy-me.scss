@@ -1,5 +1,7 @@
 @use '@bad-at-coding/styles/layout/containers';
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
+@use '@bad-at-coding/styles/variables/primitives' as primitives;
+@use '@bad-at-coding/styles/variables/breakpoints' as breakpoints;
 
 .annoy-me {
   &--row-start {
@@ -25,10 +27,23 @@
     justify-content: flex-end;
     height: 100%;
 
+    @include breakpoints.media-down('lg') {
+      justify-content: flex-start;
+      height: auto;
+      padding: primitives.$space-2;
+      gap: primitives.$space-4;
+    }
+
     .link {
       overflow: hidden;
       display: flex;
       gap: spacing.$gap-nav-links;
+
+      &__content {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
     }
   }
 }

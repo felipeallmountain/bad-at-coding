@@ -189,7 +189,7 @@ export const createGrid = (): TGrid => {
   setupPenStroke(verticalLines)
   setupPenStroke(horizontalLines)
 
-  // Mouse coordinates (pixel-based)
+  // Mouse & Touch coordinates (pixel-based)
   let mouseX = -1000
   let mouseY = -1000
 
@@ -208,9 +208,35 @@ export const createGrid = (): TGrid => {
     clickAmplitude = 1.0
   }
 
+  const handleTouchStart = (e: TouchEvent) => {
+    const touch = e.touches[0]
+    if (!touch) return
+    const rect = canvas.getBoundingClientRect()
+    mouseX = touch.clientX - rect.left
+    mouseY = touch.clientY - rect.top
+    clickAmplitude = 1.0
+  }
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0]
+    if (!touch) return
+    const rect = canvas.getBoundingClientRect()
+    mouseX = touch.clientX - rect.left
+    mouseY = touch.clientY - rect.top
+  }
+
+  const handleTouchEnd = () => {
+    mouseX = -1000
+    mouseY = -1000
+  }
+
   window.addEventListener('mousemove', handleMouseMove)
   window.addEventListener('mouseleave', handleMouseLeave)
   window.addEventListener('mousedown', handleMouseDown)
+  window.addEventListener('touchstart', handleTouchStart, { passive: true })
+  window.addEventListener('touchmove', handleTouchMove, { passive: true })
+  window.addEventListener('touchend', handleTouchEnd, { passive: true })
+  window.addEventListener('touchcancel', handleTouchEnd, { passive: true })
 
   // --- 3. Three.js Scene Setup ---
   const renderer = new THREE.WebGLRenderer({
@@ -222,15 +248,20 @@ export const createGrid = (): TGrid => {
   const camera = new THREE.PerspectiveCamera(45, 1, 1, 2000)
   scene.add(camera)
 
+  let currentDpr = 1
+
   // Setup camera distance to map coordinates exactly to pixel space at z=0
   const syncViewport = () => {
     const rect = canvas.getBoundingClientRect()
     const width = rect.width
     const height = rect.height
-    const dpr = Math.min(window.devicePixelRatio, 2)
+    const isMobile = window.matchMedia(
+      '(max-width: 1024px), (pointer: coarse)'
+    ).matches
+    currentDpr = Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2)
 
     renderer.setSize(width, height, false)
-    renderer.setPixelRatio(dpr)
+    renderer.setPixelRatio(currentDpr)
     camera.aspect = width / height
 
     // Distance calculation to map 1 3D unit = 1 pixel at z = 0
@@ -700,8 +731,8 @@ export const createGrid = (): TGrid => {
 
     // Sync buffer dimensions if needed
     if (
-      canvas.width !== width * devicePixelRatio ||
-      canvas.height !== height * devicePixelRatio
+      Math.abs(canvas.width - width * currentDpr) > 1 ||
+      Math.abs(canvas.height - height * currentDpr) > 1
     ) {
       syncViewport()
     }
@@ -827,6 +858,10 @@ export const createGrid = (): TGrid => {
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseleave', handleMouseLeave)
     window.removeEventListener('mousedown', handleMouseDown)
+    window.removeEventListener('touchstart', handleTouchStart)
+    window.removeEventListener('touchmove', handleTouchMove)
+    window.removeEventListener('touchend', handleTouchEnd)
+    window.removeEventListener('touchcancel', handleTouchEnd)
     cuttingMat.classList.remove('has-dynamic-grid')
     bgGrid.style.removeProperty('--grid-cols')
     bgGrid.style.removeProperty('--grid-rows')

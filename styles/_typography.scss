@@ -1,5 +1,6 @@
 @use './variables/typography' as typography;
 @use './variables/primitives' as primitives;
+@use './variables/breakpoints' as breakpoints;
 
 :root {
   font-family: typography.$font-family-display;
@@ -9,17 +10,34 @@
   font-family: typography.$font-family-display;
   font-weight: typography.$font-weight-medium;
   line-height: typography.$line-height-tight;
+  overflow-wrap: break-word;
 }
 
 .heading {
   &-display {
     font-size: typography.$heading-display;
     @include heading;
+
+    @include breakpoints.media-down('md') {
+      font-size: primitives.$text-8;
+    }
+
+    @include breakpoints.media-down('xs') {
+      font-size: primitives.$text-7;
+    }
   }
 
   &-title {
     font-size: typography.$heading-title;
     @include heading;
+
+    @include breakpoints.media-down('md') {
+      font-size: primitives.$text-7;
+    }
+
+    @include breakpoints.media-down('xs') {
+      font-size: primitives.$text-6;
+    }
   }
 }
 
@@ -48,6 +66,14 @@
 
     p + p {
       margin-block-start: typography.$code-lg;
+    }
+
+    @include breakpoints.media-down('md') {
+      font-size: primitives.$text-4;
+
+      p + p {
+        margin-block-start: primitives.$space-2;
+      }
     }
   }
 }
@@ -78,5 +104,9 @@
     font-weight: typography.$font-weight-bold;
     font-size: typography.$body-micro;
     @include body;
+
+    @include breakpoints.media-down('sm') {
+      font-size: 3.25rem;
+    }
   }
 }

@@ -1,5 +1,7 @@
 @use '@bad-at-coding/styles/variables/spacing' as spacing;
 @use '@bad-at-coding/styles/variables/stroke' as stroke;
+@use '@bad-at-coding/styles/variables/primitives' as primitives;
+@use '@bad-at-coding/styles/variables/breakpoints' as breakpoints;
 @use '@bad-at-coding/styles/layout/containers';
 
 .who-i-am-not {
@@ -24,11 +26,23 @@
     justify-content: space-between;
     height: 100%;
 
+    @include breakpoints.media-down('lg') {
+      height: auto;
+      min-height: 100%;
+      gap: primitives.$space-4;
+      padding-inline: primitives.$space-1;
+    }
+
     .content {
       &__items {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         column-gap: spacing.$gap-cards-items;
+
+        @include breakpoints.media-down('lg') {
+          grid-template-columns: 1fr;
+          row-gap: primitives.$space-3;
+        }
 
         .item {
           display: flex;

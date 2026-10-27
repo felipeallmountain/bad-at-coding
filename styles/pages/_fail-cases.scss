@@ -3,6 +3,7 @@
 @use '@bad-at-coding/styles/variables/colors' as colors;
 @use '@bad-at-coding/styles/variables/primitives' as primitives;
 @use '@bad-at-coding/styles/variables/typography' as typography;
+@use '@bad-at-coding/styles/variables/breakpoints' as breakpoints;
 @use '@bad-at-coding/styles/layout/containers';
 
 // Custom blueprint scrollbar mixin
@@ -154,6 +155,10 @@
     grid-template-columns: minmax(0, 1.55fr) minmax(240px, 0.95fr);
     gap: spacing.$gap-cards-items;
     align-items: stretch;
+
+    @include breakpoints.media-down('lg') {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__details {
@@ -212,6 +217,7 @@
     display: flex;
     align-items: center;
     gap: spacing.$gap-text-line;
+    overflow-wrap: anywhere;
   }
 
   &__media {
@@ -230,6 +236,14 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+
+      @include breakpoints.media-down('lg') {
+        min-height: 36rem;
+      }
+
+      @include breakpoints.media-down('sm') {
+        min-height: 28rem;
+      }
     }
 
     &-overlay {
@@ -238,6 +252,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: primitives.$space-1;
       padding: primitives.$space-2 primitives.$space-3;
       background: linear-gradient(
         to top,
@@ -307,10 +323,20 @@
     border-block-end: stroke.$line-thin solid colors.$color-border-mat;
     padding-block-end: primitives.$space-1 !important;
 
+    @include breakpoints.media-down('md') {
+      flex-direction: column !important;
+      align-items: flex-start;
+      gap: primitives.$space-1 !important;
+    }
+
     h1.heading-display {
       font-size: primitives.$text-8;
       line-height: 1;
       flex-shrink: 0;
+
+      @include breakpoints.media-down('sm') {
+        font-size: primitives.$text-6;
+      }
     }
 
     .container__paragraph {
@@ -323,6 +349,12 @@
         overflow: hidden;
         text-overflow: ellipsis;
         text-wrap: nowrap;
+
+        @include breakpoints.media-down('md') {
+          white-space: normal;
+          text-wrap: pretty;
+          font-size: typography.$body-commentary;
+        }
       }
     }
   }
@@ -376,17 +408,34 @@
         color: colors.$color-feedback-disaster;
         background-color: colors.$color-feedback-disaster-bg;
         border: stroke.$line-thin solid colors.$color-feedback-disaster;
+
+        @include breakpoints.media-down('md') {
+          display: none;
+        }
       }
 
       &__jumps {
         display: flex;
         flex-wrap: wrap;
         gap: primitives.$space-1;
+
+        @include breakpoints.media-down('md') {
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          max-width: 100%;
+          scrollbar-width: none;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
       }
 
       &__jump {
         background: transparent;
         cursor: pointer;
+        white-space: nowrap;
+        flex-shrink: 0;
         padding: primitives.$space-0 primitives.$space-2;
         border: stroke.$line-thin solid colors.$color-border-mat;
         transition:
@@ -461,6 +510,14 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: primitives.$space-2;
+
+  @include breakpoints.media-down('lg') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include breakpoints.media-down('sm') {
+    grid-template-columns: 1fr;
+  }
 }
 
 .dossier-cell {
@@ -471,7 +528,7 @@
   background-color: primitives.$color-darkblue-opaque-50;
 
   &--wide {
-    grid-column: span 4;
+    grid-column: 1 / -1;
   }
 
   &__link {
@@ -512,6 +569,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: spacing.$gap-cards-items;
+
+  @include breakpoints.media-down('lg') {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pitch-card {
@@ -530,6 +591,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     gap: primitives.$space-2;
     padding-block-end: primitives.$space-2;
     border-block-end: stroke.$line-thin solid colors.$color-border-mat;
@@ -567,6 +629,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: primitives.$space-2;
+
+  @include breakpoints.media-down('sm') {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 .gallery-filter {
@@ -574,6 +647,8 @@
   color: colors.$color-text-muted;
   border: stroke.$line-thin solid colors.$color-border-mat;
   padding: primitives.$space-1 primitives.$space-2;
+  white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
   transition:
     color 0.2s ease,
@@ -593,6 +668,14 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: primitives.$space-2;
   align-items: stretch;
+
+  @include breakpoints.media-down('lg') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include breakpoints.media-down('sm') {
+    grid-template-columns: 1fr;
+  }
 }
 
 .evidence-card {
@@ -676,6 +759,10 @@
     border: stroke.$line-thin solid colors.$color-border-blueprint;
     opacity: 0;
     transition: opacity 0.2s ease;
+
+    @media (hover: none) {
+      opacity: 1;
+    }
   }
 
   &__caption {
@@ -724,11 +811,18 @@
     gap: spacing.$gap-nav-links;
     padding-block-end: primitives.$space-2;
     border-block-end: stroke.$line-thin solid colors.$color-border-mat;
+
+    @include breakpoints.media-down('sm') {
+      flex-direction: column;
+      gap: primitives.$space-1;
+    }
   }
 
   &__titles {
     @extend %flex-column;
     gap: primitives.$space-1;
+    min-width: 0;
+    overflow-wrap: break-word;
   }
 
   &__body {
@@ -781,6 +875,14 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: primitives.$space-2;
+
+  @include breakpoints.media-down('md') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include breakpoints.media-down('xs') {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pose-chip {
@@ -795,11 +897,14 @@
 .receipt-table-wrap {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: stroke.$line-thin solid colors.$color-border-blueprint;
+  @include blueprint-scrollbar;
 }
 
 .receipt-table {
   width: 100%;
+  min-width: 520px;
   text-align: left;
 
   th,
@@ -833,6 +938,10 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: spacing.$gap-nav-links;
+
+  @include breakpoints.media-down('lg') {
+    grid-template-columns: 1fr;
+  }
 }
 
 .takeaway-item {
@@ -861,6 +970,7 @@
     display: flex;
     align-items: center;
     gap: primitives.$space-1;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -875,6 +985,10 @@
   justify-content: center;
   padding: spacing.$component-padding-panel;
 
+  @include breakpoints.media-down('md') {
+    padding: primitives.$space-2;
+  }
+
   &.is-open {
     display: flex;
   }
@@ -884,8 +998,16 @@
     gap: primitives.$space-2;
     width: min(90vw, 240rem);
     max-height: 90vh;
+    max-height: 90dvh;
     border: stroke.$line-focus solid colors.$color-border-blueprint;
     background-color: colors.$color-bg-abyss;
+
+    @include breakpoints.media-down('md') {
+      width: 96vw;
+      max-height: 94dvh;
+      padding-inline: primitives.$space-2;
+      padding-block: primitives.$space-2;
+    }
   }
 
   &__header {
@@ -899,7 +1021,16 @@
   &__meta-group {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: spacing.$gap-nav-links;
+
+    @include breakpoints.media-down('sm') {
+      gap: primitives.$space-2;
+
+      .js-lightbox-meta {
+        display: none;
+      }
+    }
   }
 
   &__controls {
@@ -916,11 +1047,13 @@
     border: stroke.$line-thin solid colors.$color-border-mat;
     overflow: hidden;
     max-height: 62vh;
+    max-height: 58dvh;
   }
 
   &__img {
     max-width: 100%;
     max-height: 62vh;
+    max-height: 58dvh;
     object-fit: contain;
     display: block;
   }
@@ -936,6 +1069,10 @@
   padding: primitives.$space-1 primitives.$space-2;
   border: stroke.$line-thin solid colors.$color-border-blueprint;
   cursor: pointer;
+
+  @include breakpoints.media-down('sm') {
+    padding: primitives.$space-2 primitives.$space-3;
+  }
 
   &:hover {
     background-color: primitives.$color-white-opaque-10;

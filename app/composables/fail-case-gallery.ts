@@ -65,10 +65,15 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
     const wrapperRect = wrapper.getBoundingClientRect()
     const viewportCenterY = wrapperRect.top + wrapperRect.height * 0.5
 
-    // Structural parallax elements
+    // Structural parallax elements (disabled on narrow single-column mobile to prevent overlap)
+    const isNarrowMobile = window.matchMedia('(max-width: 640px)').matches
     const parallaxEls = wrapper.querySelectorAll<HTMLElement>('[data-parallax]')
     parallaxEls.forEach((el) => {
       if (el.classList.contains('is-hidden')) return
+      if (isNarrowMobile) {
+        el.style.setProperty('--parallax-y', '0px')
+        return
+      }
       const speed = parseFloat(el.dataset.parallax || '0')
       if (!speed) return
 
@@ -293,14 +298,17 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
 
     items.forEach((item) => itemObserver?.observe(item))
 
-    // Hook continuous parallax into Lenis scroll
+    // Hook continuous parallax into both Lenis scroll and native touch scroll
     const smoothScroll = getSmoothScroll()
-    if (smoothScroll) {
-      unsubscribeScroll = smoothScroll.onScroll(() => {
-        updateParallax()
-      })
-    } else {
-      wrapper.addEventListener('scroll', updateParallax, { passive: true })
+    const offLenis = smoothScroll
+      ? smoothScroll.onScroll(() => {
+          updateParallax()
+        })
+      : null
+    wrapper.addEventListener('scroll', updateParallax, { passive: true })
+    unsubscribeScroll = () => {
+      offLenis?.()
+      wrapper.removeEventListener('scroll', updateParallax)
     }
 
     requestAnimationFrame(() => {
@@ -556,6 +564,47 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
       updateLightboxContent(currentIndex + 1)
     }
   })
+
+  // Touch swipe navigation inside the lightbox on mobile/tablet
+  let touchStartX = 0
+  let touchStartY = 0
+
+  document.addEventListener(
+    'touchstart',
+    (e: TouchEvent) => {
+      const lightbox = document.querySelector<HTMLElement>(
+        '.js-gallery-lightbox'
+      )
+      if (!lightbox || !lightbox.classList.contains('is-open')) return
+      const touch = e.touches[0]
+      if (!touch) return
+      touchStartX = touch.clientX
+      touchStartY = touch.clientY
+    },
+    { passive: true }
+  )
+
+  document.addEventListener(
+    'touchend',
+    (e: TouchEvent) => {
+      const lightbox = document.querySelector<HTMLElement>(
+        '.js-gallery-lightbox'
+      )
+      if (!lightbox || !lightbox.classList.contains('is-open')) return
+      const touch = e.changedTouches[0]
+      if (!touch) return
+      const deltaX = touch.clientX - touchStartX
+      const deltaY = touch.clientY - touchStartY
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+        if (deltaX < 0) {
+          updateLightboxContent(currentIndex + 1)
+        } else {
+          updateLightboxContent(currentIndex - 1)
+        }
+      }
+    },
+    { passive: true }
+  )
 
   window.addEventListener('resize', () => {
     updateParallax()
