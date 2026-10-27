@@ -264,6 +264,14 @@
     }
   }
 
+  &__picture {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   &__img {
     position: absolute;
     inset: 0;
@@ -477,6 +485,8 @@
 .section-heading {
   @extend %flex-column;
   gap: primitives.$space-1;
+  min-width: 0;
+  max-width: 100%;
 
   &--split {
     flex-direction: row;
@@ -489,6 +499,8 @@
   &__left {
     @extend %flex-column;
     gap: primitives.$space-1;
+    min-width: 0;
+    max-width: 100%;
   }
 }
 
@@ -668,13 +680,16 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: primitives.$space-2;
   align-items: stretch;
+  width: 100%;
+  min-width: 0;
 
   @include breakpoints.media-down('lg') {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @include breakpoints.media-down('sm') {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    gap: primitives.$space-3;
   }
 }
 
@@ -684,6 +699,8 @@
   padding: primitives.$space-1 primitives.$space-2;
   border: stroke.$line-thin solid colors.$color-border-mat;
   background-color: primitives.$color-darkblue-opaque-50;
+  width: 100%;
+  min-width: 0;
   cursor: pointer;
   transition:
     border-color 0.25s ease,
@@ -726,10 +743,24 @@
     overflow: hidden;
     border: stroke.$line-thin solid colors.$color-border-mat;
     background-color: primitives.$color-black;
+
+    @include breakpoints.media-down('sm') {
+      height: 46rem;
+    }
   }
 
   &--portrait &__media {
     height: 26rem;
+
+    @include breakpoints.media-down('sm') {
+      height: 56rem;
+    }
+  }
+
+  &__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   &__img {
@@ -768,6 +799,7 @@
   &__caption {
     @extend %flex-column;
     gap: primitives.$space-0;
+    min-width: 0;
   }
 
   &__title {
@@ -775,6 +807,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @include breakpoints.media-down('sm') {
+      white-space: normal;
+      text-wrap: pretty;
+    }
   }
 
   &__desc {
@@ -1050,10 +1087,22 @@
     max-height: 58dvh;
   }
 
+  &__picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    max-height: 62vh;
+    max-height: 58dvh;
+  }
+
   &__img {
     max-width: 100%;
     max-height: 62vh;
     max-height: 58dvh;
+    width: auto;
+    height: auto;
     object-fit: contain;
     display: block;
   }

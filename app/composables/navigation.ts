@@ -230,7 +230,13 @@ export const createNavigation = (): TNavigation => {
         await gsap.fromTo(
           contentBody,
           { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.35,
+            ease: 'power2.out',
+            clearProps: 'transform,translate,rotate,scale,opacity',
+          }
         )
       }
       return

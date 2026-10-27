@@ -92,7 +92,8 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
       const card = img.closest<HTMLElement>('.evidence-card')
       if (card?.classList.contains('is-hidden')) return
 
-      const media = img.parentElement
+      const media =
+        img.closest<HTMLElement>('.evidence-card__media') ?? img.parentElement
       if (!media) return
 
       const speed = parseFloat(img.dataset.parallaxImg || '0.14')
@@ -135,10 +136,24 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
     unsubscribeScroll?.()
     unsubscribeScroll = null
 
+    // Clean up any previously portaled lightbox on document.body before mounting
+    document
+      .querySelectorAll<HTMLElement>('body > .js-gallery-lightbox')
+      .forEach((el) => el.remove())
+
     const wrapper = document.querySelector<HTMLElement>(
       '.v-feed-06 .container__content'
     )
     if (!wrapper) return
+
+    // Portal lightbox to document.body so position: fixed is never trapped
+    // inside a transformed or scrolling ancestor container on mobile
+    const inlineLightbox = wrapper.querySelector<HTMLElement>(
+      '.js-gallery-lightbox'
+    )
+    if (inlineLightbox) {
+      document.body.appendChild(inlineLightbox)
+    }
 
     // Pre-cache original text on all [data-scramble] elements
     const allScrambleEls =
@@ -235,8 +250,8 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
       },
       {
         root: wrapper,
-        threshold: 0.08,
-        rootMargin: '0px 0px -4% 0px',
+        threshold: 0.01,
+        rootMargin: '0px 0px -2% 0px',
       }
     )
 
@@ -291,8 +306,8 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
       },
       {
         root: wrapper,
-        threshold: 0.08,
-        rootMargin: '0px 0px -3% 0px',
+        threshold: 0.01,
+        rootMargin: '0px 0px -2% 0px',
       }
     )
 
@@ -332,12 +347,18 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
     if (!lightbox || !item) return
 
     const src = item.dataset.src || ''
+    const srcset = item.dataset.srcset || ''
+    const sizes = item.dataset.sizes || '(max-width: 768px) 96vw, 90vw'
+    const fallback = item.dataset.fallback || src
     const title = item.dataset.title || ''
     const caption = item.dataset.caption || ''
     const photoId = item.dataset.id || ''
     const aspect = item.dataset.aspect || ''
     const file = item.dataset.file || ''
 
+    const sourceEl = lightbox.querySelector<HTMLSourceElement>(
+      '.js-lightbox-source'
+    )
     const imgEl = lightbox.querySelector<HTMLImageElement>('.js-lightbox-img')
     const idEl = lightbox.querySelector<HTMLElement>('.js-lightbox-id')
     const titleEl = lightbox.querySelector<HTMLElement>('.js-lightbox-title')
@@ -346,8 +367,12 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
     )
     const metaEl = lightbox.querySelector<HTMLElement>('.js-lightbox-meta')
 
+    if (sourceEl) {
+      sourceEl.srcset = srcset
+      sourceEl.sizes = sizes
+    }
     if (imgEl) {
-      imgEl.src = src
+      imgEl.src = src || fallback
       imgEl.alt = title
       gsap.fromTo(
         imgEl,

@@ -152,9 +152,10 @@ bad-at-coding/
 | `npm run dev`      | Launches server in watch mode using `tsx` on `index.ts` with Vite middleware enabled. |
 | `npm run build`    | Compiles server TypeScript, executes Vite client build, and runs `prerender.js`.      |
 | `npm start`        | Starts Express in production mode (`NODE_ENV=production node server/index.js`).       |
-| `npm run lint`     | Runs ESLint analysis across the repository.                                           |
-| `npm run lint:fix` | Runs ESLint and automatically fixes formatting/syntax issues.                         |
-| `npm run format`   | Runs Prettier across all project files.                                               |
+| `npm run lint`            | Runs ESLint analysis across the repository.                                                            |
+| `npm run lint:fix`        | Runs ESLint and automatically fixes formatting/syntax issues.                                          |
+| `npm run format`          | Runs Prettier across all project files.                                                                |
+| `npm run optimize:images` | Generates responsive WebP variants (`480w`, `768w`, `1280w`, `1920w`, master `.webp`) and compresses fallbacks. |
 
 ---
 

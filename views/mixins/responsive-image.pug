@@ -1,0 +1,32 @@
+mixin responsive-image(options)
+  -
+    var opts = options || {}
+    var targetWidths = opts.widths || [480, 768, 1280, 1920]
+    var basePath = (opts.src || '').replace(/\.[a-zA-Z0-9]+$/, '')
+    var webpSrc = basePath + '.webp'
+    var fallbackSrc = opts.fallback || webpSrc
+    var srcset = targetWidths
+      .map(function (w) {
+        return basePath + '-' + w + 'w.webp ' + w + 'w'
+      })
+      .join(', ')
+    var sizes = opts.sizes || '100vw'
+    var loading = opts.loading || 'lazy'
+    var decoding = opts.decoding || 'async'
+  picture(class=opts.pictureClass)
+    source(
+      type='image/webp',
+      srcset=srcset,
+      sizes=sizes
+    )
+    img(
+      class=opts.imgClass,
+      src=fallbackSrc,
+      alt=opts.alt || '',
+      loading=loading,
+      decoding=decoding,
+      fetchpriority=opts.fetchpriority,
+      width=opts.width,
+      height=opts.height,
+      data-parallax-img=opts.parallaxImg
+    )

@@ -1,5 +1,6 @@
 extends ../base.pug
 include ../mixins/line.pug
+include ../mixins/responsive-image.pug
 
 block variables
   - var template = 'fail-cases'
@@ -31,7 +32,10 @@ block variables
         status: 'OVER-ENGINEERED / HARDWARE REALITY CHECK',
         tags: ['Three.js', 'GLSL', 'MediaPipe Wasm', 'Web Audio API', 'Node.js', '6x CRT Matrix'],
         tldrMetric: '2,839 LOC Calibration GUI vs. 1 Loose Composite Cable',
-        thumbnail: '/assets/v-feed-06/DSC_3270.jpg',
+        thumbnail: '/assets/v-feed-06/DSC_3270.webp',
+        thumbnailFallback: '/assets/v-feed-06/DSC_3270.jpg',
+        thumbnailWidth: 2400,
+        thumbnailHeight: 1600,
         thumbnailAlt: 'V-FEED [06] — 6 physical CRT televisions mounted in a 2x3 steel rack matrix on the exhibition floor',
         summary: 'Wrote a 346-line single-pass CRT shader, a 15,734 Hz NTSC flyback oscillator, a 60 FPS MediaPipe pose & clothing-color classifier, and a 2,839-line calibration deck to fix problems that belonged to a screwdriver and a $4 composite adapter.'
       }
@@ -75,7 +79,18 @@ block body
 
           a.fail-card__media(href=item.url, target='_self', aria-label=`Open ${item.title} post-mortem`)
             .fail-card__media-frame
-              img.fail-card__img(src=item.thumbnail, alt=item.thumbnailAlt, loading='eager')
+              +responsive-image({
+                src: item.thumbnail,
+                fallback: item.thumbnailFallback,
+                alt: item.thumbnailAlt,
+                pictureClass: 'fail-card__picture',
+                imgClass: 'fail-card__img',
+                sizes: '(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 35vw',
+                loading: 'eager',
+                fetchpriority: 'high',
+                width: item.thumbnailWidth,
+                height: item.thumbnailHeight
+              })
               .fail-card__media-overlay
                 span.body-micro.text-color-pure [ EXHIBIT_EVIDENCE :: 13 PHOTOS ATTACHED ]
                 span.body-micro.text-color-default.js-scramble-text OPEN DOSSIER -&gt;

@@ -1,5 +1,6 @@
 extends ../../base.pug
 include ../../mixins/line.pug
+include ../../mixins/responsive-image.pug
 
 block variables
   - var template = 'v-feed-06'
@@ -29,7 +30,10 @@ block variables
     var vFeedPhotos = [
       {
         id: 'photo-01',
-        file: '/assets/v-feed-06/DSC_3270.jpg',
+        file: '/assets/v-feed-06/DSC_3270.webp',
+        fallback: '/assets/v-feed-06/DSC_3270.jpg',
+        width: 2400,
+        height: 1600,
         title: 'The Physical Setup / Totem in Situ',
         caption: '6 screens, miles of composite cabling, a webcam binder-clipped to a steel rack, and the gap between CAD diagrams and gravity.',
         alt: 'V-FEED [06] physical setup showing 6 vintage CRT televisions stacked in a 2x3 steel rack matrix with purple floor tape markers and cable spaghetti',
@@ -39,7 +43,10 @@ block variables
       },
       {
         id: 'photo-02',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-288.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-288.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-288.jpg',
+        width: 2400,
+        height: 1597,
         title: 'The "Human Antenna" in Action',
         caption: 'Trying to convince real humans to hold "UHF Loop Halo" and "Yagi Point" poses in public while MediaPipe tracks 33 joints at 60 FPS.',
         alt: 'Gallery visitor raising an arm in front of the 6-CRT matrix to trigger pose recognition while green wireframe telemetry renders on screen',
@@ -49,7 +56,10 @@ block variables
       },
       {
         id: 'photo-03',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-287.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-287.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-287.jpg',
+        width: 2400,
+        height: 1597,
         title: 'The 2,839-Line Calibration HUD (CalibrationConsole.ts)',
         caption: 'When you refuse to move a physical screen 2 centimeters to the left, so you write an inverse bilinear keystone solver in GLSL instead—complete with the "CRT [01}" typo on the top-left tube.',
         alt: 'Close-up of the CRT screens displaying per-screen calibration HUD overlays, antenna lock percentages, and the CRT [01} label typo',
@@ -59,7 +69,10 @@ block variables
       },
       {
         id: 'photo-04',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-289.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-289.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-289.jpg',
+        width: 2400,
+        height: 1597,
         title: 'The Shader Matrix & Skeleton Overlay',
         caption: 'Simulated CRT phosphor masks, scanlines, and green phosphor MediaPipe skeletons rendered at 60 FPS on top of real leaded CRT glass.',
         alt: 'Close-up of CRT [01} and CRT [03] showing the ZAP NEXT VID trigger overlay, simulated scanlines, and live query synthesis telemetry',
@@ -69,7 +82,10 @@ block variables
       },
       {
         id: 'photo-05',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-285.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-285.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-285.jpg',
+        width: 1597,
+        height: 2400,
         title: 'Improvised Dipole Hardware',
         caption: 'A visitor discovering that waving an octagonal event sign confuses the wrist-velocity zero-crossing classifier into thinking she is dancing at 1.8 Hz.',
         alt: 'Vertical shot of a visitor holding an octagonal sign paddle in front of the 6-CRT totem on the gallery floor',
@@ -79,7 +95,10 @@ block variables
       },
       {
         id: 'photo-06',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-286.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-286.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-286.jpg',
+        width: 1597,
+        height: 2400,
         title: 'The 2×3 Totem vs. Gallery Scale',
         caption: 'Standing on purple gaffer-tape rangefinder marks (1m–3m) while six 15,734 Hz flyback transformers and a Bose subwoofer hum in unison.',
         alt: 'Vertical full-height view of the 6-CRT installation rack and visitor standing on the purple floor distance markers',
@@ -89,7 +108,10 @@ block variables
       },
       {
         id: 'photo-07',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-225.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-225.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-225.jpg',
+        width: 2400,
+        height: 1597,
         title: 'Edge-Case Rangefinder Testing (Height < 1.1m)',
         caption: 'My inverse-square shoulder-span distance estimator (landmarks 11 and 12) immediately assuming a child standing 30cm away is a full-grown adult standing 2.8 meters back.',
         alt: 'A woman and a young child inspecting the 6-CRT totem at close range in the exhibition space',
@@ -99,7 +121,10 @@ block variables
       },
       {
         id: 'photo-08',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-230.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-230.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-230.jpg',
+        width: 2400,
+        height: 1597,
         title: 'Zero-Engagement Telemetry',
         caption: 'A spectator ignoring 2,839 lines of calibration code to check her actual phone—ironically the exact behavior the installation was supposed to critique.',
         alt: 'Gallery visitor looking down at her smartphone while standing on the purple antenna floor markers in front of the glowing CRT array',
@@ -109,7 +134,10 @@ block variables
       },
       {
         id: 'photo-09',
-        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-228.jpg',
+        file: '/assets/v-feed-06/Pabellon-2026-JUEVES-228.webp',
+        fallback: '/assets/v-feed-06/Pabellon-2026-JUEVES-228.jpg',
+        width: 2400,
+        height: 1597,
         title: 'Ambient Glare & Exhibition Physics',
         caption: 'Competing with adjacent wall projections and gallery floodlights that turned carefully tuned 48×48 HSV torso-color sampling into a random number generator.',
         alt: 'Wide gallery view showing the 6-CRT totem alongside another bright projection installation and visitors walking through the venue',
@@ -119,7 +147,10 @@ block variables
       },
       {
         id: 'photo-10',
-        file: '/assets/v-feed-06/calibration.png',
+        file: '/assets/v-feed-06/calibration.webp',
+        fallback: '/assets/v-feed-06/calibration.png',
+        width: 1446,
+        height: 1310,
         title: 'Parallel Calibration Console & 24-Point Keystone Matrix',
         caption: 'The 2,839-line lil-gui operator deck (CalibrationConsole.ts): interactive TL/TR/BL/BR corner-pinning handles, per-tube bezel compensation, and the infamous "CRT [01}" typo in its native habitat.',
         alt: 'Screenshot of the V-FEED [06] Parallel Calibration Console showing the 2x3 CRT keystone grid visualizer on the left and lil-gui parameter folders on the right',
@@ -129,7 +160,10 @@ block variables
       },
       {
         id: 'photo-11',
-        file: '/assets/v-feed-06/calibration_view.png',
+        file: '/assets/v-feed-06/calibration_view.webp',
+        fallback: '/assets/v-feed-06/calibration_view.png',
+        width: 2400,
+        height: 1350,
         title: 'Dual-Window BroadcastChannel Sync & Live Debug Telemetry',
         caption: 'Running the Calibration Console alongside the live 60 FPS WebGL stage—complete with the split Debug Overlay window, 15.7 kHz flyback hum synth controls, and V-Hold vertical roll on CRT [04].',
         alt: 'Split-screen view of the V-FEED [06] Calibration Console with live MediaPipe debug overlay on the left and the 6-CRT WebGL shader stage on the right',
@@ -139,7 +173,10 @@ block variables
       },
       {
         id: 'photo-12',
-        file: '/assets/v-feed-06/calibration_view2.png',
+        file: '/assets/v-feed-06/calibration_view2.webp',
+        fallback: '/assets/v-feed-06/calibration_view2.png',
+        width: 2400,
+        height: 1350,
         title: 'Live Query Synthesis, Quota Guard & Pose Zapping',
         caption: 'Tracking a solo spectator at 0.9m (HIGH_MOTION 88%, DARK_NEUTRAL chroma) during a 10s query cooldown while green phosphor MediaPipe skeletons and pose reticles overlay all 6 virtual tubes.',
         alt: 'Split-screen capture showing live pose tracking telemetry at 0.9m distance on the left console and phosphor skeleton overlays across the 2x3 CRT matrix on the right',
@@ -149,7 +186,10 @@ block variables
       },
       {
         id: 'photo-13',
-        file: '/assets/v-feed-06/view.png',
+        file: '/assets/v-feed-06/view.webp',
+        fallback: '/assets/v-feed-06/view.png',
+        width: 1219,
+        height: 1440,
         title: 'The 2×3 WebGL CRT Stage (CompositeShader.ts Output)',
         caption: 'Direct capture of the 38-uniform fragment shader simulating barrel curvature, RGB shadow-mask triads, chromatic aberration, RF static snow, and all 6 antenna pose guides from "Rabbit Ears" to "Signal Lock."',
         alt: 'Full vertical 2x3 matrix output of the V-FEED [06] WebGL stage showing chromatic aberration, scanlines, RF static, green phosphor skeleton lines, and pose guide icons',
@@ -297,14 +337,32 @@ block body
         p.body-commentary.text-color-default(data-reveal-item) Click any evidence frame to launch the full-resolution blueprint inspection view. Includes 16:9 exhibition captures, vertical totem shots, and direct captures of the 2,839-line Calibration Console &amp; WebGL CRT stage.
 
         .evidence-gallery
+          -
+            var buildResponsiveProps = function (src, fallback) {
+              var basePath = src.replace(/\.[a-zA-Z0-9]+$/, '')
+              var webpSrc = basePath + '.webp'
+              return {
+                webpSrc: webpSrc,
+                fallbackSrc: fallback || webpSrc,
+                srcset: [480, 768, 1280, 1920]
+                  .map(function (w) {
+                    return basePath + '-' + w + 'w.webp ' + w + 'w'
+                  })
+                  .join(', ')
+              }
+            }
           each photo, idx in vFeedPhotos
             - var colOffset = (idx % 3 === 1) ? '0.045' : (idx % 3 === 2 ? '-0.03' : '0.02')
+            - var imgProps = buildResponsiveProps(photo.file, photo.fallback)
             figure.evidence-card.js-gallery-item(
               class=`evidence-card--${photo.orientation}`,
               data-reveal-item,
               data-parallax=colOffset,
               data-id=photo.id,
-              data-src=photo.file,
+              data-src=imgProps.webpSrc,
+              data-srcset=imgProps.srcset,
+              data-sizes='(max-width: 768px) 96vw, 90vw',
+              data-fallback=imgProps.fallbackSrc,
               data-file=photo.file,
               data-title=photo.title,
               data-caption=photo.caption,
@@ -318,7 +376,19 @@ block body
                 span.text-color-pure(data-scramble) [#{photo.id.toUpperCase()}]
                 span.text-color-muted(data-scramble)= photo.aspect
               .evidence-card__media
-                img.evidence-card__img(src=photo.file, alt=photo.alt, loading=idx < 4 ? 'eager' : 'lazy', data-parallax-img='0.14')
+                +responsive-image({
+                  src: photo.file,
+                  fallback: photo.fallback,
+                  alt: photo.alt,
+                  pictureClass: 'evidence-card__picture',
+                  imgClass: 'evidence-card__img',
+                  sizes: '(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw',
+                  loading: idx < 4 ? 'eager' : 'lazy',
+                  fetchpriority: idx === 0 ? 'high' : undefined,
+                  width: photo.width,
+                  height: photo.height,
+                  parallaxImg: '0.14'
+                })
                 .evidence-card__zoom.body-micro.text-color-pure [ + INSPECT FRAME ]
               figcaption.evidence-card__caption
                 .evidence-card__title.code-command-default.text-color-pure= photo.title
@@ -548,13 +618,24 @@ block body
         .gallery-lightbox__header
           .gallery-lightbox__meta-group
             span.body-micro.text-color-pure.js-lightbox-id [ PHOTO-01 // 01 OF 13 ]
-            span.body-micro.text-color-muted.js-lightbox-meta 16:9 SETUP · /assets/v-feed-06/DSC_3270.jpg
+            span.body-micro.text-color-muted.js-lightbox-meta 16:9 SETUP · /assets/v-feed-06/DSC_3270.webp
           .gallery-lightbox__controls
             button.lightbox-btn.body-micro.text-color-pure.js-lightbox-prev(type='button') [&lt; PREV]
             button.lightbox-btn.body-micro.text-color-pure.js-lightbox-next(type='button') [NEXT &gt;]
             button.lightbox-btn.lightbox-btn--close.body-micro.js-lightbox-close(type='button') [X ESC]
         .gallery-lightbox__stage
-          img.gallery-lightbox__img.js-lightbox-img(src='/assets/v-feed-06/DSC_3270.jpg', alt='Evidence inspection preview')
+          - var defaultLightboxProps = buildResponsiveProps('/assets/v-feed-06/DSC_3270.webp', '/assets/v-feed-06/DSC_3270.jpg')
+          picture.gallery-lightbox__picture
+            source.js-lightbox-source(
+              type='image/webp',
+              srcset=defaultLightboxProps.srcset,
+              sizes='(max-width: 768px) 96vw, 90vw'
+            )
+            img.gallery-lightbox__img.js-lightbox-img(
+              src=defaultLightboxProps.webpSrc,
+              alt='Evidence inspection preview',
+              decoding='async'
+            )
         .gallery-lightbox__footer
           p.code-command-default.text-color-pure.js-lightbox-title The Physical Setup / Totem in Situ
           p.body-commentary.text-color-default.js-lightbox-caption 6 screens, miles of composite cabling, and the gap between CAD diagrams and gravity.
