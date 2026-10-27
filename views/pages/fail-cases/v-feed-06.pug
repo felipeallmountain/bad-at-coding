@@ -116,6 +116,46 @@ block variables
         aspect: '16:9 FIELD',
         orientation: 'landscape',
         category: 'field'
+      },
+      {
+        id: 'photo-10',
+        file: '/assets/v-feed-06/calibration.png',
+        title: 'Parallel Calibration Console & 24-Point Keystone Matrix',
+        caption: 'The 2,839-line lil-gui operator deck (CalibrationConsole.ts): interactive TL/TR/BL/BR corner-pinning handles, per-tube bezel compensation, and the infamous "CRT [01}" typo in its native habitat.',
+        alt: 'Screenshot of the V-FEED [06] Parallel Calibration Console showing the 2x3 CRT keystone grid visualizer on the left and lil-gui parameter folders on the right',
+        aspect: 'UI CONSOLE',
+        orientation: 'portrait',
+        category: 'console'
+      },
+      {
+        id: 'photo-11',
+        file: '/assets/v-feed-06/calibration_view.png',
+        title: 'Dual-Window BroadcastChannel Sync & Live Debug Telemetry',
+        caption: 'Running the Calibration Console alongside the live 60 FPS WebGL stage—complete with the split Debug Overlay window, 15.7 kHz flyback hum synth controls, and V-Hold vertical roll on CRT [04].',
+        alt: 'Split-screen view of the V-FEED [06] Calibration Console with live MediaPipe debug overlay on the left and the 6-CRT WebGL shader stage on the right',
+        aspect: '16:9 STAGE+UI',
+        orientation: 'landscape',
+        category: 'console'
+      },
+      {
+        id: 'photo-12',
+        file: '/assets/v-feed-06/calibration_view2.png',
+        title: 'Live Query Synthesis, Quota Guard & Pose Zapping',
+        caption: 'Tracking a solo spectator at 0.9m (HIGH_MOTION 88%, DARK_NEUTRAL chroma) during a 10s query cooldown while green phosphor MediaPipe skeletons and pose reticles overlay all 6 virtual tubes.',
+        alt: 'Split-screen capture showing live pose tracking telemetry at 0.9m distance on the left console and phosphor skeleton overlays across the 2x3 CRT matrix on the right',
+        aspect: '16:9 STAGE+UI',
+        orientation: 'landscape',
+        category: 'console'
+      },
+      {
+        id: 'photo-13',
+        file: '/assets/v-feed-06/view.png',
+        title: 'The 2×3 WebGL CRT Stage (CompositeShader.ts Output)',
+        caption: 'Direct capture of the 38-uniform fragment shader simulating barrel curvature, RGB shadow-mask triads, chromatic aberration, RF static snow, and all 6 antenna pose guides from "Rabbit Ears" to "Signal Lock."',
+        alt: 'Full vertical 2x3 matrix output of the V-FEED [06] WebGL stage showing chromatic aberration, scanlines, RF static, green phosphor skeleton lines, and pose guide icons',
+        aspect: '2×3 STAGE',
+        orientation: 'portrait',
+        category: 'console'
       }
     ]
   -
@@ -169,7 +209,7 @@ block body
       nav.toolbar__jumps(aria-label='Post-mortem section navigation')
         button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-dossier') [00. DOSSIER]
         button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-pitch') [01. PITCH_VS_REALITY]
-        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-gallery') [02. EVIDENCE_09]
+        button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-gallery') [02. EVIDENCE_13]
         button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-pillars') [03. 4_PILLARS_OF_DOOM]
         button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-receipts') [04. RECEIPTS]
         button.toolbar__jump.body-micro.text-color-default.js-section-jump(type='button', data-target='section-takeaways') [05. AUTOPSY]
@@ -248,12 +288,13 @@ block body
             span.body-micro.text-color-muted(data-scramble) // SECTION 02 :: PHOTOGRAPHIC FIELD EVIDENCE (/PUBLIC/ASSETS/V-FEED-06)
             h2.heading-title.text-color-pure(data-scramble) PHOTO &amp; MEDIA EVIDENCE_
           .gallery-filters(role='tablist', aria-label='Filter evidence photos')
-            button.gallery-filter.body-micro.is-active.js-gallery-filter(type='button', data-filter='all') [ALL :: 09]
+            button.gallery-filter.body-micro.is-active.js-gallery-filter(type='button', data-filter='all') [ALL :: 13]
             button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='primary') [CORE_EVIDENCE :: 04]
+            button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='console') [CONSOLE_&_STAGE :: 04]
             button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='vertical') [9:16_TOTEM :: 02]
             button.gallery-filter.body-micro.js-gallery-filter(type='button', data-filter='field') [FIELD_LOGS :: 03]
 
-        p.body-commentary.text-color-default(data-reveal-item) Click any evidence frame to launch the full-resolution blueprint inspection view. Includes both 16:9 setup/HUD captures and vertical totem shots from the exhibition floor.
+        p.body-commentary.text-color-default(data-reveal-item) Click any evidence frame to launch the full-resolution blueprint inspection view. Includes 16:9 exhibition captures, vertical totem shots, and direct captures of the 2,839-line Calibration Console &amp; WebGL CRT stage.
 
         .evidence-gallery
           each photo, idx in vFeedPhotos
@@ -506,7 +547,7 @@ block body
         +line-block('top-line')
         .gallery-lightbox__header
           .gallery-lightbox__meta-group
-            span.body-micro.text-color-pure.js-lightbox-id [ PHOTO-01 // 01 OF 09 ]
+            span.body-micro.text-color-pure.js-lightbox-id [ PHOTO-01 // 01 OF 13 ]
             span.body-micro.text-color-muted.js-lightbox-meta 16:9 SETUP · /assets/v-feed-06/DSC_3270.jpg
           .gallery-lightbox__controls
             button.lightbox-btn.body-micro.text-color-pure.js-lightbox-prev(type='button') [&lt; PREV]
