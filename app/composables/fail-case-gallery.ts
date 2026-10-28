@@ -1,8 +1,9 @@
 import gsap from 'gsap'
+import { Flip } from 'gsap/Flip'
 import ScrambleTextPlugin from 'gsap/ScrambleTextPlugin'
 import { getSmoothScroll } from './smooth-scroll.js'
 
-gsap.registerPlugin(ScrambleTextPlugin)
+gsap.registerPlugin(Flip, ScrambleTextPlugin)
 
 export type TFailCaseGallery = {
   refresh: () => void
@@ -334,7 +335,70 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
   // ==========================================================================
   // 3. LIGHTBOX & GALLERY CONTROLS
   // ==========================================================================
-  const updateLightboxContent = (index: number) => {
+  let transitionToken = 0
+  let isClosingLightbox = false
+  let loaderTimeout: ReturnType<typeof setTimeout> | null = null
+  const preloadedSources = new Set<string>()
+
+  const preloadLightboxItem = (item: HTMLElement | undefined) => {
+    if (!item) return
+    const src = item.dataset.src || item.dataset.fallback || ''
+    if (!src || preloadedSources.has(src)) return
+    preloadedSources.add(src)
+
+    const img = new Image()
+    img.decoding = 'async'
+    if (item.dataset.sizes) {
+      img.sizes = item.dataset.sizes
+    }
+    if (item.dataset.srcset) {
+      img.srcset = item.dataset.srcset
+    }
+    img.src = src
+    img.decode?.().catch(() => {})
+  }
+
+  const preloadAdjacentItems = (index: number, items: HTMLElement[]) => {
+    if (items.length <= 1) return
+    const prevIdx = (((index - 1) % items.length) + items.length) % items.length
+    const nextIdx = (index + 1) % items.length
+    preloadLightboxItem(items[prevIdx])
+    preloadLightboxItem(items[nextIdx])
+  }
+
+  const createSlidePicture = (
+    item: HTMLElement
+  ): {
+    pictureEl: HTMLPictureElement
+    imgEl: HTMLImageElement
+  } => {
+    const src = item.dataset.src || ''
+    const srcset = item.dataset.srcset || ''
+    const sizes = item.dataset.sizes || '(max-width: 768px) 96vw, 90vw'
+    const fallback = item.dataset.fallback || src
+    const title = item.dataset.title || 'Evidence inspection preview'
+
+    const pictureEl = document.createElement('picture')
+    pictureEl.className = 'gallery-lightbox__picture js-lightbox-slide'
+
+    const sourceEl = document.createElement('source')
+    sourceEl.className = 'js-lightbox-source'
+    sourceEl.type = 'image/webp'
+    sourceEl.srcset = srcset
+    sourceEl.sizes = sizes
+
+    const imgEl = document.createElement('img')
+    imgEl.className = 'gallery-lightbox__img js-lightbox-img'
+    imgEl.src = src || fallback
+    imgEl.alt = title
+    imgEl.decoding = 'async'
+    imgEl.draggable = false
+
+    pictureEl.append(sourceEl, imgEl)
+    return { pictureEl, imgEl }
+  }
+
+  const updateLightboxContent = (index: number, direction = 0) => {
     const items = getGalleryItems()
     if (items.length === 0) return
 
@@ -346,20 +410,16 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
     const lightbox = document.querySelector<HTMLElement>('.js-gallery-lightbox')
     if (!lightbox || !item) return
 
-    const src = item.dataset.src || ''
-    const srcset = item.dataset.srcset || ''
-    const sizes = item.dataset.sizes || '(max-width: 768px) 96vw, 90vw'
-    const fallback = item.dataset.fallback || src
     const title = item.dataset.title || ''
     const caption = item.dataset.caption || ''
     const photoId = item.dataset.id || ''
     const aspect = item.dataset.aspect || ''
     const file = item.dataset.file || ''
 
-    const sourceEl = lightbox.querySelector<HTMLSourceElement>(
-      '.js-lightbox-source'
+    const slidesContainer = lightbox.querySelector<HTMLElement>(
+      '.js-lightbox-slides'
     )
-    const imgEl = lightbox.querySelector<HTMLImageElement>('.js-lightbox-img')
+    const loaderEl = lightbox.querySelector<HTMLElement>('.js-lightbox-loader')
     const idEl = lightbox.querySelector<HTMLElement>('.js-lightbox-id')
     const titleEl = lightbox.querySelector<HTMLElement>('.js-lightbox-title')
     const captionEl = lightbox.querySelector<HTMLElement>(
@@ -367,67 +427,257 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
     )
     const metaEl = lightbox.querySelector<HTMLElement>('.js-lightbox-meta')
 
-    if (sourceEl) {
-      sourceEl.srcset = srcset
-      sourceEl.sizes = sizes
-    }
-    if (imgEl) {
-      imgEl.src = src || fallback
-      imgEl.alt = title
-      gsap.fromTo(
-        imgEl,
-        { opacity: 0, scale: 0.985 },
-        { opacity: 1, scale: 1, duration: 0.35, ease: 'power2.out' }
-      )
-    }
+    preloadAdjacentItems(normalizedIndex, items)
+
     if (idEl) {
       const idText = `[ ${photoId.toUpperCase()} // ${String(normalizedIndex + 1).padStart(2, '0')} OF ${String(items.length).padStart(2, '0')} ]`
       idEl.dataset.originalText = idText
       idEl.textContent = idText
-      scrambleElement(idEl, { duration: 0.55 })
+      scrambleElement(idEl, { duration: 0.5 })
     }
     if (titleEl) {
       titleEl.dataset.originalText = title
       titleEl.textContent = title
-      scrambleElement(titleEl, { duration: 0.65 })
+      scrambleElement(titleEl, { duration: 0.6 })
     }
     if (captionEl) {
       captionEl.textContent = caption
       gsap.fromTo(
         captionEl,
-        { opacity: 0, y: 6 },
-        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+        { opacity: 0, x: direction * 10, y: direction === 0 ? 6 : 0 },
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          duration: 0.35,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        }
       )
     }
     if (metaEl) {
       metaEl.textContent = `${aspect} · ${file}`
+      if (direction !== 0) {
+        gsap.fromTo(
+          metaEl,
+          { opacity: 0.35, x: direction * 6 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.3,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          }
+        )
+      }
+    }
+
+    if (!slidesContainer) return
+
+    const token = ++transitionToken
+    if (loaderTimeout) {
+      clearTimeout(loaderTimeout)
+      loaderTimeout = null
+    }
+
+    // Initial open (direction === 0): replace slides cleanly and animate in
+    if (direction === 0) {
+      loaderEl?.classList.remove('is-visible')
+      const { pictureEl, imgEl } = createSlidePicture(item)
+      slidesContainer.replaceChildren(pictureEl)
+      gsap.set(pictureEl, { opacity: 0, scale: 0.965, x: 0 })
+
+      const revealInitial = () => {
+        if (token !== transitionToken) return
+        gsap.fromTo(
+          pictureEl,
+          {
+            opacity: 0,
+            scale: 0.965,
+            filter: 'brightness(1.25) contrast(1.1)',
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            x: 0,
+            filter: 'brightness(1) contrast(1)',
+            duration: 0.38,
+            ease: 'power3.out',
+          }
+        )
+      }
+
+      if (imgEl.decode) {
+        Promise.race([
+          imgEl.decode().catch(() => {}),
+          new Promise((resolve) => setTimeout(resolve, 160)),
+        ]).then(revealInitial)
+      } else {
+        revealInitial()
+      }
+      return
+    }
+
+    // Directional navigation (+1 next / -1 prev): dual-layer crossfade + slide
+    const existingSlides = Array.from(
+      slidesContainer.querySelectorAll<HTMLElement>('.js-lightbox-slide')
+    )
+    // If more than 1 old slide is lingering from rapid clicks, prune all but the most recent
+    if (existingSlides.length > 1) {
+      existingSlides.slice(0, -1).forEach((oldSlide) => {
+        gsap.killTweensOf(oldSlide)
+        oldSlide.remove()
+      })
+    }
+
+    const outgoingSlide = slidesContainer.querySelector<HTMLElement>(
+      '.js-lightbox-slide:last-of-type'
+    )
+
+    const { pictureEl: incomingSlide, imgEl: incomingImg } =
+      createSlidePicture(item)
+    gsap.set(incomingSlide, { opacity: 0 })
+    slidesContainer.appendChild(incomingSlide)
+
+    loaderTimeout = setTimeout(() => {
+      if (token === transitionToken) {
+        loaderEl?.classList.add('is-visible')
+      }
+    }, 90)
+
+    const runDirectionalTransition = () => {
+      if (loaderTimeout) {
+        clearTimeout(loaderTimeout)
+        loaderTimeout = null
+      }
+      loaderEl?.classList.remove('is-visible')
+
+      if (token !== transitionToken) {
+        incomingSlide.remove()
+        return
+      }
+
+      const stageWidth = slidesContainer.clientWidth || 360
+      const slideOffsetPx = Math.round(
+        Math.min(96, Math.max(36, stageWidth * 0.12))
+      )
+
+      if (outgoingSlide && outgoingSlide !== incomingSlide) {
+        gsap.killTweensOf(outgoingSlide)
+        gsap.to(outgoingSlide, {
+          x: -direction * slideOffsetPx,
+          scale: 0.955,
+          opacity: 0,
+          filter: 'brightness(0.6) contrast(1.15)',
+          duration: 0.38,
+          ease: 'power3.out',
+          overwrite: 'auto',
+          onComplete: () => {
+            outgoingSlide.remove()
+          },
+        })
+      }
+
+      gsap.fromTo(
+        incomingSlide,
+        {
+          x: direction * slideOffsetPx,
+          scale: 1.025,
+          opacity: 0,
+          filter: 'brightness(1.3) contrast(1.14)',
+        },
+        {
+          x: 0,
+          scale: 1,
+          opacity: 1,
+          filter: 'brightness(1) contrast(1)',
+          duration: 0.42,
+          ease: 'power3.out',
+          overwrite: 'auto',
+        }
+      )
+    }
+
+    if (incomingImg.decode) {
+      Promise.race([
+        incomingImg.decode().catch(() => {}),
+        new Promise((resolve) => setTimeout(resolve, 220)),
+      ]).then(runDirectionalTransition)
+    } else {
+      runDirectionalTransition()
     }
   }
 
   const openLightbox = (index: number) => {
     const lightbox = document.querySelector<HTMLElement>('.js-gallery-lightbox')
     if (!lightbox) return
+
+    isClosingLightbox = false
+    gsap.killTweensOf(lightbox)
     lightbox.classList.add('is-open')
     lightbox.setAttribute('aria-hidden', 'false')
+
+    gsap.fromTo(
+      lightbox,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.25, ease: 'power2.out' }
+    )
 
     const dialog = lightbox.querySelector<HTMLElement>(
       '.gallery-lightbox__dialog'
     )
     if (dialog) {
+      gsap.killTweensOf(dialog)
       gsap.fromTo(
         dialog,
-        { opacity: 0, y: 16, scale: 0.98 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power3.out' }
+        { opacity: 0, y: 16, scale: 0.975 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: 'power3.out' }
       )
     }
-    updateLightboxContent(index)
+    updateLightboxContent(index, 0)
   }
 
   const closeLightbox = () => {
     const lightbox = document.querySelector<HTMLElement>('.js-gallery-lightbox')
-    if (!lightbox) return
-    lightbox.classList.remove('is-open')
-    lightbox.setAttribute('aria-hidden', 'true')
+    if (
+      !lightbox ||
+      !lightbox.classList.contains('is-open') ||
+      isClosingLightbox
+    ) {
+      return
+    }
+
+    isClosingLightbox = true
+    const dialog = lightbox.querySelector<HTMLElement>(
+      '.gallery-lightbox__dialog'
+    )
+
+    if (dialog) {
+      gsap.to(dialog, {
+        opacity: 0,
+        y: 12,
+        scale: 0.98,
+        duration: 0.2,
+        ease: 'power2.in',
+        overwrite: 'auto',
+      })
+    }
+
+    gsap.to(lightbox, {
+      opacity: 0,
+      duration: 0.22,
+      ease: 'power2.in',
+      overwrite: 'auto',
+      onComplete: () => {
+        lightbox.classList.remove('is-open')
+        lightbox.setAttribute('aria-hidden', 'true')
+        gsap.set(lightbox, { clearProps: 'opacity' })
+        if (dialog) {
+          gsap.set(dialog, { clearProps: 'opacity,transform,translate,scale' })
+        }
+        isClosingLightbox = false
+      },
+    })
   }
 
   // Hover scramble on interactive buttons (.js-section-jump, .js-gallery-filter, .lightbox-btn)
@@ -488,10 +738,12 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
       return
     }
 
-    // 2. Gallery category filter buttons
+    // 2. Gallery category filter buttons with GSAP Flip layout transitions
     const filterBtn = target.closest<HTMLElement>('.js-gallery-filter')
     if (filterBtn) {
       e.preventDefault()
+      if (filterBtn.classList.contains('is-active')) return
+
       const category = filterBtn.dataset.filter || 'all'
       const allFilters =
         document.querySelectorAll<HTMLElement>('.js-gallery-filter')
@@ -499,41 +751,63 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
         btn.classList.toggle('is-active', btn === filterBtn)
       })
 
-      const allItems =
+      const allItems = Array.from(
         document.querySelectorAll<HTMLElement>('.js-gallery-item')
+      )
+      const flipState = Flip.getState(allItems)
       const newlyVisible: HTMLElement[] = []
 
       allItems.forEach((item) => {
+        const wasHidden = item.classList.contains('is-hidden')
         const itemCat = item.dataset.category || ''
         const shouldShow = category === 'all' || itemCat === category
         item.classList.toggle('is-hidden', !shouldShow)
-        if (shouldShow) {
+        if (shouldShow && wasHidden) {
           newlyVisible.push(item)
         }
       })
 
-      if (newlyVisible.length > 0) {
-        gsap.fromTo(
-          newlyVisible,
-          { opacity: 0, y: 18 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.45,
-            stagger: 0.04,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          }
+      Flip.from(flipState, {
+        duration: 0.45,
+        ease: 'power3.out',
+        scale: false,
+        absoluteOnLeave: true,
+        onEnter: (elements) =>
+          gsap.fromTo(
+            elements,
+            { opacity: 0, scale: 0.95, y: 16 },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 0.4,
+              stagger: 0.035,
+              ease: 'power3.out',
+              clearProps: 'scale',
+            }
+          ),
+        onLeave: (elements) =>
+          gsap.to(elements, {
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.24,
+            ease: 'power2.in',
+            clearProps: 'scale',
+          }),
+        onComplete: () => {
+          getSmoothScroll()?.resize()
+          updateParallax()
+        },
+      })
+
+      newlyVisible.forEach((card, idx) => {
+        const topSpans = card.querySelectorAll<HTMLElement>(
+          '.evidence-card__top [data-scramble]'
         )
-        newlyVisible.forEach((card, idx) => {
-          const topSpans = card.querySelectorAll<HTMLElement>(
-            '.evidence-card__top [data-scramble]'
-          )
-          topSpans.forEach((sp) => {
-            scrambleElement(sp, { delay: idx * 0.035, duration: 0.5 })
-          })
+        topSpans.forEach((sp) => {
+          scrambleElement(sp, { delay: idx * 0.035, duration: 0.5 })
         })
-      }
+      })
 
       getSmoothScroll()?.resize()
       requestAnimationFrame(() => {
@@ -561,13 +835,13 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
 
     if (target.closest('.js-lightbox-prev')) {
       e.preventDefault()
-      updateLightboxContent(currentIndex - 1)
+      updateLightboxContent(currentIndex - 1, -1)
       return
     }
 
     if (target.closest('.js-lightbox-next')) {
       e.preventDefault()
-      updateLightboxContent(currentIndex + 1)
+      updateLightboxContent(currentIndex + 1, 1)
       return
     }
 
@@ -579,20 +853,39 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
 
   document.addEventListener('keydown', (e: KeyboardEvent) => {
     const lightbox = document.querySelector<HTMLElement>('.js-gallery-lightbox')
-    if (!lightbox || !lightbox.classList.contains('is-open')) return
+    if (lightbox && lightbox.classList.contains('is-open')) {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        closeLightbox()
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        updateLightboxContent(currentIndex - 1, -1)
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        updateLightboxContent(currentIndex + 1, 1)
+      }
+      return
+    }
 
-    if (e.key === 'Escape') {
-      closeLightbox()
-    } else if (e.key === 'ArrowLeft') {
-      updateLightboxContent(currentIndex - 1)
-    } else if (e.key === 'ArrowRight') {
-      updateLightboxContent(currentIndex + 1)
+    // Allow keyboard activation (Enter / Space) on focused gallery cards
+    if (e.key === 'Enter' || e.key === ' ') {
+      const activeEl = document.activeElement as HTMLElement | null
+      const galleryItem = activeEl?.closest<HTMLElement>('.js-gallery-item')
+      if (galleryItem) {
+        e.preventDefault()
+        const visibleItems = getGalleryItems()
+        const idx = visibleItems.indexOf(galleryItem)
+        openLightbox(idx >= 0 ? idx : 0)
+      }
     }
   })
 
-  // Touch swipe navigation inside the lightbox on mobile/tablet
+  // Interactive touch-drag & swipe navigation inside the lightbox on mobile/tablet
   let touchStartX = 0
   let touchStartY = 0
+  let touchDeltaX = 0
+  let isDraggingStage = false
+  let touchAxisLocked: 'x' | 'y' | null = null
 
   document.addEventListener(
     'touchstart',
@@ -601,35 +894,98 @@ export const initFailCaseGallery = (): TFailCaseGallery => {
         '.js-gallery-lightbox'
       )
       if (!lightbox || !lightbox.classList.contains('is-open')) return
+      const target = e.target as HTMLElement | null
+      if (!target?.closest('.js-lightbox-stage')) return
+      if (e.touches.length !== 1) return
+
       const touch = e.touches[0]
       if (!touch) return
       touchStartX = touch.clientX
       touchStartY = touch.clientY
+      touchDeltaX = 0
+      isDraggingStage = false
+      touchAxisLocked = null
     },
     { passive: true }
   )
 
   document.addEventListener(
-    'touchend',
+    'touchmove',
     (e: TouchEvent) => {
       const lightbox = document.querySelector<HTMLElement>(
         '.js-gallery-lightbox'
       )
       if (!lightbox || !lightbox.classList.contains('is-open')) return
-      const touch = e.changedTouches[0]
+      if (e.touches.length !== 1) return
+      const target = e.target as HTMLElement | null
+      if (!target?.closest('.js-lightbox-stage')) return
+
+      const touch = e.touches[0]
       if (!touch) return
       const deltaX = touch.clientX - touchStartX
       const deltaY = touch.clientY - touchStartY
-      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
-        if (deltaX < 0) {
-          updateLightboxContent(currentIndex + 1)
-        } else {
-          updateLightboxContent(currentIndex - 1)
-        }
+
+      if (!touchAxisLocked) {
+        if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return
+        touchAxisLocked = Math.abs(deltaX) >= Math.abs(deltaY) ? 'x' : 'y'
+      }
+
+      if (touchAxisLocked !== 'x') return
+
+      isDraggingStage = true
+      touchDeltaX = deltaX
+
+      const activeSlide = lightbox.querySelector<HTMLElement>(
+        '.js-lightbox-slides .js-lightbox-slide:last-of-type'
+      )
+      if (activeSlide) {
+        const dragProgress = Math.min(1, Math.abs(deltaX) / 260)
+        gsap.set(activeSlide, {
+          x: deltaX * 0.82,
+          scale: 1 - dragProgress * 0.04,
+          opacity: 1 - dragProgress * 0.32,
+        })
       }
     },
     { passive: true }
   )
+
+  const finishTouchSwipe = () => {
+    if (!isDraggingStage) {
+      touchAxisLocked = null
+      return
+    }
+
+    const lightbox = document.querySelector<HTMLElement>('.js-gallery-lightbox')
+    const deltaX = touchDeltaX
+    isDraggingStage = false
+    touchDeltaX = 0
+    touchAxisLocked = null
+
+    if (!lightbox || !lightbox.classList.contains('is-open')) return
+
+    if (Math.abs(deltaX) > 42) {
+      const direction = deltaX < 0 ? 1 : -1
+      updateLightboxContent(currentIndex + direction, direction)
+    } else {
+      const activeSlide = lightbox.querySelector<HTMLElement>(
+        '.js-lightbox-slides .js-lightbox-slide:last-of-type'
+      )
+      if (activeSlide) {
+        gsap.to(activeSlide, {
+          x: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.28,
+          ease: 'power3.out',
+          overwrite: 'auto',
+        })
+      }
+    }
+  }
+
+  document.addEventListener('touchend', finishTouchSwipe, { passive: true })
+  document.addEventListener('touchcancel', finishTouchSwipe, { passive: true })
 
   window.addEventListener('resize', () => {
     updateParallax()

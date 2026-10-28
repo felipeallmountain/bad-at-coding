@@ -368,6 +368,8 @@ block body
               data-caption=photo.caption,
               data-aspect=photo.aspect,
               data-category=photo.category,
+              data-width=photo.width,
+              data-height=photo.height,
               tabindex='0',
               role='button',
               aria-label=`Inspect ${photo.id}: ${photo.title}`
@@ -623,19 +625,21 @@ block body
             button.lightbox-btn.body-micro.text-color-pure.js-lightbox-prev(type='button') [&lt; PREV]
             button.lightbox-btn.body-micro.text-color-pure.js-lightbox-next(type='button') [NEXT &gt;]
             button.lightbox-btn.lightbox-btn--close.body-micro.js-lightbox-close(type='button') [X ESC]
-        .gallery-lightbox__stage
-          - var defaultLightboxProps = buildResponsiveProps('/assets/v-feed-06/DSC_3270.webp', '/assets/v-feed-06/DSC_3270.jpg')
-          picture.gallery-lightbox__picture
-            source.js-lightbox-source(
-              type='image/webp',
-              srcset=defaultLightboxProps.srcset,
-              sizes='(max-width: 768px) 96vw, 90vw'
-            )
-            img.gallery-lightbox__img.js-lightbox-img(
-              src=defaultLightboxProps.webpSrc,
-              alt='Evidence inspection preview',
-              decoding='async'
-            )
+        .gallery-lightbox__stage.js-lightbox-stage
+          .gallery-lightbox__slides.js-lightbox-slides
+            - var defaultLightboxProps = buildResponsiveProps('/assets/v-feed-06/DSC_3270.webp', '/assets/v-feed-06/DSC_3270.jpg')
+            picture.gallery-lightbox__picture.js-lightbox-slide
+              source.js-lightbox-source(
+                type='image/webp',
+                srcset=defaultLightboxProps.srcset,
+                sizes='(max-width: 768px) 96vw, 90vw'
+              )
+              img.gallery-lightbox__img.js-lightbox-img(
+                src=defaultLightboxProps.webpSrc,
+                alt='Evidence inspection preview',
+                decoding='async'
+              )
+          .gallery-lightbox__loader.body-micro.text-color-muted.js-lightbox-loader(aria-hidden='true') [ DECODING_FRAME... ]
         .gallery-lightbox__footer
           p.code-command-default.text-color-pure.js-lightbox-title The Physical Setup / Totem in Situ
           p.body-commentary.text-color-default.js-lightbox-caption 6 screens, miles of composite cabling, and the gap between CAD diagrams and gravity.
